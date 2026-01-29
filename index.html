@@ -997,6 +997,124 @@
         .quick-input::placeholder {
             color: var(--text-muted);
         }
+        
+        /* ========================================
+           ENHANCED OPTION EDITOR STYLES
+           ======================================== */
+        
+        .option-item-editable {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-left: 4px solid var(--text-muted);
+            transition: border-color 0.15s;
+        }
+        
+        .option-item-editable[data-state="normal"] { border-left-color: #34d399; }
+        .option-item-editable[data-state="abnormal"] { border-left-color: #fbbf24; }
+        .option-item-editable[data-state="critical"] { border-left-color: #fb7185; }
+        .option-item-editable[data-state="chronic"] { border-left-color: #a78bfa; }
+        .option-item-editable[data-state="absent"] { border-left-color: #6b7280; }
+        .option-item-editable[data-state="benign"] { border-left-color: #60a5fa; }
+        .option-item-editable[data-state="surgical"] { border-left-color: #f97316; }
+        
+        .option-row-top {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .option-state-select {
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text-primary);
+            padding: 4px 8px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            min-width: 90px;
+        }
+        
+        .option-state-select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        .option-actions-always {
+            display: flex;
+            gap: 4px;
+            margin-left: auto;
+        }
+        
+        .option-text-input {
+            width: 100%;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text-primary);
+            padding: 8px;
+            font-size: 13px;
+            min-height: 50px;
+            resize: vertical;
+            font-family: inherit;
+            line-height: 1.4;
+        }
+        
+        .option-text-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        .option-text-input::placeholder {
+            color: var(--text-muted);
+        }
+        
+        .option-meta-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        
+        .option-id-input {
+            flex: 1;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text-muted);
+            padding: 4px 8px;
+            font-size: 11px;
+            font-family: "SF Mono", monospace;
+        }
+        
+        .option-id-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            color: var(--text-primary);
+        }
+        
+        /* Picklist header with actions */
+        .picklist-editor-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+        }
+        
+        .picklist-editor-header .picklist-name {
+            flex: 1;
+        }
+        
+        .picklist-editor-header .option-btn {
+            opacity: 0.6;
+        }
+        
+        .picklist-editor-header:hover .option-btn {
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -1594,6 +1712,7 @@
                 return;
             }
             
+            const loc = findComponentLocation(currentComponent);
             const picklists = comp.picklists || {};
             const routes = comp.routes_to || [];
             
@@ -1603,13 +1722,34 @@
                     <div class="editor-subtitle">${currentComponent}</div>
                 </div>
                 <div class="editor-body">
+                    <!-- Component Metadata -->
                     <div class="editor-section">
-                        <div class="editor-section-title">Used by Templates (${routes.length})</div>
-                        <div style="display:flex;flex-wrap:wrap;gap:4px;">
-                            ${routes.map(r => `<span class="picklist-tag" style="background:var(--accent-dim);color:var(--accent);border-color:var(--accent);">${r}</span>`).join('')}
+                        <div class="editor-section-title">Component Details</div>
+                        <div class="form-row">
+                            <label class="form-label">Display Name</label>
+                            <input type="text" id="edit-comp-name" value="${comp.display_name || ''}" 
+                                onchange="updateComponentField('display_name', this.value)">
+                        </div>
+                        <div class="form-row">
+                            <label class="form-label">Description</label>
+                            <textarea id="edit-comp-desc" onchange="updateComponentField('description', this.value)"
+                                style="min-height:60px;">${comp.description || ''}</textarea>
+                        </div>
+                        <div class="form-row">
+                            <label class="form-label">Component ID</label>
+                            <input type="text" value="${currentComponent}" disabled style="opacity:0.6;">
                         </div>
                     </div>
                     
+                    <!-- Used By Templates -->
+                    <div class="editor-section">
+                        <div class="editor-section-title">Used by Templates (${routes.length})</div>
+                        <div style="display:flex;flex-wrap:wrap;gap:4px;">
+                            ${routes.length > 0 ? routes.map(r => `<span class="picklist-tag" style="background:var(--accent-dim);color:var(--accent);border-color:var(--accent);">${r}</span>`).join('') : '<span style="color:var(--text-muted);font-size:12px;">Not used by any template</span>'}
+                        </div>
+                    </div>
+                    
+                    <!-- Picklists -->
                     <div class="editor-section">
                         <div class="editor-section-title">Picklists (${Object.keys(picklists).length})</div>`;
             
@@ -1618,9 +1758,15 @@
                 const opts = pk.options || [];
                 
                 html += `<div class="picklist-editor">
-                    <div class="picklist-editor-header" onclick="selectPicklist('${currentComponent}', '${pkKey}')">
-                        <span class="picklist-name">${pk.display_name || pkKey}</span>
-                        <span class="picklist-meta">${opts.length} options${pk.multiselect ? ' · multi-select' : ''}</span>
+                    <div class="picklist-editor-header">
+                        <span class="picklist-name" onclick="selectPicklist('${currentComponent}', '${pkKey}')" style="cursor:pointer;">${pk.display_name || pkKey}</span>
+                        <span class="picklist-meta">${opts.length} options${pk.multiselect ? ' · multi' : ''}</span>
+                        <button class="option-btn" onclick="selectPicklist('${currentComponent}', '${pkKey}')" title="Edit" style="margin-left:auto;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                        </button>
+                        <button class="option-btn danger" onclick="deletePicklist('${pkKey}')" title="Delete">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+                        </button>
                     </div>
                 </div>`;
             }
@@ -1633,6 +1779,34 @@
             html += '</div></div>';
             
             document.getElementById('editor-content').innerHTML = html;
+        }
+        
+        // Update component field
+        function updateComponentField(field, value) {
+            const loc = findComponentLocation(currentComponent);
+            if (!loc) return;
+            
+            componentMap[loc.modKey][loc.regKey].component_templates[currentComponent][field] = value;
+            markChanged();
+            
+            // Update template structure view if display_name changed
+            if (field === 'display_name') {
+                renderTemplateStructure();
+            }
+        }
+        
+        // Delete picklist
+        function deletePicklist(pkKey) {
+            if (!confirm(`Delete picklist "${pkKey}"? This cannot be undone.`)) return;
+            
+            const loc = findComponentLocation(currentComponent);
+            if (!loc) return;
+            
+            delete componentMap[loc.modKey][loc.regKey].component_templates[currentComponent].picklists[pkKey];
+            markChanged();
+            renderComponentEditor();
+            renderTemplateStructure();
+            showToast('Picklist deleted', 'success');
         }
         
         function renderPicklistEditor() {
@@ -1663,27 +1837,67 @@
                     </div>
                 </div>
                 <div class="editor-body">
+                    <!-- Picklist Metadata -->
+                    <div class="editor-section">
+                        <div class="editor-section-title">Picklist Settings</div>
+                        <div class="form-row">
+                            <label class="form-label">Display Name</label>
+                            <input type="text" id="edit-pk-name" value="${pk.display_name || ''}" 
+                                onchange="updatePicklistField('display_name', this.value)">
+                        </div>
+                        <div class="form-row">
+                            <label class="form-label">Picklist ID</label>
+                            <input type="text" value="${currentPicklist}" disabled style="opacity:0.6;">
+                        </div>
+                        <div class="form-row">
+                            <label class="form-label" style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+                                <input type="checkbox" id="edit-pk-multi" ${pk.multiselect ? 'checked' : ''} 
+                                    onchange="updatePicklistField('multiselect', this.checked)">
+                                Allow Multiple Selections
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Options -->
                     <div class="editor-section">
                         <div class="editor-section-title">Options (${opts.length})</div>
-                        <div class="picklist-options">`;
+                        <div class="picklist-options" id="options-list">`;
             
             opts.forEach((opt, idx) => {
-                html += `<div class="option-item" data-state="${opt.state}">
-                    <span class="option-state">${opt.state}</span>
-                    <span class="option-text">${opt.text}</span>
-                    <div class="option-actions">
-                        <button class="option-btn" onclick="editOption(${idx})" title="Edit">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                        </button>
-                        <button class="option-btn danger" onclick="deleteOption(${idx})" title="Delete">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><path d="M6 18L18 6M6 6l12 12"/></svg>
-                        </button>
+                html += `<div class="option-item-editable" data-idx="${idx}" data-state="${opt.state}">
+                    <div class="option-row-top">
+                        <select class="option-state-select" onchange="updateOption(${idx}, 'state', this.value)">
+                            <option value="absent" ${opt.state === 'absent' ? 'selected' : ''}>Absent</option>
+                            <option value="normal" ${opt.state === 'normal' ? 'selected' : ''}>Normal</option>
+                            <option value="abnormal" ${opt.state === 'abnormal' ? 'selected' : ''}>Abnormal</option>
+                            <option value="critical" ${opt.state === 'critical' ? 'selected' : ''}>Critical</option>
+                            <option value="chronic" ${opt.state === 'chronic' ? 'selected' : ''}>Chronic</option>
+                            <option value="benign" ${opt.state === 'benign' ? 'selected' : ''}>Benign</option>
+                            <option value="surgical" ${opt.state === 'surgical' ? 'selected' : ''}>Surgical</option>
+                        </select>
+                        <div class="option-actions-always">
+                            <button class="option-btn" onclick="moveOption(${idx}, -1)" title="Move Up" ${idx === 0 ? 'disabled style="opacity:0.3;"' : ''}>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><path d="M18 15l-6-6-6 6"/></svg>
+                            </button>
+                            <button class="option-btn" onclick="moveOption(${idx}, 1)" title="Move Down" ${idx === opts.length - 1 ? 'disabled style="opacity:0.3;"' : ''}>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><path d="M6 9l6 6 6-6"/></svg>
+                            </button>
+                            <button class="option-btn danger" onclick="deleteOption(${idx})" title="Delete">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><path d="M6 18L18 6M6 6l12 12"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <textarea class="option-text-input" onchange="updateOption(${idx}, 'text', this.value)" 
+                        placeholder="Option text...">${opt.text || ''}</textarea>
+                    <div class="option-meta-row">
+                        <input type="text" class="option-id-input" value="${opt.id || ''}" 
+                            placeholder="Option ID (optional)" onchange="updateOption(${idx}, 'id', this.value)">
                     </div>
                 </div>`;
             });
             
             html += `</div>
-                        <button class="add-btn" onclick="openAddOptionModal()">
+                        <button class="add-btn" onclick="addOptionInline()">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M12 5v14M5 12h14"/></svg>
                             Add Option
                         </button>
@@ -1691,6 +1905,82 @@
                 </div>`;
             
             document.getElementById('editor-content').innerHTML = html;
+        }
+        
+        // Update picklist field
+        function updatePicklistField(field, value) {
+            const loc = findComponentLocation(currentComponent);
+            if (!loc) return;
+            
+            componentMap[loc.modKey][loc.regKey].component_templates[currentComponent].picklists[currentPicklist][field] = value;
+            markChanged();
+            
+            if (field === 'display_name') {
+                renderTemplateStructure();
+            }
+        }
+        
+        // Update option
+        function updateOption(idx, field, value) {
+            const loc = findComponentLocation(currentComponent);
+            if (!loc) return;
+            
+            const pk = componentMap[loc.modKey][loc.regKey].component_templates[currentComponent].picklists[currentPicklist];
+            if (!pk?.options?.[idx]) return;
+            
+            pk.options[idx][field] = value;
+            markChanged();
+            
+            // Update visual state indicator
+            if (field === 'state') {
+                const item = document.querySelector(`.option-item-editable[data-idx="${idx}"]`);
+                if (item) item.dataset.state = value;
+            }
+        }
+        
+        // Move option up or down
+        function moveOption(idx, direction) {
+            const loc = findComponentLocation(currentComponent);
+            if (!loc) return;
+            
+            const pk = componentMap[loc.modKey][loc.regKey].component_templates[currentComponent].picklists[currentPicklist];
+            if (!pk?.options) return;
+            
+            const newIdx = idx + direction;
+            if (newIdx < 0 || newIdx >= pk.options.length) return;
+            
+            // Swap
+            [pk.options[idx], pk.options[newIdx]] = [pk.options[newIdx], pk.options[idx]];
+            markChanged();
+            renderPicklistEditor();
+        }
+        
+        // Add option inline (quick add)
+        function addOptionInline() {
+            const loc = findComponentLocation(currentComponent);
+            if (!loc) return;
+            
+            const pk = componentMap[loc.modKey][loc.regKey].component_templates[currentComponent].picklists[currentPicklist];
+            if (!pk) return;
+            
+            if (!pk.options) pk.options = [];
+            
+            pk.options.push({
+                id: `opt-${pk.options.length + 1}`,
+                state: 'normal',
+                text: ''
+            });
+            
+            markChanged();
+            renderPicklistEditor();
+            
+            // Focus the new textarea
+            setTimeout(() => {
+                const textareas = document.querySelectorAll('.option-text-input');
+                if (textareas.length > 0) {
+                    textareas[textareas.length - 1].focus();
+                }
+            }, 50);
         }
         
         // Modal functions

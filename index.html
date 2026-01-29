@@ -1157,6 +1157,9 @@
             padding: 16px;
             border-bottom: 1px solid var(--border);
             background: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
         
         .editor-title {
@@ -2393,6 +2396,15 @@
             }
         }
         
+        // Helper to collapse right panel
+        function collapseEditorPanel() {
+            const editorPanel = document.getElementById('panel-editor');
+            if (editorPanel && !editorPanel.classList.contains('collapsed')) {
+                editorPanel.classList.add('collapsed');
+                localStorage.setItem('panel-panel-editor-collapsed', 'true');
+            }
+        }
+        
         function editTechniquePicklist() {
             const picklistId = `TEC-${currentTemplate.mod}-${currentTemplate.reg}`;
             currentSectionPicklist = { type: 'technique', id: picklistId };
@@ -2443,7 +2455,7 @@
             let html = `
                 <div class="editor-header">
                     <div style="display:flex;align-items:center;gap:8px;">
-                        <button class="btn" onclick="renderEmptyEditor()" style="padding:4px 8px;">
+                        <button class="btn" onclick="renderEmptyEditor()" style="padding:4px 8px;" title="Back">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M15 18l-6-6 6-6"/></svg>
                         </button>
                         <div>
@@ -2451,6 +2463,9 @@
                             <div class="editor-subtitle">${picklistId}</div>
                         </div>
                     </div>
+                    <button class="btn" onclick="collapseEditorPanel()" style="padding:4px 8px;" title="Close panel">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                    </button>
                 </div>
                 <div class="editor-body">
                     <!-- Picklist Metadata -->
@@ -2668,8 +2683,18 @@
             
             let html = `
                 <div class="editor-header">
-                    <div class="editor-title">${comp.display_name}</div>
-                    <div class="editor-subtitle">${currentComponent}</div>
+                    <div style="display:flex;align-items:center;gap:8px;">
+                        <button class="btn" onclick="renderEmptyEditor()" style="padding:4px 8px;" title="Back">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M15 18l-6-6 6-6"/></svg>
+                        </button>
+                        <div>
+                            <div class="editor-title">${comp.display_name}</div>
+                            <div class="editor-subtitle">${currentComponent}</div>
+                        </div>
+                    </div>
+                    <button class="btn" onclick="collapseEditorPanel()" style="padding:4px 8px;" title="Close panel">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                    </button>
                 </div>
                 <div class="editor-body">
                     <!-- Component Metadata -->
@@ -2777,7 +2802,7 @@
             let html = `
                 <div class="editor-header">
                     <div style="display:flex;align-items:center;gap:8px;">
-                        <button class="btn" onclick="renderComponentEditor()" style="padding:4px 8px;">
+                        <button class="btn" onclick="renderComponentEditor()" style="padding:4px 8px;" title="Back">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M15 18l-6-6 6-6"/></svg>
                         </button>
                         <div>
@@ -2785,6 +2810,9 @@
                             <div class="editor-subtitle">${currentComponent} → ${currentPicklist}</div>
                         </div>
                     </div>
+                    <button class="btn" onclick="collapseEditorPanel()" style="padding:4px 8px;" title="Close panel">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                    </button>
                 </div>
                 <div class="editor-body">
                     <!-- Picklist Metadata -->

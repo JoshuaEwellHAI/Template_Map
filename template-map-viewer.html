@@ -1066,154 +1066,148 @@
         }
         
         /* ════════════════════════════════════════════════════════════
-           REPORT MODE STYLES (PowerScribe-like dark theme)
+           REPORT MODE - PowerScribe Intelligent Documenter Style
            ════════════════════════════════════════════════════════════ */
         
         .report-mode .word-canvas {
-            background: #1a1a1a;
+            background: #0d0d0d;
         }
         
         .report-mode .word-page {
-            background: #1e1e1e;
-            color: #e0e0e0;
-            border: 1px solid #333;
-            font-family: 'Consolas', 'Courier New', monospace;
-            font-size: 12pt;
-            line-height: 1.4;
-            padding: 24px 32px;
+            background: #1a1a1a;
+            color: #e8e8e8;
+            border: none;
+            box-shadow: none;
+            max-width: 900px;
+            padding: 20px 40px;
         }
         
-        .report-mode .word-title {
-            color: #4fc3f7;
-            border-bottom-color: #4fc3f7;
-            font-family: 'Segoe UI', Arial, sans-serif;
+        /* PowerScribe Document */
+        .ps-document {
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #e8e8e8;
+            outline: none;
+            min-height: 500px;
         }
         
-        .rpt-exam {
-            font-size: 12pt;
-            font-weight: 400;
+        .ps-title {
+            text-align: center;
+            font-size: 15px;
+            font-weight: 600;
+            color: #64b5f6;
             margin-bottom: 16px;
             padding-bottom: 8px;
-            border-bottom: 1px solid #444;
-            color: #e0e0e0;
+            border-bottom: 1px solid #333;
         }
         
-        .rpt-exam strong {
-            color: #4fc3f7;
-        }
-        
-        .rpt-h1 {
-            font-size: 12pt;
+        .ps-section {
+            font-size: 13px;
             font-weight: 700;
+            color: #64b5f6;
             text-transform: uppercase;
-            color: #4fc3f7;
-            margin: 20px 0 8px;
-            letter-spacing: 0.05em;
+            margin: 16px 0 4px;
+            letter-spacing: 0.03em;
         }
         
-        .rpt-line {
+        .ps-line {
             margin: 2px 0;
-            line-height: 1.6;
+            padding: 2px 0;
         }
         
-        .rpt-line strong {
-            color: #b0b0b0;
-            font-weight: 600;
+        .ps-label {
+            color: #9e9e9e;
+            font-weight: 500;
         }
         
-        .rpt-field {
-            background: transparent;
-            border: none;
-            border-bottom: 1px dashed #666;
-            color: #ffd54f;
-            font-family: inherit;
-            font-size: inherit;
-            padding: 0 4px;
-            min-width: 80px;
+        /* Editable text fields */
+        .ps-field {
+            color: #e8e8e8;
+            border-bottom: 1px dotted #555;
+            padding: 0 2px;
+            min-width: 60px;
+            display: inline-block;
         }
         
-        .rpt-field:focus {
+        .ps-field:empty::before {
+            content: '___';
+            color: #555;
+        }
+        
+        .ps-field:focus {
+            background: rgba(100, 181, 246, 0.1);
+            border-bottom-color: #64b5f6;
             outline: none;
-            border-bottom-color: #ffd54f;
-            border-bottom-style: solid;
-            background: rgba(255, 213, 79, 0.1);
         }
         
-        .rpt-field::placeholder {
-            color: #666;
-            font-style: italic;
-        }
-        
-        .rpt-field-sm {
-            min-width: 100px;
-            max-width: 150px;
-        }
-        
-        .rpt-field-xs {
+        .ps-field-sm {
             min-width: 30px;
-            max-width: 50px;
-            text-align: center;
         }
         
-        .rpt-field-lg {
+        .ps-field-lg {
             min-width: 200px;
-            width: 80%;
         }
         
-        .rpt-select {
-            background: transparent;
-            border: none;
-            border-bottom: 1px dashed #4caf50;
+        /* Clickable picklist fields */
+        .ps-pick {
             color: #81c784;
-            font-family: inherit;
-            font-size: inherit;
+            background: rgba(129, 199, 132, 0.1);
+            border-bottom: 1px dashed #81c784;
             padding: 0 4px;
             cursor: pointer;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
+            border-radius: 2px;
         }
         
-        .rpt-select:focus {
-            outline: none;
-            border-bottom-color: #81c784;
-            border-bottom-style: solid;
-            background: rgba(129, 199, 132, 0.1);
+        .ps-pick:hover {
+            background: rgba(129, 199, 132, 0.2);
         }
         
-        .rpt-select option {
-            background: #2d2d2d;
-            color: #e0e0e0;
-        }
-        
-        .rpt-impression {
-            width: 100%;
-            min-height: 60px;
-            padding: 8px;
-            border: 1px solid #444;
-            border-radius: 0;
-            font-family: inherit;
-            font-size: inherit;
-            resize: vertical;
-            background: #252525;
-            color: #e0e0e0;
+        .ps-impression {
             margin-top: 4px;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 3px solid #64b5f6;
+            min-height: 40px;
         }
         
-        .rpt-impression:focus {
-            outline: none;
-            border-color: #4fc3f7;
-            background: #2a2a2a;
+        /* Picklist popup */
+        .ps-popup {
+            position: absolute;
+            background: #252525;
+            border: 1px solid #444;
+            border-radius: 4px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+            min-width: 200px;
+            max-width: 400px;
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 1000;
         }
         
-        .rpt-impression::placeholder {
-            color: #666;
+        .ps-popup-header {
+            padding: 8px 12px;
+            background: #333;
+            border-bottom: 1px solid #444;
+            font-weight: 600;
+            color: #81c784;
+            font-size: 12px;
         }
         
-        /* Inline field styling for PowerScribe look */
-        .report-mode .rpt-line {
-            display: block;
+        .ps-popup-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 12px;
+            border-bottom: 1px solid #333;
         }
+        
+        .ps-popup-item:hover {
+            background: #333;
+        }
+        
+        .ps-popup-item.normal { color: #81c784; }
+        .ps-popup-item.abnormal { color: #ef5350; }
+        .ps-popup-item.critical { color: #ff7043; font-weight: 600; }
         
         /* RTF Toolbar */
         .te-rtf-toolbar {
@@ -2673,64 +2667,77 @@
             
             if (editorMode === 'report') {
                 // ═══════════════════════════════════════════════════════════
-                // REPORT MODE - PowerScribe-style with tabbable fields
+                // REPORT MODE - PowerScribe Intelligent Documenter style
+                // Single contenteditable document with inline picklists
                 // ═══════════════════════════════════════════════════════════
-                html += `<div class="word-title">Frontier Radiology Report</div>`;
+                
+                // Build inline picklist helper
+                const inlinePick = (compId, pkId, opts) => {
+                    const defaultOpt = opts.find(o => o.state === 'normal') || opts[0];
+                    const text = defaultOpt?.text || defaultOpt?.id || 'Select...';
+                    return `<span class="ps-pick" data-comp="${compId}" data-pk="${pkId}" onclick="showPicklistPopup(this, '${compId}', '${pkId}')">${text}</span>`;
+                };
+                
+                html += `<div class="ps-document" contenteditable="true" spellcheck="true" id="ps-doc">`;
+                
+                // Title
+                html += `<div class="ps-title">Frontier Radiology Report</div>`;
                 
                 // EXAM
-                html += `<p class="rpt-exam"><strong>EXAM:</strong> <input type="text" class="rpt-field" tabindex="${tabIndex++}" value="${tpl.primary_cpt} ${tpl.description}" data-field="exam"></p>`;
+                html += `<div class="ps-line"><span class="ps-label">EXAM:</span> ${tpl.primary_cpt} ${tpl.description}</div>`;
                 
                 // DEMOGRAPHICS
-                html += `<p class="rpt-h1">DEMOGRAPHICS</p>`;
-                html += `<p class="rpt-line"><strong>Facility:</strong> <input type="text" class="rpt-field" tabindex="${tabIndex++}" placeholder="Facility Name" data-field="facility"></p>`;
-                html += `<p class="rpt-line"><strong>Patient:</strong> <input type="text" class="rpt-field rpt-field-sm" tabindex="${tabIndex++}" placeholder="Name" data-field="patient_name">, <input type="text" class="rpt-field rpt-field-xs" tabindex="${tabIndex++}" placeholder="Age" data-field="age">, <input type="text" class="rpt-field rpt-field-xs" tabindex="${tabIndex++}" placeholder="Sex" data-field="sex"></p>`;
-                html += `<p class="rpt-line"><strong>Referring:</strong> <input type="text" class="rpt-field" tabindex="${tabIndex++}" placeholder="Referring Physician" data-field="referring"></p>`;
+                html += `<div class="ps-section">DEMOGRAPHICS</div>`;
+                html += `<div class="ps-line"><span class="ps-label">Facility:</span> <span class="ps-field" data-field="facility"></span></div>`;
+                html += `<div class="ps-line"><span class="ps-label">Patient:</span> <span class="ps-field" data-field="patient_name"></span>, <span class="ps-field ps-field-sm" data-field="age"></span>, <span class="ps-field ps-field-sm" data-field="sex"></span></div>`;
+                html += `<div class="ps-line"><span class="ps-label">Referring:</span> <span class="ps-field" data-field="referring"></span></div>`;
                 
                 // CLINICAL INFORMATION
-                html += `<p class="rpt-h1">CLINICAL INFORMATION</p>`;
-                html += `<p class="rpt-line"><strong>History:</strong> <input type="text" class="rpt-field rpt-field-lg" tabindex="${tabIndex++}" placeholder="HPI / PMHx" data-field="history"></p>`;
-                html += `<p class="rpt-line"><strong>Indication:</strong> <input type="text" class="rpt-field rpt-field-lg" tabindex="${tabIndex++}" placeholder="Indication" data-field="indication"></p>`;
+                html += `<div class="ps-section">CLINICAL INFORMATION</div>`;
+                html += `<div class="ps-line"><span class="ps-label">History:</span> <span class="ps-field ps-field-lg" data-field="history"></span></div>`;
+                html += `<div class="ps-line"><span class="ps-label">Indication:</span> <span class="ps-field ps-field-lg" data-field="indication"></span></div>`;
                 
                 // TECHNIQUE
-                html += `<p class="rpt-h1">TECHNIQUE</p>`;
-                html += `<p class="rpt-line"><strong>Procedure:</strong> <select class="rpt-select" tabindex="${tabIndex++}" data-field="procedure"><option>Standard protocol</option></select></p>`;
-                html += `<p class="rpt-line"><strong>Contrast:</strong> <select class="rpt-select" tabindex="${tabIndex++}" data-field="contrast"><option>None</option><option>IV contrast</option><option>Oral contrast</option></select></p>`;
+                html += `<div class="ps-section">TECHNIQUE</div>`;
+                html += `<div class="ps-line"><span class="ps-label">Procedure:</span> <span class="ps-pick" onclick="showTechniqueOptions(this)">Standard protocol</span></div>`;
+                html += `<div class="ps-line"><span class="ps-label">Contrast:</span> <span class="ps-pick" onclick="showContrastOptions(this)">None</span></div>`;
                 
                 // COMPARISON
-                html += `<p class="rpt-h1">COMPARISON</p>`;
-                html += `<p class="rpt-line"><input type="text" class="rpt-field rpt-field-lg" tabindex="${tabIndex++}" placeholder="None available" data-field="comparison"></p>`;
+                html += `<div class="ps-section">COMPARISON</div>`;
+                html += `<div class="ps-line"><span class="ps-field ps-field-lg" data-field="comparison">None available.</span></div>`;
                 
                 // FINDINGS
-                html += `<p class="rpt-h1">FINDINGS</p>`;
-                html += `<p class="rpt-line"><strong>Quality:</strong> <select class="rpt-select" tabindex="${tabIndex++}" data-field="quality"><option>Diagnostic quality</option><option>Limited study</option></select></p>`;
+                html += `<div class="ps-section">FINDINGS</div>`;
+                html += `<div class="ps-line"><span class="ps-label">Quality:</span> <span class="ps-pick" onclick="showQualityOptions(this)">Diagnostic quality.</span></div>`;
                 
                 components.forEach((compId) => {
                     const comp = findComponent(compId);
                     const displayName = comp?.display_name || compId;
                     const picklists = comp ? Object.keys(comp.picklists || {}) : [];
                     
-                    let fieldHtml = '';
+                    html += `<div class="ps-line"><span class="ps-label">${displayName}:</span> `;
+                    
                     if (picklists.length > 0) {
-                        picklists.forEach(pk => {
+                        picklists.forEach((pk, i) => {
                             const pkData = comp.picklists[pk];
                             const opts = pkData.options || [];
                             const normalOpt = opts.find(o => o.state === 'normal') || opts[0];
-                            fieldHtml += `<select class="rpt-select" tabindex="${tabIndex++}" data-field="${compId}.${pk}">`;
-                            opts.forEach(opt => {
-                                fieldHtml += `<option value="${opt.id}">${opt.text || opt.id}</option>`;
-                            });
-                            fieldHtml += `</select> `;
+                            const text = normalOpt?.text || 'Normal.';
+                            html += `<span class="ps-pick" data-comp="${compId}" data-pk="${pk}" onclick="showPicklistPopup(this, '${compId}', '${pk}')">${text}</span>`;
+                            if (i < picklists.length - 1) html += ' ';
                         });
                     } else {
-                        fieldHtml = `<input type="text" class="rpt-field" tabindex="${tabIndex++}" placeholder="Findings" data-field="${compId}">`;
+                        html += `<span class="ps-field" data-field="${compId}">Normal.</span>`;
                     }
                     
-                    html += `<p class="rpt-line"><strong>${displayName}:</strong> ${fieldHtml}</p>`;
+                    html += `</div>`;
                 });
                 
                 // IMPRESSION
-                html += `<p class="rpt-h1">IMPRESSION</p>`;
-                html += `<textarea class="rpt-impression" tabindex="${tabIndex++}" placeholder="Enter impression..." data-field="impression">${defaultImpression}</textarea>`;
+                html += `<div class="ps-section">IMPRESSION</div>`;
+                html += `<div class="ps-impression">${defaultImpression}</div>`;
+                
+                html += `</div>`; // Close ps-document
                 
             } else {
                 // ═══════════════════════════════════════════════════════════
@@ -2816,10 +2823,134 @@
             // Focus first field in report mode
             if (editorMode === 'report') {
                 setTimeout(() => {
-                    const firstField = document.querySelector('.rpt-field, .rpt-select');
-                    if (firstField) firstField.focus();
+                    const doc = document.getElementById('ps-doc');
+                    if (doc) doc.focus();
                 }, 100);
             }
+        }
+        
+        // ═══════════════════════════════════════════════════════════
+        // PICKLIST POPUP FUNCTIONS
+        // ═══════════════════════════════════════════════════════════
+        
+        function showPicklistPopup(el, compId, pkId) {
+            closePicklistPopup();
+            
+            const comp = findComponent(compId);
+            if (!comp || !comp.picklists || !comp.picklists[pkId]) return;
+            
+            const pk = comp.picklists[pkId];
+            const opts = pk.options || [];
+            
+            const rect = el.getBoundingClientRect();
+            const popup = document.createElement('div');
+            popup.className = 'ps-popup';
+            popup.id = 'ps-active-popup';
+            popup.style.left = rect.left + 'px';
+            popup.style.top = (rect.bottom + 4) + 'px';
+            
+            popup.innerHTML = `<div class="ps-popup-header">${pk.display_name || pkId}</div>`;
+            
+            opts.forEach(opt => {
+                const stateClass = opt.state || '';
+                popup.innerHTML += `<div class="ps-popup-item ${stateClass}" onclick="selectPicklistOption(this, '${opt.text || opt.id}')">${opt.text || opt.id}</div>`;
+            });
+            
+            popup.dataset.target = el.outerHTML;
+            popup._targetEl = el;
+            
+            document.body.appendChild(popup);
+            
+            // Close on click outside
+            setTimeout(() => {
+                document.addEventListener('click', closePicklistPopupOnClickOutside);
+            }, 10);
+        }
+        
+        function selectPicklistOption(optEl, text) {
+            const popup = document.getElementById('ps-active-popup');
+            if (popup && popup._targetEl) {
+                popup._targetEl.textContent = text;
+            }
+            closePicklistPopup();
+        }
+        
+        function closePicklistPopup() {
+            const popup = document.getElementById('ps-active-popup');
+            if (popup) popup.remove();
+            document.removeEventListener('click', closePicklistPopupOnClickOutside);
+        }
+        
+        function closePicklistPopupOnClickOutside(e) {
+            const popup = document.getElementById('ps-active-popup');
+            if (popup && !popup.contains(e.target) && !e.target.classList.contains('ps-pick')) {
+                closePicklistPopup();
+            }
+        }
+        
+        function showTechniqueOptions(el) {
+            closePicklistPopup();
+            const rect = el.getBoundingClientRect();
+            const popup = document.createElement('div');
+            popup.className = 'ps-popup';
+            popup.id = 'ps-active-popup';
+            popup.style.left = rect.left + 'px';
+            popup.style.top = (rect.bottom + 4) + 'px';
+            popup._targetEl = el;
+            
+            popup.innerHTML = `
+                <div class="ps-popup-header">Technique</div>
+                <div class="ps-popup-item" onclick="selectPicklistOption(this, 'Standard protocol')">Standard protocol</div>
+                <div class="ps-popup-item" onclick="selectPicklistOption(this, 'High resolution protocol')">High resolution protocol</div>
+                <div class="ps-popup-item" onclick="selectPicklistOption(this, 'Routine protocol')">Routine protocol</div>
+            `;
+            
+            document.body.appendChild(popup);
+            setTimeout(() => document.addEventListener('click', closePicklistPopupOnClickOutside), 10);
+        }
+        
+        function showContrastOptions(el) {
+            closePicklistPopup();
+            const rect = el.getBoundingClientRect();
+            const popup = document.createElement('div');
+            popup.className = 'ps-popup';
+            popup.id = 'ps-active-popup';
+            popup.style.left = rect.left + 'px';
+            popup.style.top = (rect.bottom + 4) + 'px';
+            popup._targetEl = el;
+            
+            popup.innerHTML = `
+                <div class="ps-popup-header">Contrast</div>
+                <div class="ps-popup-item" onclick="selectPicklistOption(this, 'None')">None</div>
+                <div class="ps-popup-item" onclick="selectPicklistOption(this, 'IV contrast administered')">IV contrast administered</div>
+                <div class="ps-popup-item" onclick="selectPicklistOption(this, 'Oral and IV contrast administered')">Oral and IV contrast administered</div>
+                <div class="ps-popup-item" onclick="selectPicklistOption(this, 'Oral contrast administered')">Oral contrast administered</div>
+            `;
+            
+            document.body.appendChild(popup);
+            setTimeout(() => document.addEventListener('click', closePicklistPopupOnClickOutside), 10);
+        }
+        
+        function showQualityOptions(el) {
+            closePicklistPopup();
+            const rect = el.getBoundingClientRect();
+            const popup = document.createElement('div');
+            popup.className = 'ps-popup';
+            popup.id = 'ps-active-popup';
+            popup.style.left = rect.left + 'px';
+            popup.style.top = (rect.bottom + 4) + 'px';
+            popup._targetEl = el;
+            
+            popup.innerHTML = `
+                <div class="ps-popup-header">Quality</div>
+                <div class="ps-popup-item normal" onclick="selectPicklistOption(this, 'Diagnostic quality.')">Diagnostic quality.</div>
+                <div class="ps-popup-item abnormal" onclick="selectPicklistOption(this, 'Limited study due to motion artifact.')">Limited study due to motion artifact.</div>
+                <div class="ps-popup-item abnormal" onclick="selectPicklistOption(this, 'Limited study due to patient positioning.')">Limited study due to patient positioning.</div>
+                <div class="ps-popup-item abnormal" onclick="selectPicklistOption(this, 'Suboptimal study.')">Suboptimal study.</div>
+            `;
+            
+            document.body.appendChild(popup);
+            setTimeout(() => document.addEventListener('click', closePicklistPopupOnClickOutside), 10);
         }
         
         function updateImpressionFromDiv(el) {

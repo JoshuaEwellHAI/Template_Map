@@ -614,6 +614,7 @@
         /* Finding row */
         .te-finding-row {
             display: flex;
+            flex-wrap: wrap;
             align-items: baseline;
             gap: 6px;
             margin: 2px 0;
@@ -627,6 +628,12 @@
         
         .te-finding-label {
             min-width: 120px;
+            flex-shrink: 0;
+        }
+        
+        .te-finding-row .te-picklist {
+            white-space: normal;
+            word-wrap: break-word;
         }
         
         .te-finding-actions {

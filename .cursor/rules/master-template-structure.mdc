@@ -1,0 +1,131 @@
+---
+description: Required structure and components for all master radiology report templates
+globs: templates/**/*.json, template-map.json
+alwaysApply: false
+---
+
+# Master Template Required Structure
+
+Every master radiology report template MUST contain all of the following sections. Components can be organized per the project's format but all elements must be present.
+
+---
+
+## 1. DEMOGRAPHICS (Header Section)
+
+Required fields:
+- **Facility/Location**: Where the study was performed
+- **Patient Name**: Full patient name
+- **Age/DOB**: Age or date of birth
+- **Sex**: Sex assigned at birth (and gender when appropriate)
+- **Referring Physician**: Name(s) of referring physician(s) or other health care provider(s)
+- **Exam Name/Type**: Name or type of examination
+- **Exam Date**: Date of the examination
+- **Exam Time**: Time of examination (required when patient may have multiple exams per day)
+
+Optional metadata (when applicable):
+- Date and time of dictation
+- Date and time of transcription
+- Date and time report is finalized
+
+---
+
+## 2. RELEVANT CLINICAL INFORMATION
+
+Required fields:
+- **HPI**: History of present illness
+- **Indication**: Clinical indication for the study
+- **Clinical Questions**: The report must address or answer specific clinical questions. If factors prevent answering the clinical question, these must be stated.
+
+---
+
+## 3. BODY OF THE REPORT
+
+### 3.1 TECHNIQUE (Procedures and Materials)
+
+The report must include:
+- Description of studies and/or procedures performed
+- Contrast media and/or radiopharmaceuticals used, including:
+  - Specific administered activities
+  - Concentration
+  - Volume
+  - Route of administration
+- Medications used (beyond routine contrast administration)
+- Catheters or devices used
+- Any known significant patient reaction or complication
+- Description of any therapeutic interventions
+- Patient instructions given (documented when applicable)
+
+### 3.2 COMPARISON
+
+- Comparison with relevant prior examinations and reports
+- Must be included when appropriate and available
+
+### 3.3 FINDINGS
+
+Required:
+- Use appropriate anatomic, pathologic, and radiologic terminology
+- Organize by anatomic region or system as appropriate for the modality
+
+### 3.4 QUALITY/LIMITATIONS
+
+- Identify factors that may compromise sensitivity and specificity of the examination
+- Document any technical limitations affecting interpretation
+
+---
+
+## 4. IMPRESSION (Conclusion/Diagnosis)
+
+Required for all reports except brief ones:
+- **Diagnosis**: Specific diagnosis when possible
+- **Differential**: Differential diagnosis when appropriate
+- **Recommendations**: Follow-up or additional diagnostic studies to clarify/confirm impression
+- **Adverse Events**: Any known significant adverse event that occurred during the study
+
+---
+
+## Template Structure in JSON
+
+Master templates must follow this section hierarchy:
+
+```json
+{
+  "header": {
+    "demographics": { /* merge fields */ },
+    "facility": { /* merge field */ },
+    "exam_info": { /* merge fields for exam name, date, time */ },
+    "referring_provider": { /* merge field */ }
+  },
+  "clinical_information": {
+    "hpi": { /* merge field or component */ },
+    "indication": { /* merge field or component */ },
+    "clinical_questions": { /* component */ }
+  },
+  "technique": { /* picklist/component for procedure description */ },
+  "comparison": { /* merge field + picklist for prior studies */ },
+  "findings": [
+    /* Array of finding components organized by anatomy */
+  ],
+  "quality": { /* component for limitations */ },
+  "impression": {
+    "default_text": "Normal exam.",
+    "source": "AI Generated",
+    "includes_diagnosis": true,
+    "includes_differential": true,
+    "includes_recommendations": true
+  }
+}
+```
+
+---
+
+## Validation Checklist
+
+When creating or reviewing a master template, verify:
+
+- [ ] Demographics section complete with all required fields
+- [ ] Clinical information includes HPI and Indication
+- [ ] Technique section describes procedure and materials
+- [ ] Comparison section present (even if "No prior studies available")
+- [ ] Findings organized with appropriate anatomic components
+- [ ] Quality/Limitations section included
+- [ ] Impression section with diagnosis, differential, and recommendations capability

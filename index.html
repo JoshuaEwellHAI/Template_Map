@@ -639,6 +639,35 @@
             font-size: 10px;
         }
         
+        /* Add button in editors */
+        .add-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            width: 100%;
+            padding: 10px;
+            border: 1px dashed var(--border);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 12px;
+            margin-top: 8px;
+            transition: all 0.15s;
+        }
+        
+        .add-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: var(--accent-dim);
+        }
+        
+        .add-btn svg {
+            width: 14px;
+            height: 14px;
+        }
+        
         /* Right Panel - Detail Editor */
         .editor-header {
             padding: 16px;
@@ -1585,11 +1614,16 @@
             // ═══════════════════════════════════════════════════════════
             // TECHNIQUE Section
             // ═══════════════════════════════════════════════════════════
+            const tecId = `TEC-${currentTemplate.mod}-${currentTemplate.reg}`;
+            const contrastId = `CONTRAST-${currentTemplate.mod}`;
+            const tecCount = templateMap._section_picklists?.[tecId]?.options?.length || 0;
+            const contrastCount = templateMap._section_picklists?.[contrastId]?.options?.length || 0;
+            
             html += `<div class="tpl-section" data-section="technique">
                 <div class="tpl-section-header" onclick="this.parentElement.classList.toggle('collapsed')">
                     <span class="tpl-section-toggle">${chevron}</span>
                     <span class="tpl-section-title">Technique</span>
-                    <span class="tpl-section-badge">2 picklists</span>
+                    <span class="tpl-section-badge">${tecCount + contrastCount} options</span>
                 </div>
                 <div class="tpl-section-body">
                     <div class="tpl-field">
@@ -1597,7 +1631,8 @@
                         <span class="tpl-field-value">
                             <span class="tpl-picklist" onclick="editTechniquePicklist()">
                                 ${listIcon}
-                                TEC-${currentTemplate.mod}-${currentTemplate.reg}
+                                ${tecId}
+                                <span class="tpl-picklist-count">${tecCount}</span>
                             </span>
                         </span>
                     </div>
@@ -1606,7 +1641,8 @@
                         <span class="tpl-field-value">
                             <span class="tpl-picklist" onclick="editContrastPicklist()">
                                 ${listIcon}
-                                CONTRAST-${currentTemplate.mod}
+                                ${contrastId}
+                                <span class="tpl-picklist-count">${contrastCount}</span>
                             </span>
                         </span>
                     </div>
@@ -1642,13 +1678,17 @@
                 <div class="tpl-section-body">`;
             
             // Quality row (always first)
+            const qualityId = `QUALITY-${currentTemplate.mod}`;
+            const qualityCount = templateMap._section_picklists?.[qualityId]?.options?.length || 0;
+            
             html += `<div class="tpl-finding">
                 <span class="tpl-finding-drag">${dragIcon}</span>
                 <span class="tpl-finding-label"><input type="text" value="Quality" onchange="updateHeaderLabel(this, 'quality')"></span>
                 <span class="tpl-finding-picklists">
                     <span class="tpl-picklist" onclick="editQualityPicklist()">
                         ${listIcon}
-                        QUALITY-${currentTemplate.mod}
+                        ${qualityId}
+                        <span class="tpl-picklist-count">${qualityCount}</span>
                     </span>
                 </span>
                 <span class="tpl-finding-actions"></span>
@@ -1777,29 +1817,229 @@
             markChanged();
         }
         
-        // Placeholder functions for section picklist editing
+        // ═══════════════════════════════════════════════════════════
+        // SECTION PICKLIST EDITORS
+        // These edit template-level picklists (technique, contrast, quality, etc.)
+        // ═══════════════════════════════════════════════════════════
+        
+        let currentSectionPicklist = null; // { type, id }
+        
+        // Ensure section picklists exist in templateMap
+        function ensureSectionPicklists() {
+            if (!templateMap._section_picklists) {
+                templateMap._section_picklists = {};
+            }
+        }
+        
+        // Get or create a section picklist
+        function getSectionPicklist(picklistId) {
+            ensureSectionPicklists();
+            if (!templateMap._section_picklists[picklistId]) {
+                templateMap._section_picklists[picklistId] = {
+                    id: picklistId,
+                    display_name: picklistId,
+                    options: []
+                };
+            }
+            return templateMap._section_picklists[picklistId];
+        }
+        
         function editTechniquePicklist() {
-            showToast('Technique picklist editor - coming soon', 'info');
+            const picklistId = `TEC-${currentTemplate.mod}-${currentTemplate.reg}`;
+            currentSectionPicklist = { type: 'technique', id: picklistId };
+            renderSectionPicklistEditor(picklistId, 'Technique');
         }
         
         function editComparisonPicklist() {
-            showToast('Comparison picklist editor - coming soon', 'info');
+            const picklistId = 'COMP-standard';
+            currentSectionPicklist = { type: 'comparison', id: picklistId };
+            renderSectionPicklistEditor(picklistId, 'Comparison');
         }
         
         function editContrastPicklist() {
-            showToast('Contrast/Materials picklist editor - coming soon', 'info');
+            const picklistId = `CONTRAST-${currentTemplate.mod}`;
+            currentSectionPicklist = { type: 'contrast', id: picklistId };
+            renderSectionPicklistEditor(picklistId, 'Contrast / Materials');
         }
         
         function editQualityPicklist() {
-            showToast('Quality/Limitations picklist editor - coming soon', 'info');
+            const picklistId = `QUALITY-${currentTemplate.mod}`;
+            currentSectionPicklist = { type: 'quality', id: picklistId };
+            renderSectionPicklistEditor(picklistId, 'Quality / Limitations');
         }
         
         function editDifferentialPicklist() {
-            showToast('Differential diagnosis picklist editor - coming soon', 'info');
+            const picklistId = `DIFF-${currentTemplate.mod}-${currentTemplate.reg}`;
+            currentSectionPicklist = { type: 'differential', id: picklistId };
+            renderSectionPicklistEditor(picklistId, 'Differential Diagnosis');
         }
         
         function editRecommendationsPicklist() {
-            showToast('Recommendations picklist editor - coming soon', 'info');
+            const picklistId = 'REC-followup';
+            currentSectionPicklist = { type: 'recommendations', id: picklistId };
+            renderSectionPicklistEditor(picklistId, 'Recommendations');
+        }
+        
+        // Render section picklist editor in right panel
+        function renderSectionPicklistEditor(picklistId, displayName) {
+            const pk = getSectionPicklist(picklistId);
+            const opts = pk.options || [];
+            
+            let html = `
+                <div class="editor-header">
+                    <div style="display:flex;align-items:center;gap:8px;">
+                        <button class="btn" onclick="renderEmptyEditor()" style="padding:4px 8px;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M15 18l-6-6 6-6"/></svg>
+                        </button>
+                        <div>
+                            <div class="editor-title">${displayName}</div>
+                            <div class="editor-subtitle">${picklistId}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="editor-body">
+                    <!-- Picklist Metadata -->
+                    <div class="editor-section">
+                        <div class="editor-section-title">Picklist Settings</div>
+                        <div class="form-row">
+                            <label class="form-label">Display Name</label>
+                            <input type="text" id="edit-section-pk-name" value="${pk.display_name || picklistId}" 
+                                onchange="updateSectionPicklistField('display_name', this.value)">
+                        </div>
+                        <div class="form-row">
+                            <label class="form-label">Picklist ID</label>
+                            <input type="text" value="${picklistId}" disabled style="opacity:0.6;">
+                        </div>
+                    </div>
+                    
+                    <!-- Options -->
+                    <div class="editor-section">
+                        <div class="editor-section-title">Options (${opts.length})</div>
+                        <div class="picklist-options" id="section-options-list">`;
+            
+            opts.forEach((opt, idx) => {
+                html += `<div class="option-item-editable" data-idx="${idx}" data-state="${opt.state || 'normal'}">
+                    <div class="option-row-top">
+                        <select class="option-state-select" onchange="updateSectionOption(${idx}, 'state', this.value)">
+                            <option value="normal" ${(opt.state || 'normal') === 'normal' ? 'selected' : ''}>Normal</option>
+                            <option value="abnormal" ${opt.state === 'abnormal' ? 'selected' : ''}>Abnormal</option>
+                            <option value="critical" ${opt.state === 'critical' ? 'selected' : ''}>Critical</option>
+                            <option value="na" ${opt.state === 'na' ? 'selected' : ''}>N/A</option>
+                        </select>
+                        <div class="option-actions-always">
+                            <button class="option-btn" onclick="moveSectionOption(${idx}, -1)" title="Move Up" ${idx === 0 ? 'disabled style="opacity:0.3;"' : ''}>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><path d="M18 15l-6-6-6 6"/></svg>
+                            </button>
+                            <button class="option-btn" onclick="moveSectionOption(${idx}, 1)" title="Move Down" ${idx === opts.length - 1 ? 'disabled style="opacity:0.3;"' : ''}>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><path d="M6 9l6 6 6-6"/></svg>
+                            </button>
+                            <button class="option-btn danger" onclick="deleteSectionOption(${idx})" title="Delete">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><path d="M6 18L18 6M6 6l12 12"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <textarea class="option-text-input" onchange="updateSectionOption(${idx}, 'text', this.value)" 
+                        placeholder="Option text...">${opt.text || ''}</textarea>
+                </div>`;
+            });
+            
+            html += `</div>
+                        <button class="add-btn" onclick="addSectionOption()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M12 5v14M5 12h14"/></svg>
+                            Add Option
+                        </button>
+                    </div>
+                </div>`;
+            
+            document.getElementById('editor-content').innerHTML = html;
+        }
+        
+        // Update section picklist field
+        function updateSectionPicklistField(field, value) {
+            if (!currentSectionPicklist) return;
+            const pk = getSectionPicklist(currentSectionPicklist.id);
+            pk[field] = value;
+            markChanged();
+        }
+        
+        // Update section option
+        function updateSectionOption(idx, field, value) {
+            if (!currentSectionPicklist) return;
+            const pk = getSectionPicklist(currentSectionPicklist.id);
+            if (!pk.options?.[idx]) return;
+            pk.options[idx][field] = value;
+            markChanged();
+            
+            // Update visual state indicator
+            if (field === 'state') {
+                const item = document.querySelector(`.option-item-editable[data-idx="${idx}"]`);
+                if (item) item.dataset.state = value;
+            }
+        }
+        
+        // Move section option
+        function moveSectionOption(idx, direction) {
+            if (!currentSectionPicklist) return;
+            const pk = getSectionPicklist(currentSectionPicklist.id);
+            if (!pk.options) return;
+            
+            const newIdx = idx + direction;
+            if (newIdx < 0 || newIdx >= pk.options.length) return;
+            
+            [pk.options[idx], pk.options[newIdx]] = [pk.options[newIdx], pk.options[idx]];
+            markChanged();
+            renderSectionPicklistEditor(currentSectionPicklist.id, getPicklistDisplayName(currentSectionPicklist.type));
+        }
+        
+        // Delete section option
+        function deleteSectionOption(idx) {
+            if (!currentSectionPicklist) return;
+            if (!confirm('Delete this option?')) return;
+            
+            const pk = getSectionPicklist(currentSectionPicklist.id);
+            if (!pk.options) return;
+            
+            pk.options.splice(idx, 1);
+            markChanged();
+            renderSectionPicklistEditor(currentSectionPicklist.id, getPicklistDisplayName(currentSectionPicklist.type));
+            showToast('Option deleted', 'success');
+        }
+        
+        // Add section option
+        function addSectionOption() {
+            if (!currentSectionPicklist) return;
+            const pk = getSectionPicklist(currentSectionPicklist.id);
+            if (!pk.options) pk.options = [];
+            
+            pk.options.push({
+                id: `opt-${pk.options.length + 1}`,
+                state: 'normal',
+                text: ''
+            });
+            
+            markChanged();
+            renderSectionPicklistEditor(currentSectionPicklist.id, getPicklistDisplayName(currentSectionPicklist.type));
+            
+            // Focus the new textarea
+            setTimeout(() => {
+                const textareas = document.querySelectorAll('.option-text-input');
+                if (textareas.length > 0) {
+                    textareas[textareas.length - 1].focus();
+                }
+            }, 50);
+        }
+        
+        // Get display name for picklist type
+        function getPicklistDisplayName(type) {
+            const names = {
+                technique: 'Technique',
+                comparison: 'Comparison',
+                contrast: 'Contrast / Materials',
+                quality: 'Quality / Limitations',
+                differential: 'Differential Diagnosis',
+                recommendations: 'Recommendations'
+            };
+            return names[type] || type;
         }
         
         function findComponent(compId) {

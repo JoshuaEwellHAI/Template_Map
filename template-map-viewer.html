@@ -437,26 +437,90 @@
             font-weight: 600;
         }
         
-        /* Section header */
+        /* Section header - editable */
         .text-section {
             margin-top: 20px;
             margin-bottom: 8px;
-            font-weight: 700;
-            font-size: 13px;
-            color: var(--accent);
-            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
         .text-section:first-child {
             margin-top: 0;
         }
         
-        /* Subheader for findings */
-        .text-subheader {
-            margin-top: 12px;
-            margin-bottom: 4px;
+        .text-section-label {
+            font-weight: 700;
+            font-size: 13px;
+            color: var(--accent);
+            text-transform: uppercase;
+            background: transparent;
+            border: 1px solid transparent;
+            padding: 2px 4px;
+            margin: -2px -4px;
+            border-radius: 3px;
+            cursor: text;
+            min-width: 80px;
+        }
+        
+        .text-section-label:hover {
+            border-color: var(--border);
+            background: rgba(255,255,255,0.02);
+        }
+        
+        .text-section-label:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: rgba(255,255,255,0.04);
+        }
+        
+        .text-section-tag {
+            font-size: 10px;
+            color: var(--text-muted);
+            font-family: "SF Mono", monospace;
+            opacity: 0;
+            transition: opacity 0.15s;
+        }
+        
+        .text-section:hover .text-section-tag {
+            opacity: 1;
+        }
+        
+        /* Subheader label - editable */
+        .text-label {
             color: var(--text-secondary);
             font-weight: 600;
+            background: transparent;
+            border: 1px solid transparent;
+            padding: 1px 3px;
+            margin: -1px -3px;
+            border-radius: 2px;
+            cursor: text;
+            min-width: 60px;
+            display: inline-block;
+        }
+        
+        .text-label:hover {
+            border-color: var(--border);
+        }
+        
+        .text-label:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: rgba(255,255,255,0.03);
+        }
+        
+        .text-label-tag {
+            font-size: 9px;
+            color: var(--text-muted);
+            font-family: "SF Mono", monospace;
+            opacity: 0;
+            margin-left: 4px;
+        }
+        
+        .text-line:hover .text-label-tag {
+            opacity: 0.7;
         }
         
         /* Finding line with actions */
@@ -475,7 +539,19 @@
         .text-finding-label {
             color: var(--text-secondary);
             font-weight: 600;
+            min-width: 140px;
+            display: flex;
+            align-items: baseline;
+            gap: 2px;
+        }
+        
+        .text-finding-label .text-label {
             min-width: 0;
+            flex: 1;
+        }
+        
+        .text-finding:hover .text-label-tag {
+            opacity: 0.7;
         }
         
         .text-finding-content {
@@ -1564,21 +1640,43 @@
             // Text document area
             html += `<div class="text-content"><div class="text-document">`;
             
+            // Get custom labels or use defaults
+            const labels = tpl.custom_labels || {};
+            
+            // Helper for editable section header
+            const sectionHeader = (defaultLabel, tag) => {
+                const label = labels[tag] || defaultLabel;
+                return `<div class="text-section">
+                    <input type="text" class="text-section-label" value="${label}" 
+                        onchange="updateSectionLabel('${tag}', this.value)" 
+                        data-tag="${tag}">
+                    <span class="text-section-tag">[${tag}]</span>
+                </div>`;
+            };
+            
+            // Helper for editable field label
+            const fieldLabel = (defaultLabel, tag) => {
+                const label = labels[tag] || defaultLabel;
+                return `<input type="text" class="text-label" value="${label}" 
+                    onchange="updateSectionLabel('${tag}', this.value)" 
+                    data-tag="${tag}"><span class="text-label-tag">[${tag}]</span>`;
+            };
+            
             // ═══════════════════════════════════════════════════════════
             // DEMOGRAPHICS
             // ═══════════════════════════════════════════════════════════
-            html += `<div class="text-section">DEMOGRAPHICS:</div>`;
-            html += `<div class="text-line"><span class="text-label">Facility:</span> ${mergeField('Facility Name')}</div>`;
-            html += `<div class="text-line"><span class="text-label">Patient:</span> ${mergeField('Patient Name')}, ${mergeField('DOB/Age')}, ${mergeField('Sex')}</div>`;
-            html += `<div class="text-line"><span class="text-label">Referring:</span> ${mergeField('Referring Physician')}</div>`;
-            html += `<div class="text-line"><span class="text-label">Exam:</span> ${tpl.primary_cpt} ${tpl.description}</div>`;
+            html += sectionHeader('DEMOGRAPHICS:', 'section.demographics');
+            html += `<div class="text-line">${fieldLabel('Facility:', 'field.facility')} ${mergeField('Facility Name')}</div>`;
+            html += `<div class="text-line">${fieldLabel('Patient:', 'field.patient')} ${mergeField('Patient Name')}, ${mergeField('DOB/Age')}, ${mergeField('Sex')}</div>`;
+            html += `<div class="text-line">${fieldLabel('Referring:', 'field.referring')} ${mergeField('Referring Physician')}</div>`;
+            html += `<div class="text-line">${fieldLabel('Exam:', 'field.exam')} ${tpl.primary_cpt} ${tpl.description}</div>`;
             
             // ═══════════════════════════════════════════════════════════
             // CLINICAL INFORMATION
             // ═══════════════════════════════════════════════════════════
-            html += `<div class="text-section">CLINICAL INFORMATION:</div>`;
-            html += `<div class="text-line"><span class="text-label">History:</span> ${mergeField('HPI')} / ${mergeField('PMHx')}</div>`;
-            html += `<div class="text-line"><span class="text-label">Indication:</span> ${mergeField('Indication')}</div>`;
+            html += sectionHeader('CLINICAL INFORMATION:', 'section.clinical');
+            html += `<div class="text-line">${fieldLabel('History:', 'field.history')} ${mergeField('HPI')} / ${mergeField('PMHx')}</div>`;
+            html += `<div class="text-line">${fieldLabel('Indication:', 'field.indication')} ${mergeField('Indication')}</div>`;
             
             // ═══════════════════════════════════════════════════════════
             // TECHNIQUE
@@ -1588,14 +1686,14 @@
             const tecCount = templateMap._section_picklists?.[tecId]?.options?.length || 0;
             const contrastCount = templateMap._section_picklists?.[contrastId]?.options?.length || 0;
             
-            html += `<div class="text-section">TECHNIQUE:</div>`;
-            html += `<div class="text-line"><span class="text-label">Procedure:</span> ${picklistLink(tecId, tecId + ' (' + tecCount + ')', tecCount, 'editTechniquePicklist()')}</div>`;
-            html += `<div class="text-line"><span class="text-label">Contrast:</span> ${picklistLink(contrastId, contrastId + ' (' + contrastCount + ')', contrastCount, 'editContrastPicklist()')}</div>`;
+            html += sectionHeader('TECHNIQUE:', 'section.technique');
+            html += `<div class="text-line">${fieldLabel('Procedure:', 'field.procedure')} ${picklistLink(tecId, tecId + ' (' + tecCount + ')', tecCount, 'editTechniquePicklist()')}</div>`;
+            html += `<div class="text-line">${fieldLabel('Contrast:', 'field.contrast')} ${picklistLink(contrastId, contrastId + ' (' + contrastCount + ')', contrastCount, 'editContrastPicklist()')}</div>`;
             
             // ═══════════════════════════════════════════════════════════
             // COMPARISON
             // ═══════════════════════════════════════════════════════════
-            html += `<div class="text-section">COMPARISON:</div>`;
+            html += sectionHeader('COMPARISON:', 'section.comparison');
             html += `<div class="text-line">${mergeField('Prior Studies')}</div>`;
             
             // ═══════════════════════════════════════════════════════════
@@ -1604,11 +1702,11 @@
             const qualityId = `QUALITY-${currentTemplate.mod}`;
             const qualityCount = templateMap._section_picklists?.[qualityId]?.options?.length || 0;
             
-            html += `<div class="text-section">FINDINGS:</div>`;
+            html += sectionHeader('FINDINGS:', 'section.findings');
             
             // Quality
             html += `<div class="text-finding">
-                <span class="text-finding-label">Quality:</span>
+                <span class="text-finding-label">${fieldLabel('Quality:', 'field.quality')}</span>
                 <span class="text-finding-content">${picklistLink(qualityId, qualityId + ' (' + qualityCount + ')', qualityCount, 'editQualityPicklist()')}</span>
             </div>`;
             
@@ -1631,7 +1729,12 @@
                 }
                 
                 html += `<div class="text-finding" data-comp="${compId}">
-                    <span class="text-finding-label">${displayName}:</span>
+                    <span class="text-finding-label">
+                        <input type="text" class="text-label" value="${displayName}:" 
+                            onchange="updateFindingLabel(this, '${compId}')" 
+                            data-tag="finding.${compId}">
+                        <span class="text-label-tag">[${compId}]</span>
+                    </span>
                     <span class="text-finding-content">${picklistsHtml}</span>
                     <span class="text-finding-actions">
                         <span class="text-action-btn" onclick="moveComponent(${idx}, -1)" title="Move Up">↑</span>
@@ -1647,7 +1750,7 @@
             // IMPRESSION
             // ═══════════════════════════════════════════════════════════
             const defaultImpression = tpl.impression?.default_text || 'Normal exam.';
-            html += `<div class="text-section">IMPRESSION:</div>`;
+            html += sectionHeader('IMPRESSION:', 'section.impression');
             html += `<textarea class="text-impression" onchange="updateImpressionText(this)" placeholder="Enter impression...">${defaultImpression}</textarea>`;
             
             html += `</div></div>`; // Close text-document and text-content
@@ -1683,7 +1786,11 @@
         
         // Update finding label from input
         function updateFindingLabel(el, compId) {
-            const newValue = el.value.trim();
+            let newValue = el.value.trim();
+            // Remove trailing colon if present for storage
+            if (newValue.endsWith(':')) {
+                newValue = newValue.slice(0, -1);
+            }
             const loc = findComponentLocation(compId);
             if (loc) {
                 componentMap[loc.modKey][loc.regKey].component_templates[compId].display_name = newValue;
@@ -1700,15 +1807,18 @@
             markChanged();
         }
         
-        // Update header/subheader labels
-        function updateHeaderLabel(el, field) {
-            const newValue = el.textContent.trim();
-            // Store custom header labels in template metadata
+        // Update section/field labels with content tags for AI
+        function updateSectionLabel(tag, value) {
             if (!currentTemplate) return;
             const tpl = templateMap.modalities[currentTemplate.mod].regions[currentTemplate.reg].templates[currentTemplate.tpl];
             if (!tpl.custom_labels) tpl.custom_labels = {};
-            tpl.custom_labels[field] = newValue;
+            tpl.custom_labels[tag] = value.trim();
             markChanged();
+        }
+        
+        // Legacy alias
+        function updateHeaderLabel(el, field) {
+            updateSectionLabel(field, el.textContent || el.value || '');
         }
         
         // ═══════════════════════════════════════════════════════════

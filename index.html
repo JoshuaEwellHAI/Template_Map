@@ -166,10 +166,15 @@
             padding: 8px;
         }
         
-        /* Template editor panel */
+        /* Report editor panel - fills entire space */
         #panel-structure .panel-content {
-            background: var(--bg-primary);
+            background: #0a0f14;
             padding: 0;
+            overflow: hidden;
+        }
+        
+        #template-structure {
+            height: 100%;
         }
         
         .resizer {
@@ -269,351 +274,452 @@
         }
         
         /* ========================================
-           TEMPLATE EDITOR STYLES
-           PowerScribe-like template editor interface
+           REPORT EDITOR STYLES
+           NotariOS Dicta-style rich text report editor
            ======================================== */
         
-        /* Editor container - dark admin panel style */
-        .tpl-editor {
-            background: var(--bg-primary);
-            padding: 12px;
-            min-height: 100%;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            font-size: 13px;
+        /* Report editor container */
+        .report-editor {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            background: #0d1117;
         }
         
-        /* Template header bar */
-        .tpl-header-bar {
-            background: linear-gradient(135deg, var(--accent), #0d7fd4);
-            border-radius: 8px;
-            padding: 16px 20px;
-            margin-bottom: 12px;
+        /* Template info header */
+        .report-header {
+            background: linear-gradient(135deg, #1a365d, #2563eb);
+            padding: 12px 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            border-bottom: 1px solid var(--border);
         }
         
-        .tpl-header-bar h2 {
-            color: white;
-            font-size: 18px;
-            font-weight: 600;
-            margin: 0;
+        .report-header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
         }
         
-        .tpl-header-bar .cpt-badge {
-            background: rgba(255,255,255,0.2);
-            color: white;
-            padding: 4px 12px;
+        .report-template-badge {
+            background: rgba(0,0,0,0.3);
+            padding: 6px 14px;
             border-radius: 4px;
+            font-size: 13px;
+            color: white;
+            font-weight: 500;
+        }
+        
+        .report-cpt {
             font-family: "SF Mono", monospace;
             font-size: 14px;
             font-weight: 600;
+            color: #60a5fa;
         }
         
-        /* Section card */
-        .tpl-section {
+        .report-desc {
+            font-size: 13px;
+            color: rgba(255,255,255,0.8);
+        }
+        
+        /* Format toolbar */
+        .format-toolbar {
             background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            margin-bottom: 8px;
-            overflow: hidden;
-        }
-        
-        .tpl-section.collapsed .tpl-section-body { display: none; }
-        .tpl-section.collapsed .tpl-section-toggle { transform: rotate(-90deg); }
-        
-        .tpl-section-header {
+            border-bottom: 1px solid var(--border);
+            padding: 8px 16px;
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 12px 16px;
-            background: var(--bg-tertiary);
+            gap: 4px;
+        }
+        
+        .format-group {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            padding-right: 12px;
+            margin-right: 12px;
+            border-right: 1px solid var(--border);
+        }
+        
+        .format-group:last-child {
+            border-right: none;
+            margin-right: 0;
+        }
+        
+        .format-btn {
+            width: 32px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            color: var(--text-secondary);
             cursor: pointer;
-            border-bottom: 1px solid var(--border);
-            user-select: none;
+            transition: all 0.15s;
         }
         
-        .tpl-section-header:hover {
+        .format-btn:hover {
             background: var(--bg-hover);
+            color: var(--text-primary);
         }
         
-        .tpl-section-toggle {
-            color: var(--text-muted);
-            transition: transform 0.15s;
-            flex-shrink: 0;
+        .format-btn.active {
+            background: var(--accent-dim);
+            color: var(--accent);
+            border-color: var(--accent);
         }
         
-        .tpl-section-toggle svg {
+        .format-btn svg {
             width: 16px;
             height: 16px;
         }
         
-        .tpl-section-title {
-            font-weight: 600;
-            font-size: 12px;
+        .format-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-right: 8px;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            color: var(--text-primary);
-            flex: 1;
         }
         
-        .tpl-section-badge {
-            font-size: 10px;
-            padding: 2px 8px;
-            border-radius: 10px;
-            background: var(--accent-dim);
-            color: var(--accent);
-        }
+        .format-spacer { flex: 1; }
         
-        .tpl-section-body {
-            padding: 12px 16px;
-        }
-        
-        /* Field row in section */
-        .tpl-field {
+        .format-mode {
             display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 8px 0;
-            border-bottom: 1px solid var(--border-subtle);
-        }
-        
-        .tpl-field:last-child {
-            border-bottom: none;
-        }
-        
-        .tpl-field-label {
-            font-weight: 500;
-            color: var(--text-secondary);
-            min-width: 100px;
-            font-size: 12px;
-        }
-        
-        .tpl-field-value {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-        
-        /* Merge field tag */
-        .tpl-merge-field {
-            display: inline-flex;
             align-items: center;
             gap: 4px;
-            background: rgba(167, 139, 250, 0.15);
-            color: var(--purple);
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 12px;
-            border: 1px dashed rgba(167, 139, 250, 0.4);
+            padding: 4px;
+            background: var(--bg-tertiary);
+            border-radius: 6px;
         }
         
-        .tpl-merge-field::before { content: "{{"; opacity: 0.5; font-size: 10px; }
-        .tpl-merge-field::after { content: "}}"; opacity: 0.5; font-size: 10px; }
-        
-        /* Picklist/Component tag */
-        .tpl-picklist {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(34, 197, 94, 0.15);
-            color: var(--success);
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 12px;
+        .format-mode-btn {
+            padding: 5px 12px;
+            font-size: 11px;
             font-weight: 500;
+            border-radius: 4px;
+            border: none;
             cursor: pointer;
-            border: 1px solid rgba(34, 197, 94, 0.3);
+            background: transparent;
+            color: var(--text-muted);
             transition: all 0.15s;
         }
         
-        .tpl-picklist:hover {
+        .format-mode-btn.active {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .format-mode-btn:hover:not(.active) {
+            color: var(--text-primary);
+        }
+        
+        /* Report content area - the actual editable document */
+        .report-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px 40px;
+            background: #0a0f14;
+        }
+        
+        .report-document {
+            max-width: 800px;
+            margin: 0 auto;
+            font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--text-primary);
+        }
+        
+        /* Section in the document */
+        .doc-section {
+            margin-bottom: 24px;
+        }
+        
+        .doc-section-header {
+            font-weight: 700;
+            font-size: 13px;
+            color: #60a5fa;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .doc-section-header::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, rgba(96, 165, 250, 0.3), transparent);
+        }
+        
+        /* Editable content block */
+        .doc-content {
+            min-height: 24px;
+            padding: 8px 12px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid transparent;
+            border-radius: 4px;
+            margin-bottom: 4px;
+            cursor: text;
+            transition: all 0.15s;
+        }
+        
+        .doc-content:hover {
+            background: rgba(255,255,255,0.04);
+            border-color: var(--border);
+        }
+        
+        .doc-content:focus {
+            outline: none;
+            background: rgba(255,255,255,0.05);
+            border-color: var(--accent);
+        }
+        
+        .doc-content[contenteditable="true"]:empty::before {
+            content: attr(data-placeholder);
+            color: var(--text-muted);
+            font-style: italic;
+        }
+        
+        /* Merge field inline tag */
+        .doc-merge-field {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(167, 139, 250, 0.2);
+            color: #a78bfa;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-family: "SF Mono", monospace;
+            border: 1px solid rgba(167, 139, 250, 0.3);
+            margin: 0 2px;
+            cursor: default;
+            user-select: none;
+        }
+        
+        /* Picklist inline tag */
+        .doc-picklist {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(34, 197, 94, 0.15);
+            color: #22c55e;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            margin: 2px 4px;
+            cursor: pointer;
+            transition: all 0.15s;
+            user-select: none;
+        }
+        
+        .doc-picklist:hover {
             background: rgba(34, 197, 94, 0.25);
             border-color: rgba(34, 197, 94, 0.5);
         }
         
-        .tpl-picklist.selected {
+        .doc-picklist.selected {
             background: var(--accent-dim);
             color: var(--accent);
             border-color: var(--accent);
         }
         
-        .tpl-picklist-icon {
-            width: 14px;
-            height: 14px;
+        .doc-picklist svg {
+            width: 12px;
+            height: 12px;
             opacity: 0.7;
         }
         
-        .tpl-picklist-count {
-            background: rgba(0,0,0,0.2);
-            padding: 2px 6px;
+        .doc-picklist-count {
+            background: rgba(0,0,0,0.3);
+            padding: 1px 5px;
             border-radius: 8px;
             font-size: 10px;
+            margin-left: 2px;
         }
         
-        /* Finding component row */
-        .tpl-finding {
+        /* Finding row in document */
+        .doc-finding {
             display: flex;
             align-items: flex-start;
-            gap: 12px;
-            padding: 10px 12px;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            margin-bottom: 6px;
-            transition: all 0.15s;
+            gap: 8px;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
         }
         
-        .tpl-finding:hover {
-            border-color: var(--accent);
+        .doc-finding:last-child {
+            border-bottom: none;
         }
         
-        .tpl-finding-drag {
-            color: var(--text-muted);
-            cursor: grab;
-            padding: 4px;
-            opacity: 0.5;
-        }
-        
-        .tpl-finding:hover .tpl-finding-drag {
-            opacity: 1;
-        }
-        
-        .tpl-finding-drag svg {
-            width: 14px;
-            height: 14px;
-        }
-        
-        .tpl-finding-label {
-            min-width: 140px;
+        .doc-finding-label {
+            min-width: 160px;
             font-weight: 600;
-            color: var(--text-primary);
+            color: var(--text-secondary);
             font-size: 13px;
-            padding: 4px 0;
+            padding-top: 5px;
         }
         
-        .tpl-finding-label input {
+        .doc-finding-label input {
             background: transparent;
             border: none;
-            color: var(--text-primary);
+            color: var(--text-secondary);
             font-weight: 600;
             font-size: 13px;
             width: 100%;
             padding: 0;
         }
         
-        .tpl-finding-label input:focus {
+        .doc-finding-label input:focus {
             outline: none;
-            background: var(--bg-input);
-            padding: 4px 8px;
-            margin: -4px -8px;
-            border-radius: 4px;
+            color: var(--text-primary);
         }
         
-        .tpl-finding-picklists {
+        .doc-finding-picklists {
             flex: 1;
             display: flex;
             flex-wrap: wrap;
             gap: 6px;
         }
         
-        .tpl-finding-actions {
+        .doc-finding-actions {
             display: flex;
             gap: 4px;
             opacity: 0;
             transition: opacity 0.15s;
         }
         
-        .tpl-finding:hover .tpl-finding-actions {
+        .doc-finding:hover .doc-finding-actions {
             opacity: 1;
         }
         
-        .tpl-action-btn {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            padding: 4px;
-            border-radius: 4px;
-        }
-        
-        .tpl-action-btn:hover {
-            background: var(--bg-hover);
-            color: var(--text-primary);
-        }
-        
-        .tpl-action-btn.danger:hover {
-            color: var(--danger);
-        }
-        
-        .tpl-action-btn svg {
-            width: 14px;
-            height: 14px;
-        }
-        
-        /* Add button */
-        .tpl-add-btn {
+        .doc-action-btn {
+            width: 24px;
+            height: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        
+        .doc-action-btn:hover {
+            background: var(--bg-hover);
+            border-color: var(--border);
+            color: var(--text-primary);
+        }
+        
+        .doc-action-btn.danger:hover {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: var(--danger);
+        }
+        
+        .doc-action-btn svg {
+            width: 12px;
+            height: 12px;
+        }
+        
+        /* Add component button */
+        .doc-add-btn {
+            display: inline-flex;
+            align-items: center;
             gap: 6px;
-            width: 100%;
-            padding: 10px;
+            padding: 8px 14px;
             border: 1px dashed var(--border);
             border-radius: 6px;
             background: transparent;
             color: var(--text-muted);
             cursor: pointer;
             font-size: 12px;
-            margin-top: 6px;
+            margin-top: 12px;
             transition: all 0.15s;
         }
         
-        .tpl-add-btn:hover {
+        .doc-add-btn:hover {
             border-color: var(--accent);
             color: var(--accent);
             background: var(--accent-dim);
         }
         
-        .tpl-add-btn svg {
+        .doc-add-btn svg {
             width: 14px;
             height: 14px;
         }
         
-        /* Impression section special styling */
-        .tpl-impression-input {
+        /* Impression textarea */
+        .doc-impression {
             width: 100%;
-            background: var(--bg-input);
+            min-height: 80px;
+            padding: 12px;
+            background: rgba(255,255,255,0.02);
             border: 1px solid var(--border);
             border-radius: 6px;
             color: var(--text-primary);
-            padding: 12px;
             font-size: 14px;
-            min-height: 60px;
+            line-height: 1.6;
+            font-family: inherit;
             resize: vertical;
         }
         
-        .tpl-impression-input:focus {
+        .doc-impression:focus {
             outline: none;
             border-color: var(--accent);
+            background: rgba(255,255,255,0.04);
         }
         
-        /* Static text display */
-        .tpl-static-text {
-            color: var(--text-secondary);
+        /* Report footer */
+        .report-footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .footer-btn {
+            padding: 8px 16px;
+            border-radius: 6px;
             font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.15s;
         }
         
-        /* Section color accents */
-        .tpl-section[data-section="demographics"] .tpl-section-header { border-left: 3px solid #60a5fa; }
-        .tpl-section[data-section="clinical"] .tpl-section-header { border-left: 3px solid #a78bfa; }
-        .tpl-section[data-section="technique"] .tpl-section-header { border-left: 3px solid #f59e0b; }
-        .tpl-section[data-section="comparison"] .tpl-section-header { border-left: 3px solid #6b7280; }
-        .tpl-section[data-section="findings"] .tpl-section-header { border-left: 3px solid var(--accent); }
-        .tpl-section[data-section="impression"] .tpl-section-header { border-left: 3px solid var(--success); }
+        .footer-btn-primary {
+            background: var(--success);
+            color: white;
+        }
         
+        .footer-btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+        
+        .footer-btn-danger {
+            background: transparent;
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+        
+        .footer-spacer { flex: 1; }
+        
+        /* Legacy styles removed - using doc-* classes */
         /* Picklist tag in component */
         .picklist-tag {
             display: inline-flex;
@@ -1544,70 +1650,73 @@
             const tpl = templateMap.modalities[currentTemplate.mod].regions[currentTemplate.reg].templates[currentTemplate.tpl];
             const components = tpl.component_templates || [];
             
-            const chevron = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>`;
-            const dragIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/></svg>`;
+            // Icons
             const listIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>`;
+            const plusIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>`;
             
-            // Build PowerScribe-like template editor
-            let html = `<div class="tpl-editor">`;
+            // Build NotariOS Dicta-style report editor
+            let html = `<div class="report-editor">`;
             
-            // Template header bar
-            html += `<div class="tpl-header-bar">
-                <h2>${tpl.description}</h2>
-                <span class="cpt-badge">${tpl.primary_cpt}</span>
-            </div>`;
-            
-            // ═══════════════════════════════════════════════════════════
-            // DEMOGRAPHICS Section
-            // ═══════════════════════════════════════════════════════════
-            html += `<div class="tpl-section" data-section="demographics">
-                <div class="tpl-section-header" onclick="this.parentElement.classList.toggle('collapsed')">
-                    <span class="tpl-section-toggle">${chevron}</span>
-                    <span class="tpl-section-title">Demographics</span>
-                    <span class="tpl-section-badge">4 fields</span>
-                </div>
-                <div class="tpl-section-body">
-                    <div class="tpl-field">
-                        <span class="tpl-field-label">Facility</span>
-                        <span class="tpl-field-value"><span class="tpl-merge-field">Facility Name</span></span>
-                    </div>
-                    <div class="tpl-field">
-                        <span class="tpl-field-label">Patient</span>
-                        <span class="tpl-field-value">
-                            <span class="tpl-merge-field">Patient Name</span>
-                            <span class="tpl-merge-field">DOB/Age</span>
-                            <span class="tpl-merge-field">Sex</span>
-                        </span>
-                    </div>
-                    <div class="tpl-field">
-                        <span class="tpl-field-label">Referring</span>
-                        <span class="tpl-field-value"><span class="tpl-merge-field">Referring Physician</span></span>
-                    </div>
-                    <div class="tpl-field">
-                        <span class="tpl-field-label">Exam</span>
-                        <span class="tpl-field-value"><span class="tpl-static-text">${tpl.primary_cpt} ${tpl.description}</span></span>
-                    </div>
+            // Header with template info
+            html += `<div class="report-header">
+                <div class="report-header-left">
+                    <span class="report-template-badge">Template</span>
+                    <span class="report-cpt">${tpl.primary_cpt}</span>
+                    <span class="report-desc">${tpl.description}</span>
                 </div>
             </div>`;
             
-            // ═══════════════════════════════════════════════════════════
-            // CLINICAL INFORMATION Section
-            // ═══════════════════════════════════════════════════════════
-            html += `<div class="tpl-section" data-section="clinical">
-                <div class="tpl-section-header" onclick="this.parentElement.classList.toggle('collapsed')">
-                    <span class="tpl-section-toggle">${chevron}</span>
-                    <span class="tpl-section-title">Clinical Information</span>
-                    <span class="tpl-section-badge">2 fields</span>
+            // Format toolbar
+            html += `<div class="format-toolbar">
+                <span class="format-label">Format</span>
+                <div class="format-group">
+                    <button class="format-btn" title="Bold" onclick="document.execCommand('bold')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 4h8a4 4 0 014 4 4 4 0 01-4 4H6V4zM6 12h9a4 4 0 014 4 4 4 0 01-4 4H6v-8z"/></svg>
+                    </button>
+                    <button class="format-btn" title="Italic" onclick="document.execCommand('italic')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="4" x2="10" y2="4"/><line x1="14" y1="20" x2="5" y2="20"/><line x1="15" y1="4" x2="9" y2="20"/></svg>
+                    </button>
+                    <button class="format-btn" title="Underline" onclick="document.execCommand('underline')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4v6a6 6 0 006 6 6 6 0 006-6V4"/><line x1="4" y1="20" x2="20" y2="20"/></svg>
+                    </button>
                 </div>
-                <div class="tpl-section-body">
-                    <div class="tpl-field">
-                        <span class="tpl-field-label">History</span>
-                        <span class="tpl-field-value"><span class="tpl-merge-field">HPI / PMHx</span></span>
-                    </div>
-                    <div class="tpl-field">
-                        <span class="tpl-field-label">Indication</span>
-                        <span class="tpl-field-value"><span class="tpl-merge-field">Indication</span></span>
-                    </div>
+                <div class="format-group">
+                    <button class="format-btn" title="Bullet List" onclick="document.execCommand('insertUnorderedList')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="4" cy="6" r="1" fill="currentColor"/><circle cx="4" cy="12" r="1" fill="currentColor"/><circle cx="4" cy="18" r="1" fill="currentColor"/></svg>
+                    </button>
+                    <button class="format-btn" title="Numbered List" onclick="document.execCommand('insertOrderedList')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 6h11M10 12h11M10 18h11"/><text x="3" y="8" font-size="8" fill="currentColor">1</text><text x="3" y="14" font-size="8" fill="currentColor">2</text><text x="3" y="20" font-size="8" fill="currentColor">3</text></svg>
+                    </button>
+                </div>
+                <div class="format-group">
+                    <button class="format-btn" title="Highlight" onclick="document.execCommand('hiliteColor', false, '#ffeb3b')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                    </button>
+                </div>
+                <div class="format-spacer"></div>
+                <span class="format-label">Editing</span>
+            </div>`;
+            
+            // Report content area - the document
+            html += `<div class="report-content"><div class="report-document">`;
+            
+            // ═══════════════════════════════════════════════════════════
+            // PROCEDURE Section
+            // ═══════════════════════════════════════════════════════════
+            html += `<div class="doc-section">
+                <div class="doc-section-header">Procedure</div>
+                <div class="doc-content" contenteditable="true" data-placeholder="Enter procedure description...">${tpl.primary_cpt} ${tpl.description}</div>
+            </div>`;
+            
+            // ═══════════════════════════════════════════════════════════
+            // CLINICAL HISTORY Section
+            // ═══════════════════════════════════════════════════════════
+            html += `<div class="doc-section">
+                <div class="doc-section-header">Clinical History</div>
+                <div class="doc-content" contenteditable="false" data-placeholder="Clinical history will be populated from PACS/EMR...">
+                    <span class="doc-merge-field">HPI</span>
+                    <span class="doc-merge-field">PMHx</span>
+                    <span class="doc-merge-field">Indication</span>
                 </div>
             </div>`;
             
@@ -1619,154 +1728,119 @@
             const tecCount = templateMap._section_picklists?.[tecId]?.options?.length || 0;
             const contrastCount = templateMap._section_picklists?.[contrastId]?.options?.length || 0;
             
-            html += `<div class="tpl-section" data-section="technique">
-                <div class="tpl-section-header" onclick="this.parentElement.classList.toggle('collapsed')">
-                    <span class="tpl-section-toggle">${chevron}</span>
-                    <span class="tpl-section-title">Technique</span>
-                    <span class="tpl-section-badge">${tecCount + contrastCount} options</span>
-                </div>
-                <div class="tpl-section-body">
-                    <div class="tpl-field">
-                        <span class="tpl-field-label">Procedure</span>
-                        <span class="tpl-field-value">
-                            <span class="tpl-picklist" onclick="editTechniquePicklist()">
-                                ${listIcon}
-                                ${tecId}
-                                <span class="tpl-picklist-count">${tecCount}</span>
-                            </span>
-                        </span>
-                    </div>
-                    <div class="tpl-field">
-                        <span class="tpl-field-label">Contrast</span>
-                        <span class="tpl-field-value">
-                            <span class="tpl-picklist" onclick="editContrastPicklist()">
-                                ${listIcon}
-                                ${contrastId}
-                                <span class="tpl-picklist-count">${contrastCount}</span>
-                            </span>
-                        </span>
-                    </div>
+            html += `<div class="doc-section">
+                <div class="doc-section-header">Technique</div>
+                <div class="doc-content" contenteditable="false">
+                    <span class="doc-picklist" onclick="editTechniquePicklist()">
+                        ${listIcon} ${tecId} <span class="doc-picklist-count">${tecCount}</span>
+                    </span>
+                    <span class="doc-picklist" onclick="editContrastPicklist()">
+                        ${listIcon} ${contrastId} <span class="doc-picklist-count">${contrastCount}</span>
+                    </span>
                 </div>
             </div>`;
             
             // ═══════════════════════════════════════════════════════════
             // COMPARISON Section
             // ═══════════════════════════════════════════════════════════
-            html += `<div class="tpl-section" data-section="comparison">
-                <div class="tpl-section-header" onclick="this.parentElement.classList.toggle('collapsed')">
-                    <span class="tpl-section-toggle">${chevron}</span>
-                    <span class="tpl-section-title">Comparison</span>
-                    <span class="tpl-section-badge">merge field</span>
-                </div>
-                <div class="tpl-section-body">
-                    <div class="tpl-field">
-                        <span class="tpl-field-label">Prior Studies</span>
-                        <span class="tpl-field-value"><span class="tpl-merge-field">Prior Studies</span></span>
-                    </div>
+            html += `<div class="doc-section">
+                <div class="doc-section-header">Comparison</div>
+                <div class="doc-content" contenteditable="false" data-placeholder="Prior studies will be populated...">
+                    <span class="doc-merge-field">Prior Studies</span>
                 </div>
             </div>`;
             
             // ═══════════════════════════════════════════════════════════
             // FINDINGS Section
             // ═══════════════════════════════════════════════════════════
-            html += `<div class="tpl-section" data-section="findings">
-                <div class="tpl-section-header" onclick="this.parentElement.classList.toggle('collapsed')">
-                    <span class="tpl-section-toggle">${chevron}</span>
-                    <span class="tpl-section-title">Findings</span>
-                    <span class="tpl-section-badge">${components.length + 1} components</span>
-                </div>
-                <div class="tpl-section-body">`;
-            
-            // Quality row (always first)
             const qualityId = `QUALITY-${currentTemplate.mod}`;
             const qualityCount = templateMap._section_picklists?.[qualityId]?.options?.length || 0;
             
-            html += `<div class="tpl-finding">
-                <span class="tpl-finding-drag">${dragIcon}</span>
-                <span class="tpl-finding-label"><input type="text" value="Quality" onchange="updateHeaderLabel(this, 'quality')"></span>
-                <span class="tpl-finding-picklists">
-                    <span class="tpl-picklist" onclick="editQualityPicklist()">
-                        ${listIcon}
-                        ${qualityId}
-                        <span class="tpl-picklist-count">${qualityCount}</span>
+            html += `<div class="doc-section">
+                <div class="doc-section-header">Findings</div>
+                <div class="doc-findings-container">`;
+            
+            // Quality row
+            html += `<div class="doc-finding">
+                <span class="doc-finding-label">
+                    <input type="text" value="Quality" onchange="updateHeaderLabel(this, 'quality')">
+                </span>
+                <span class="doc-finding-picklists">
+                    <span class="doc-picklist" onclick="editQualityPicklist()">
+                        ${listIcon} ${qualityId} <span class="doc-picklist-count">${qualityCount}</span>
                     </span>
                 </span>
-                <span class="tpl-finding-actions"></span>
+                <span class="doc-finding-actions"></span>
             </div>`;
             
-            // Anatomic finding components
+            // Component findings
             components.forEach((compId, idx) => {
                 const comp = findComponent(compId);
                 const picklists = comp ? Object.keys(comp.picklists || {}) : [];
                 const displayName = comp?.display_name || compId;
                 
-                html += `<div class="tpl-finding" data-comp="${compId}">
-                    <span class="tpl-finding-drag">${dragIcon}</span>
-                    <span class="tpl-finding-label">
+                html += `<div class="doc-finding" data-comp="${compId}">
+                    <span class="doc-finding-label">
                         <input type="text" value="${displayName}" onchange="updateFindingLabel(this, '${compId}')">
                     </span>
-                    <span class="tpl-finding-picklists">`;
+                    <span class="doc-finding-picklists">`;
                 
                 if (picklists.length > 0) {
                     picklists.forEach(pk => {
                         const pkData = comp.picklists[pk];
                         const optCount = pkData.options?.length || 0;
                         const isSelected = currentComponent === compId && currentPicklist === pk;
-                        html += `<span class="tpl-picklist${isSelected ? ' selected' : ''}" onclick="selectPicklist('${compId}', '${pk}')">
-                            ${listIcon}
-                            ${pkData.display_name || pk}
-                            <span class="tpl-picklist-count">${optCount}</span>
+                        html += `<span class="doc-picklist${isSelected ? ' selected' : ''}" onclick="selectPicklist('${compId}', '${pk}')">
+                            ${listIcon} ${pkData.display_name || pk} <span class="doc-picklist-count">${optCount}</span>
                         </span>`;
                     });
                 } else {
-                    html += `<span class="tpl-picklist" onclick="selectComponent('${compId}')">
-                        ${listIcon}
-                        ${compId}
-                        <span class="tpl-picklist-count">0</span>
+                    html += `<span class="doc-picklist" onclick="selectComponent('${compId}')">
+                        ${listIcon} ${compId} <span class="doc-picklist-count">0</span>
                     </span>`;
                 }
                 
                 html += `</span>
-                    <span class="tpl-finding-actions">
-                        <button class="tpl-action-btn" onclick="moveComponent(${idx}, -1)" title="Move Up">
+                    <span class="doc-finding-actions">
+                        <button class="doc-action-btn" onclick="moveComponent(${idx}, -1)" title="Move Up">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg>
                         </button>
-                        <button class="tpl-action-btn" onclick="moveComponent(${idx}, 1)" title="Move Down">
+                        <button class="doc-action-btn" onclick="moveComponent(${idx}, 1)" title="Move Down">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
                         </button>
-                        <button class="tpl-action-btn danger" onclick="removeComponentFromTemplate('${compId}')" title="Remove">
+                        <button class="doc-action-btn danger" onclick="removeComponentFromTemplate('${compId}')" title="Remove">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"/></svg>
                         </button>
                     </span>
                 </div>`;
             });
             
-            html += `<button class="tpl-add-btn" onclick="openAddComponentModal()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-                Add Finding Component
+            html += `<button class="doc-add-btn" onclick="openAddComponentModal()">
+                ${plusIcon} Add Finding Component
             </button>`;
             
-            html += `</div></div>`;
+            html += `</div></div>`; // Close doc-findings-container and doc-section
             
             // ═══════════════════════════════════════════════════════════
             // IMPRESSION Section
             // ═══════════════════════════════════════════════════════════
             const defaultImpression = tpl.impression?.default_text || 'Normal exam.';
-            html += `<div class="tpl-section" data-section="impression">
-                <div class="tpl-section-header" onclick="this.parentElement.classList.toggle('collapsed')">
-                    <span class="tpl-section-toggle">${chevron}</span>
-                    <span class="tpl-section-title">Impression</span>
-                    <span class="tpl-section-badge">editable</span>
-                </div>
-                <div class="tpl-section-body">
-                    <div class="tpl-field" style="flex-direction:column;align-items:stretch;">
-                        <span class="tpl-field-label" style="margin-bottom:8px;">Default Impression Text</span>
-                        <textarea class="tpl-impression-input" onchange="updateImpressionText(this)">${defaultImpression}</textarea>
-                    </div>
-                </div>
+            html += `<div class="doc-section">
+                <div class="doc-section-header">Impression</div>
+                <textarea class="doc-impression" onchange="updateImpressionText(this)" placeholder="Enter impression...">${defaultImpression}</textarea>
             </div>`;
             
-            html += `</div>`; // Close tpl-editor
+            html += `</div></div>`; // Close report-document and report-content
+            
+            // Footer with action buttons
+            html += `<div class="report-footer">
+                <button class="footer-btn footer-btn-primary" onclick="saveAllChanges()">Save Changes</button>
+                <button class="footer-btn footer-btn-secondary" onclick="renderTemplateStructure()">Reset</button>
+                <div class="footer-spacer"></div>
+                <button class="footer-btn footer-btn-danger" onclick="if(confirm('Delete this template?')) deleteTemplate()">Delete Template</button>
+            </div>`;
+            
+            html += `</div>`; // Close report-editor
             
             document.getElementById('template-structure').innerHTML = html;
         }

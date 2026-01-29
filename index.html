@@ -847,6 +847,47 @@
             letter-spacing: 0.03em;
         }
         
+        /* Section header with descriptor */
+        .te-section-header {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        
+        .te-descriptor {
+            font-size: 10px;
+            color: #6e7681;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+            cursor: pointer;
+            padding: 1px 4px;
+            border-radius: 3px;
+        }
+        
+        .te-descriptor:hover {
+            background: rgba(88, 166, 255, 0.1);
+            color: #58a6ff;
+        }
+        
+        /* Label group with inline descriptor */
+        .te-label-group {
+            display: inline-flex;
+            align-items: baseline;
+            gap: 4px;
+        }
+        
+        .te-field-desc {
+            font-size: 9px;
+            color: #484f58;
+            cursor: pointer;
+            padding: 0 2px;
+        }
+        
+        .te-field-desc:hover {
+            color: #58a6ff;
+        }
+        
         /* Legacy text-* classes kept for compatibility */
         .text-label {
             color: var(--text-secondary);
@@ -2133,17 +2174,34 @@
             // --- REPORT HEADER ---
             html += `<div class="te-report-header">Frontier Radiology Report</div>\n\n`;
             
+            // Helper for section headers with descriptor
+            const sectionHeader = (tag, defaultLabel, descriptor) => {
+                const label = labels[tag] || defaultLabel;
+                const desc = labels[tag + '.desc'] || descriptor;
+                return `<div class="te-section-header">
+                    <span class="te-heading te-heading-h1" onclick="editHeading('${tag}')">${label}</span>
+                    <span class="te-descriptor" onclick="editDescriptor('${tag}')" title="Click to edit descriptor">[${desc}]</span>
+                </div>`;
+            };
+            
+            // Helper for field labels with descriptor
+            const fieldWithDesc = (tag, defaultLabel, descriptor) => {
+                const label = labels[tag] || defaultLabel;
+                const desc = labels[tag + '.desc'] || descriptor;
+                return `<span class="te-label-group"><span class="te-label" onclick="editHeading('${tag}')">${label}</span><span class="te-field-desc" onclick="editDescriptor('${tag}')" title="Click to edit">[${desc}]</span></span>`;
+            };
+            
             // --- DEMOGRAPHICS ---
-            html += `<span class="te-heading te-heading-h1" onclick="editHeading('section.demographics')">${labels['section.demographics'] || 'DEMOGRAPHICS'}</span>\n`;
-            html += `<span class="te-label" onclick="editHeading('field.facility')">${labels['field.facility'] || 'Facility:'}</span> <span class="te-field te-field-merge">Facility Name</span>\n`;
-            html += `<span class="te-label" onclick="editHeading('field.patient')">${labels['field.patient'] || 'Patient:'}</span> <span class="te-field te-field-merge">Patient Name</span>, <span class="te-field te-field-merge">DOB/Age</span>, <span class="te-field te-field-merge">Sex</span>\n`;
-            html += `<span class="te-label" onclick="editHeading('field.referring')">${labels['field.referring'] || 'Referring:'}</span> <span class="te-field te-field-merge">Referring Physician</span>\n`;
-            html += `<span class="te-label" onclick="editHeading('field.exam')">${labels['field.exam'] || 'Exam:'}</span> ${tpl.primary_cpt} ${tpl.description}\n\n`;
+            html += sectionHeader('section.demographics', 'DEMOGRAPHICS', 'patient_info');
+            html += `${fieldWithDesc('field.facility', 'Facility:', 'facility_name')} <span class="te-field te-field-merge">Facility Name</span>\n`;
+            html += `${fieldWithDesc('field.patient', 'Patient:', 'patient_demographics')} <span class="te-field te-field-merge">Patient Name</span>, <span class="te-field te-field-merge">DOB/Age</span>, <span class="te-field te-field-merge">Sex</span>\n`;
+            html += `${fieldWithDesc('field.referring', 'Referring:', 'referring_physician')} <span class="te-field te-field-merge">Referring Physician</span>\n`;
+            html += `${fieldWithDesc('field.exam', 'Exam:', 'procedure_code')} ${tpl.primary_cpt} ${tpl.description}\n\n`;
             
             // --- CLINICAL INFORMATION ---
-            html += `<span class="te-heading te-heading-h1" onclick="editHeading('section.clinical')">${labels['section.clinical'] || 'CLINICAL INFORMATION'}</span>\n`;
-            html += `<span class="te-label" onclick="editHeading('field.history')">${labels['field.history'] || 'History:'}</span> <span class="te-field te-field-merge">HPI</span> / <span class="te-field te-field-merge">PMHx</span>\n`;
-            html += `<span class="te-label" onclick="editHeading('field.indication')">${labels['field.indication'] || 'Indication:'}</span> <span class="te-field te-field-merge">Indication</span>\n\n`;
+            html += sectionHeader('section.clinical', 'CLINICAL INFORMATION', 'clinical_context');
+            html += `${fieldWithDesc('field.history', 'History:', 'patient_history')} <span class="te-field te-field-merge">HPI</span> / <span class="te-field te-field-merge">PMHx</span>\n`;
+            html += `${fieldWithDesc('field.indication', 'Indication:', 'exam_indication')} <span class="te-field te-field-merge">Indication</span>\n\n`;
             
             // --- TECHNIQUE ---
             const tecId = `TEC-${currentTemplate.mod}-${currentTemplate.reg}`;
@@ -2151,20 +2209,20 @@
             const tecCount = templateMap._section_picklists?.[tecId]?.options?.length || 0;
             const contrastCount = templateMap._section_picklists?.[contrastId]?.options?.length || 0;
             
-            html += `<span class="te-heading te-heading-h1" onclick="editHeading('section.technique')">${labels['section.technique'] || 'TECHNIQUE'}</span>\n`;
-            html += `<span class="te-label" onclick="editHeading('field.procedure')">${labels['field.procedure'] || 'Procedure:'}</span> <span class="te-picklist" onclick="editTechniquePicklist()"><span class="te-picklist-value">${tecId}</span></span>\n`;
-            html += `<span class="te-label" onclick="editHeading('field.contrast')">${labels['field.contrast'] || 'Contrast:'}</span> <span class="te-picklist" onclick="editContrastPicklist()"><span class="te-picklist-value">${contrastId}</span></span>\n\n`;
+            html += sectionHeader('section.technique', 'TECHNIQUE', 'exam_technique');
+            html += `${fieldWithDesc('field.procedure', 'Procedure:', 'modality_protocol')} <span class="te-picklist" onclick="editTechniquePicklist()"><span class="te-picklist-value">${tecId}</span></span>\n`;
+            html += `${fieldWithDesc('field.contrast', 'Contrast:', 'contrast_agent')} <span class="te-picklist" onclick="editContrastPicklist()"><span class="te-picklist-value">${contrastId}</span></span>\n\n`;
             
             // --- COMPARISON ---
-            html += `<span class="te-heading te-heading-h1" onclick="editHeading('section.comparison')">${labels['section.comparison'] || 'COMPARISON'}</span>\n`;
+            html += sectionHeader('section.comparison', 'COMPARISON', 'prior_studies');
             html += `<span class="te-field te-field-merge">Prior Studies</span>\n\n`;
             
             // --- FINDINGS ---
             const qualityId = `QUALITY-${currentTemplate.mod}`;
             const qualityCount = templateMap._section_picklists?.[qualityId]?.options?.length || 0;
             
-            html += `<span class="te-heading te-heading-h1" onclick="editHeading('section.findings')">${labels['section.findings'] || 'FINDINGS'}</span>\n`;
-            html += `<span class="te-label" onclick="editHeading('field.quality')">${labels['field.quality'] || 'Quality:'}</span> <span class="te-picklist" onclick="editQualityPicklist()"><span class="te-picklist-value">${qualityId}</span></span>\n`;
+            html += sectionHeader('section.findings', 'FINDINGS', 'anatomic_findings');
+            html += `${fieldWithDesc('field.quality', 'Quality:', 'image_quality')} <span class="te-picklist" onclick="editQualityPicklist()"><span class="te-picklist-value">${qualityId}</span></span>\n`;
             
             // Component findings
             components.forEach((compId, idx) => {
@@ -2198,7 +2256,7 @@
             
             // --- IMPRESSION ---
             const defaultImpression = tpl.impression?.default_text || 'Normal exam.';
-            html += `<span class="te-heading te-heading-h1" onclick="editHeading('section.impression')">${labels['section.impression'] || 'IMPRESSION'}</span>\n`;
+            html += sectionHeader('section.impression', 'IMPRESSION', 'clinical_impression');
             html += `<div class="te-impression-area" contenteditable="true" onblur="updateImpressionFromDiv(this)">${defaultImpression}</div>`;
             
             html += `</div></div>`; // Close te-document and te-canvas
@@ -2239,6 +2297,17 @@
             const newValue = prompt('Edit label:', currentValue);
             if (newValue !== null && newValue.trim()) {
                 updateSectionLabel(tag, newValue);
+                renderTemplateStructure();
+            }
+        }
+        
+        function editDescriptor(tag) {
+            const labels = templateMap.modalities[currentTemplate.mod].regions[currentTemplate.reg].templates[currentTemplate.tpl].custom_labels || {};
+            const descTag = tag + '.desc';
+            const currentValue = labels[descTag] || tag.split('.').pop();
+            const newValue = prompt('Edit descriptor (AI content tag):', currentValue);
+            if (newValue !== null && newValue.trim()) {
+                updateSectionLabel(descTag, newValue);
                 renderTemplateStructure();
             }
         }

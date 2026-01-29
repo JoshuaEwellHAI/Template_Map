@@ -913,10 +913,18 @@
             font-weight: 600;
             color: #444;
             cursor: pointer;
+            position: relative;
         }
         
         .word-label:hover {
             background: #e8f4ff;
+        }
+        
+        .word-label[data-desc]:hover::after {
+            content: ' [' attr(data-desc) ']';
+            font-weight: 400;
+            font-size: 8pt;
+            color: #888;
         }
         
         .word-merge {
@@ -2460,22 +2468,22 @@
             
             // DEMOGRAPHICS
             html += `<p class="word-h1" onclick="editHeading('section.demographics')">${L('section.demographics', 'DEMOGRAPHICS')} <span class="word-tag">[${D('section.demographics', 'patient_info')}]</span></p>`;
-            html += `<p class="word-line"><span class="word-label" onclick="editHeading('field.facility')">${L('field.facility', 'Facility:')}</span> <span class="word-merge">Facility Name</span></p>`;
-            html += `<p class="word-line"><span class="word-label" onclick="editHeading('field.patient')">${L('field.patient', 'Patient:')}</span> <span class="word-merge">Patient Name</span>, <span class="word-merge">DOB/Age</span>, <span class="word-merge">Sex</span></p>`;
-            html += `<p class="word-line"><span class="word-label" onclick="editHeading('field.referring')">${L('field.referring', 'Referring:')}</span> <span class="word-merge">Referring Physician</span></p>`;
-            html += `<p class="word-line"><span class="word-label" onclick="editHeading('field.exam')">${L('field.exam', 'Exam:')}</span> ${tpl.primary_cpt} ${tpl.description}</p>`;
+            html += `<p class="word-line"><span class="word-label" onclick="editHeading('field.facility')" data-desc="${D('field.facility', 'facility_name')}">${L('field.facility', 'Facility:')}</span> <span class="word-merge">Facility Name</span></p>`;
+            html += `<p class="word-line"><span class="word-label" onclick="editHeading('field.patient')" data-desc="${D('field.patient', 'patient_demographics')}">${L('field.patient', 'Patient:')}</span> <span class="word-merge">Patient Name</span>, <span class="word-merge">DOB/Age</span>, <span class="word-merge">Sex</span></p>`;
+            html += `<p class="word-line"><span class="word-label" onclick="editHeading('field.referring')" data-desc="${D('field.referring', 'referring_physician')}">${L('field.referring', 'Referring:')}</span> <span class="word-merge">Referring Physician</span></p>`;
+            html += `<p class="word-line"><span class="word-label" onclick="editHeading('field.exam')" data-desc="${D('field.exam', 'procedure_code')}">${L('field.exam', 'Exam:')}</span> ${tpl.primary_cpt} ${tpl.description}</p>`;
             
             // CLINICAL INFORMATION
             html += `<p class="word-h1" onclick="editHeading('section.clinical')">${L('section.clinical', 'CLINICAL INFORMATION')} <span class="word-tag">[${D('section.clinical', 'clinical_context')}]</span></p>`;
-            html += `<p class="word-line"><span class="word-label" onclick="editHeading('field.history')">${L('field.history', 'History:')}</span> <span class="word-merge">HPI</span> / <span class="word-merge">PMHx</span></p>`;
-            html += `<p class="word-line"><span class="word-label" onclick="editHeading('field.indication')">${L('field.indication', 'Indication:')}</span> <span class="word-merge">Indication</span></p>`;
+            html += `<p class="word-line"><span class="word-label" onclick="editHeading('field.history')" data-desc="${D('field.history', 'patient_history')}">${L('field.history', 'History:')}</span> <span class="word-merge">HPI</span> / <span class="word-merge">PMHx</span></p>`;
+            html += `<p class="word-line"><span class="word-label" onclick="editHeading('field.indication')" data-desc="${D('field.indication', 'exam_indication')}">${L('field.indication', 'Indication:')}</span> <span class="word-merge">Indication</span></p>`;
             
             // TECHNIQUE
             const tecId = `TEC-${currentTemplate.mod}-${currentTemplate.reg}`;
             const contrastId = `CONTRAST-${currentTemplate.mod}`;
             html += `<p class="word-h1" onclick="editHeading('section.technique')">${L('section.technique', 'TECHNIQUE')} <span class="word-tag">[${D('section.technique', 'exam_technique')}]</span></p>`;
-            html += `<p class="word-line"><span class="word-label" onclick="editHeading('field.procedure')">${L('field.procedure', 'Procedure:')}</span> <span class="word-pick" onclick="editTechniquePicklist()">${tecId}</span></p>`;
-            html += `<p class="word-line"><span class="word-label" onclick="editHeading('field.contrast')">${L('field.contrast', 'Contrast:')}</span> <span class="word-pick" onclick="editContrastPicklist()">${contrastId}</span></p>`;
+            html += `<p class="word-line"><span class="word-label" onclick="editHeading('field.procedure')" data-desc="${D('field.procedure', 'modality_protocol')}">${L('field.procedure', 'Procedure:')}</span> <span class="word-pick" onclick="editTechniquePicklist()">${tecId}</span></p>`;
+            html += `<p class="word-line"><span class="word-label" onclick="editHeading('field.contrast')" data-desc="${D('field.contrast', 'contrast_agent')}">${L('field.contrast', 'Contrast:')}</span> <span class="word-pick" onclick="editContrastPicklist()">${contrastId}</span></p>`;
             
             // COMPARISON
             html += `<p class="word-h1" onclick="editHeading('section.comparison')">${L('section.comparison', 'COMPARISON')} <span class="word-tag">[${D('section.comparison', 'prior_studies')}]</span></p>`;
@@ -2484,7 +2492,7 @@
             // FINDINGS
             const qualityId = `QUALITY-${currentTemplate.mod}`;
             html += `<p class="word-h1" onclick="editHeading('section.findings')">${L('section.findings', 'FINDINGS')} <span class="word-tag">[${D('section.findings', 'anatomic_findings')}]</span></p>`;
-            html += `<p class="word-line"><span class="word-label" onclick="editHeading('field.quality')">${L('field.quality', 'Quality:')}</span> <span class="word-pick" onclick="editQualityPicklist()">${qualityId}</span></p>`;
+            html += `<p class="word-line"><span class="word-label" onclick="editHeading('field.quality')" data-desc="${D('field.quality', 'image_quality')}">${L('field.quality', 'Quality:')}</span> <span class="word-pick" onclick="editQualityPicklist()">${qualityId}</span></p>`;
             
             // Component findings
             components.forEach((compId, idx) => {

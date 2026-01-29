@@ -1209,6 +1209,144 @@
         .ps-popup-item.abnormal { color: #ef5350; }
         .ps-popup-item.critical { color: #ff7043; font-weight: 600; }
         
+        /* ════════════════════════════════════════════════════════════
+           TEMPLATE MODE - Same dark theme with editable elements
+           ════════════════════════════════════════════════════════════ */
+        
+        .template-mode .word-canvas {
+            background: #0d0d0d;
+        }
+        
+        .template-mode .word-page {
+            background: #1a1a1a;
+            color: #e8e8e8;
+            border: none;
+            box-shadow: none;
+            max-width: 900px;
+            padding: 20px 40px;
+        }
+        
+        .tpl-section {
+            cursor: pointer;
+        }
+        
+        .tpl-section:hover {
+            background: rgba(100, 181, 246, 0.1);
+        }
+        
+        .tpl-line {
+            margin: 2px 0;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        
+        .tpl-line:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+        
+        .tpl-label {
+            color: #9e9e9e;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .tpl-label:hover {
+            color: #64b5f6;
+        }
+        
+        .tpl-tag {
+            font-size: 10px;
+            color: #666;
+            font-weight: 400;
+            margin-left: 6px;
+        }
+        
+        /* Merge field placeholders */
+        .tpl-merge {
+            color: #ffd54f;
+            background: rgba(255, 213, 79, 0.1);
+            padding: 0 4px;
+            border-radius: 2px;
+            font-family: 'Consolas', monospace;
+            font-size: 12px;
+        }
+        
+        /* Picklist placeholders */
+        .tpl-pick {
+            color: #81c784;
+            background: rgba(129, 199, 132, 0.1);
+            padding: 0 4px;
+            border-radius: 2px;
+            cursor: pointer;
+            font-family: 'Consolas', monospace;
+            font-size: 12px;
+        }
+        
+        .tpl-pick:hover {
+            background: rgba(129, 199, 132, 0.2);
+        }
+        
+        .tpl-pick.active {
+            background: rgba(129, 199, 132, 0.3);
+            outline: 1px solid #81c784;
+        }
+        
+        /* Finding row with actions */
+        .tpl-finding {
+            margin: 2px 0;
+            padding: 4px;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+        
+        .tpl-finding:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+        
+        .tpl-finding:hover .tpl-actions {
+            opacity: 1;
+        }
+        
+        .tpl-actions {
+            margin-left: auto;
+            opacity: 0;
+            transition: opacity 0.15s;
+            display: flex;
+            gap: 2px;
+        }
+        
+        .tpl-actions button {
+            padding: 2px 6px;
+            background: #333;
+            border: 1px solid #444;
+            border-radius: 3px;
+            color: #888;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        
+        .tpl-actions button:hover {
+            background: #444;
+            color: #fff;
+        }
+        
+        /* Add finding button */
+        .tpl-add {
+            color: #64b5f6;
+            cursor: pointer;
+            padding: 4px 8px;
+            margin: 8px 0;
+            font-size: 12px;
+        }
+        
+        .tpl-add:hover {
+            background: rgba(100, 181, 246, 0.1);
+            border-radius: 3px;
+        }
+        
         /* RTF Toolbar */
         .te-rtf-toolbar {
             display: flex;
@@ -2742,35 +2880,40 @@
             } else {
                 // ═══════════════════════════════════════════════════════════
                 // TEMPLATE MODE - Builder with metadata and editing
+                // Same dark theme as Report Mode
                 // ═══════════════════════════════════════════════════════════
-                html += `<div class="word-title">Frontier Radiology Report</div>`;
+                
+                html += `<div class="ps-document" id="tpl-doc">`;
+                
+                // Title
+                html += `<div class="ps-title">Frontier Radiology Report</div>`;
                 
                 // EXAM
-                html += `<p class="word-exam"><span class="word-label" onclick="editHeading('field.exam')" data-desc="${D('field.exam', 'procedures')}">${L('field.exam', 'EXAM:')}</span> <span class="word-merge">Procedures</span> ${tpl.primary_cpt} ${tpl.description}</p>`;
+                html += `<div class="tpl-line"><span class="tpl-label" onclick="editHeading('field.exam')">${L('field.exam', 'EXAM:')}</span> <span class="tpl-merge">{{Procedures}}</span> ${tpl.primary_cpt} ${tpl.description} <span class="tpl-tag">[${D('field.exam', 'procedures')}]</span></div>`;
                 
                 // DEMOGRAPHICS
-                html += `<p class="word-h1" onclick="editHeading('section.demographics')">${L('section.demographics', 'DEMOGRAPHICS')} <span class="word-tag">[${D('section.demographics', 'patient_info')}]</span></p>`;
-                html += `<p class="word-line"><span class="word-label" onclick="editHeading('field.facility')" data-desc="${D('field.facility', 'facility_name')}">${L('field.facility', 'Facility:')}</span> <span class="word-merge">Facility Name</span></p>`;
-                html += `<p class="word-line"><span class="word-label" onclick="editHeading('field.patient')" data-desc="${D('field.patient', 'patient_demographics')}">${L('field.patient', 'Patient:')}</span> <span class="word-merge">Patient Name</span>, <span class="word-merge">DOB/Age</span>, <span class="word-merge">Sex</span></p>`;
-                html += `<p class="word-line"><span class="word-label" onclick="editHeading('field.referring')" data-desc="${D('field.referring', 'referring_physician')}">${L('field.referring', 'Referring:')}</span> <span class="word-merge">Referring Physician</span></p>`;
+                html += `<div class="ps-section tpl-section" onclick="editHeading('section.demographics')">${L('section.demographics', 'DEMOGRAPHICS')} <span class="tpl-tag">[${D('section.demographics', 'patient_info')}]</span></div>`;
+                html += `<div class="tpl-line"><span class="tpl-label" onclick="editHeading('field.facility')">${L('field.facility', 'Facility:')}</span> <span class="tpl-merge">{{Facility Name}}</span></div>`;
+                html += `<div class="tpl-line"><span class="tpl-label" onclick="editHeading('field.patient')">${L('field.patient', 'Patient:')}</span> <span class="tpl-merge">{{Patient Name}}</span>, <span class="tpl-merge">{{DOB/Age}}</span>, <span class="tpl-merge">{{Sex}}</span></div>`;
+                html += `<div class="tpl-line"><span class="tpl-label" onclick="editHeading('field.referring')">${L('field.referring', 'Referring:')}</span> <span class="tpl-merge">{{Referring Physician}}</span></div>`;
                 
                 // CLINICAL INFORMATION
-                html += `<p class="word-h1" onclick="editHeading('section.clinical')">${L('section.clinical', 'CLINICAL INFORMATION')} <span class="word-tag">[${D('section.clinical', 'clinical_context')}]</span></p>`;
-                html += `<p class="word-line"><span class="word-label" onclick="editHeading('field.history')" data-desc="${D('field.history', 'patient_history')}">${L('field.history', 'History:')}</span> <span class="word-merge">HPI</span> / <span class="word-merge">PMHx</span></p>`;
-                html += `<p class="word-line"><span class="word-label" onclick="editHeading('field.indication')" data-desc="${D('field.indication', 'exam_indication')}">${L('field.indication', 'Indication:')}</span> <span class="word-merge">Indication</span></p>`;
+                html += `<div class="ps-section tpl-section" onclick="editHeading('section.clinical')">${L('section.clinical', 'CLINICAL INFORMATION')} <span class="tpl-tag">[${D('section.clinical', 'clinical_context')}]</span></div>`;
+                html += `<div class="tpl-line"><span class="tpl-label" onclick="editHeading('field.history')">${L('field.history', 'History:')}</span> <span class="tpl-merge">{{HPI}}</span> / <span class="tpl-merge">{{PMHx}}</span></div>`;
+                html += `<div class="tpl-line"><span class="tpl-label" onclick="editHeading('field.indication')">${L('field.indication', 'Indication:')}</span> <span class="tpl-merge">{{Indication}}</span></div>`;
                 
                 // TECHNIQUE
-                html += `<p class="word-h1" onclick="editHeading('section.technique')">${L('section.technique', 'TECHNIQUE')} <span class="word-tag">[${D('section.technique', 'exam_technique')}]</span></p>`;
-                html += `<p class="word-line"><span class="word-label" onclick="editHeading('field.procedure')" data-desc="${D('field.procedure', 'modality_protocol')}">${L('field.procedure', 'Procedure:')}</span> <span class="word-pick" onclick="editTechniquePicklist()">${tecId}</span></p>`;
-                html += `<p class="word-line"><span class="word-label" onclick="editHeading('field.contrast')" data-desc="${D('field.contrast', 'contrast_agent')}">${L('field.contrast', 'Contrast:')}</span> <span class="word-pick" onclick="editContrastPicklist()">${contrastId}</span></p>`;
+                html += `<div class="ps-section tpl-section" onclick="editHeading('section.technique')">${L('section.technique', 'TECHNIQUE')} <span class="tpl-tag">[${D('section.technique', 'exam_technique')}]</span></div>`;
+                html += `<div class="tpl-line"><span class="tpl-label" onclick="editHeading('field.procedure')">${L('field.procedure', 'Procedure:')}</span> <span class="tpl-pick" onclick="editTechniquePicklist()">{{${tecId}}}</span></div>`;
+                html += `<div class="tpl-line"><span class="tpl-label" onclick="editHeading('field.contrast')">${L('field.contrast', 'Contrast:')}</span> <span class="tpl-pick" onclick="editContrastPicklist()">{{${contrastId}}}</span></div>`;
                 
                 // COMPARISON
-                html += `<p class="word-h1" onclick="editHeading('section.comparison')">${L('section.comparison', 'COMPARISON')} <span class="word-tag">[${D('section.comparison', 'prior_studies')}]</span></p>`;
-                html += `<p class="word-line"><span class="word-merge">Prior Studies</span></p>`;
+                html += `<div class="ps-section tpl-section" onclick="editHeading('section.comparison')">${L('section.comparison', 'COMPARISON')} <span class="tpl-tag">[${D('section.comparison', 'prior_studies')}]</span></div>`;
+                html += `<div class="tpl-line"><span class="tpl-merge">{{Prior Studies}}</span></div>`;
                 
                 // FINDINGS
-                html += `<p class="word-h1" onclick="editHeading('section.findings')">${L('section.findings', 'FINDINGS')} <span class="word-tag">[${D('section.findings', 'anatomic_findings')}]</span></p>`;
-                html += `<p class="word-line"><span class="word-label" onclick="editHeading('field.quality')" data-desc="${D('field.quality', 'image_quality')}">${L('field.quality', 'Quality:')}</span> <span class="word-pick" onclick="editQualityPicklist()">${qualityId}</span></p>`;
+                html += `<div class="ps-section tpl-section" onclick="editHeading('section.findings')">${L('section.findings', 'FINDINGS')} <span class="tpl-tag">[${D('section.findings', 'anatomic_findings')}]</span></div>`;
+                html += `<div class="tpl-line"><span class="tpl-label" onclick="editHeading('field.quality')">${L('field.quality', 'Quality:')}</span> <span class="tpl-pick" onclick="editQualityPicklist()">{{${qualityId}}}</span></div>`;
                 
                 components.forEach((compId, idx) => {
                     const comp = findComponent(compId);
@@ -2782,27 +2925,29 @@
                         pickHtml = picklists.map(pk => {
                             const pkData = comp.picklists[pk];
                             const isSelected = currentComponent === compId && currentPicklist === pk;
-                            return `<span class="word-pick${isSelected ? ' active' : ''}" onclick="selectPicklist('${compId}', '${pk}')">${pkData.display_name || pk}</span>`;
+                            return `<span class="tpl-pick${isSelected ? ' active' : ''}" onclick="selectPicklist('${compId}', '${pk}')">{{${pkData.display_name || pk}}}</span>`;
                         }).join(' ');
                     } else {
-                        pickHtml = `<span class="word-pick" onclick="selectComponent('${compId}')">${compId}</span>`;
+                        pickHtml = `<span class="tpl-pick" onclick="selectComponent('${compId}')">{{${compId}}}</span>`;
                     }
                     
-                    html += `<p class="word-finding" data-comp="${compId}">
-                        <span class="word-label" onclick="editHeading('finding.${compId}')">${displayName}:</span> ${pickHtml}
-                        <span class="word-actions">
+                    html += `<div class="tpl-finding" data-comp="${compId}">
+                        <span class="tpl-label" onclick="editHeading('finding.${compId}')">${displayName}:</span> ${pickHtml}
+                        <span class="tpl-actions">
                             <button onclick="moveComponent(${idx}, -1)" title="Move Up">↑</button>
                             <button onclick="moveComponent(${idx}, 1)" title="Move Down">↓</button>
                             <button onclick="removeComponentFromTemplate('${compId}')" title="Remove">×</button>
                         </span>
-                    </p>`;
+                    </div>`;
                 });
                 
-                html += `<p class="word-add" onclick="openAddComponentModal()">+ Add Finding</p>`;
+                html += `<div class="tpl-add" onclick="openAddComponentModal()">+ Add Finding</div>`;
                 
                 // IMPRESSION
-                html += `<p class="word-h1" onclick="editHeading('section.impression')">${L('section.impression', 'IMPRESSION')} <span class="word-tag">[${D('section.impression', 'clinical_impression')}]</span></p>`;
-                html += `<p class="word-impression" contenteditable="true" onblur="updateImpressionFromDiv(this)">${defaultImpression}</p>`;
+                html += `<div class="ps-section tpl-section" onclick="editHeading('section.impression')">${L('section.impression', 'IMPRESSION')} <span class="tpl-tag">[${D('section.impression', 'clinical_impression')}]</span></div>`;
+                html += `<div class="ps-impression" contenteditable="true" onblur="updateImpressionFromDiv(this)">${defaultImpression}</div>`;
+                
+                html += `</div>`; // Close ps-document
             }
             
             html += `</div></div>`; // Close word-page and word-canvas

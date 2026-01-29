@@ -1355,6 +1355,13 @@
             margin-bottom: 6px;
         }
         
+        .form-hint {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 4px;
+            opacity: 0.7;
+        }
+        
         /* Modal */
         .modal-overlay {
             display: none;
@@ -1809,6 +1816,33 @@
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                     <div>Select a component to edit its picklists</div>
                 </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Header Edit Modal -->
+    <div class="modal-overlay" id="header-edit-modal">
+        <div class="modal" style="max-width:400px;">
+            <div class="modal-header">
+                <h3>Edit Header</h3>
+                <button class="modal-close" onclick="closeModal('header-edit-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <label class="form-label">Header Name</label>
+                    <input type="text" id="header-edit-name" placeholder="e.g., DEMOGRAPHICS">
+                    <div class="form-hint">This is the visible text in the report</div>
+                </div>
+                <div class="form-row">
+                    <label class="form-label">Descriptor (AI Tag)</label>
+                    <input type="text" id="header-edit-desc" placeholder="e.g., patient_info">
+                    <div class="form-hint">Used for AI content mapping</div>
+                </div>
+                <input type="hidden" id="header-edit-tag">
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal('header-edit-modal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveHeaderEdit()">Save</button>
             </div>
         </div>
     </div>
@@ -2292,24 +2326,80 @@
         }
         
         function editHeading(tag) {
-            const labels = templateMap.modalities[currentTemplate.mod].regions[currentTemplate.reg].templates[currentTemplate.tpl].custom_labels || {};
-            const currentValue = labels[tag] || tag.split('.').pop();
-            const newValue = prompt('Edit label:', currentValue);
-            if (newValue !== null && newValue.trim()) {
-                updateSectionLabel(tag, newValue);
-                renderTemplateStructure();
-            }
+            openHeaderEditModal(tag);
         }
         
         function editDescriptor(tag) {
-            const labels = templateMap.modalities[currentTemplate.mod].regions[currentTemplate.reg].templates[currentTemplate.tpl].custom_labels || {};
-            const descTag = tag + '.desc';
-            const currentValue = labels[descTag] || tag.split('.').pop();
-            const newValue = prompt('Edit descriptor (AI content tag):', currentValue);
-            if (newValue !== null && newValue.trim()) {
-                updateSectionLabel(descTag, newValue);
-                renderTemplateStructure();
+            openHeaderEditModal(tag);
+        }
+        
+        function openHeaderEditModal(tag) {
+            if (!currentTemplate) return;
+            
+            const tpl = templateMap.modalities[currentTemplate.mod].regions[currentTemplate.reg].templates[currentTemplate.tpl];
+            const labels = tpl.custom_labels || {};
+            
+            // Get default values based on tag
+            const defaultNames = {
+                'section.demographics': 'DEMOGRAPHICS',
+                'section.clinical': 'CLINICAL INFORMATION',
+                'section.technique': 'TECHNIQUE',
+                'section.comparison': 'COMPARISON',
+                'section.findings': 'FINDINGS',
+                'section.impression': 'IMPRESSION',
+                'field.facility': 'Facility:',
+                'field.patient': 'Patient:',
+                'field.referring': 'Referring:',
+                'field.exam': 'Exam:',
+                'field.history': 'History:',
+                'field.indication': 'Indication:',
+                'field.procedure': 'Procedure:',
+                'field.contrast': 'Contrast:',
+                'field.quality': 'Quality:'
+            };
+            
+            const defaultDescs = {
+                'section.demographics': 'patient_info',
+                'section.clinical': 'clinical_context',
+                'section.technique': 'exam_technique',
+                'section.comparison': 'prior_studies',
+                'section.findings': 'anatomic_findings',
+                'section.impression': 'clinical_impression',
+                'field.facility': 'facility_name',
+                'field.patient': 'patient_demographics',
+                'field.referring': 'referring_physician',
+                'field.exam': 'procedure_code',
+                'field.history': 'patient_history',
+                'field.indication': 'exam_indication',
+                'field.procedure': 'modality_protocol',
+                'field.contrast': 'contrast_agent',
+                'field.quality': 'image_quality'
+            };
+            
+            const currentName = labels[tag] || defaultNames[tag] || tag.split('.').pop();
+            const currentDesc = labels[tag + '.desc'] || defaultDescs[tag] || tag.split('.').pop();
+            
+            document.getElementById('header-edit-name').value = currentName;
+            document.getElementById('header-edit-desc').value = currentDesc;
+            document.getElementById('header-edit-tag').value = tag;
+            
+            openModal('header-edit-modal');
+        }
+        
+        function saveHeaderEdit() {
+            const tag = document.getElementById('header-edit-tag').value;
+            const name = document.getElementById('header-edit-name').value.trim();
+            const desc = document.getElementById('header-edit-desc').value.trim();
+            
+            if (name) {
+                updateSectionLabel(tag, name);
             }
+            if (desc) {
+                updateSectionLabel(tag + '.desc', desc);
+            }
+            
+            closeModal('header-edit-modal');
+            renderTemplateStructure();
         }
         
         // ═══════════════════════════════════════════════════════════

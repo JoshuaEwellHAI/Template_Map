@@ -1,45 +1,30 @@
 {
   "_metadata": {
-    "version": "4.5.0",
-    "description": "Component templates organized by modality. Each component template contains picklists with ordered options.",
-    "last_updated": "2026-01-28",
-    "design_philosophy": {
-      "component_templates": "One component template per anatomic section per modality (e.g., CR-lungsandpleura for chest X-ray lungs/pleura)",
-      "picklists": "Each component template contains multiple picklists (categories of findings)",
-      "options": "Each picklist contains ordered options. The array order IS the display order in the picklist UI."
+    "version": "5.0.0",
+    "description": "Component library for radiology reporting. Each component contains multiple picklists with ordered options.",
+    "last_updated": "2026-01-29",
+    "structure": {
+      "components": "One component per anatomic section per modality (e.g., CR-lungsandpleura)",
+      "picklists": "Each component contains multiple picklists (categories of findings)",
+      "options": "Each picklist contains ordered options with clinical states",
+      "routes_to": "Array of template IDs that use this component (dependency tracking)"
     },
-    "option_ordering": {
-      "description": "Options are ordered by clinical priority and frequency of use",
-      "order": [
-        "1. absent - Device/structure not present (for device picklists)",
-        "2. normal - Normal/unremarkable findings (most common selection)",
-        "3. normal_variants - Alternative normal phrasing options",
-        "4. abnormal_mild - Mild abnormalities",
-        "5. abnormal_moderate - Moderate abnormalities",
-        "6. abnormal_severe - Severe abnormalities",
-        "7. critical - Critical/emergent findings requiring immediate action",
-        "8. chronic - Chronic/stable findings",
-        "9. benign - Definitively benign findings",
-        "10. surgical - Post-surgical/post-procedural states"
-      ],
-      "state_values": {
-        "absent": "Structure/device not present",
-        "normal": "Normal finding, no abnormality",
-        "abnormal": "Abnormal finding requiring attention",
-        "critical": "Critical finding requiring immediate action/notification",
-        "chronic": "Chronic/stable finding, not acute",
-        "benign": "Definitively benign, no follow-up needed",
-        "surgical": "Post-surgical or post-procedural state",
-        "device": "Medical device present and positioned",
-        "limitation": "Technical limitation affecting interpretation"
-      }
+    "option_states": {
+      "absent": "Structure/device not present",
+      "normal": "Normal finding, no abnormality",
+      "abnormal": "Abnormal finding requiring attention",
+      "critical": "Critical finding requiring immediate action",
+      "chronic": "Chronic/stable finding",
+      "benign": "Definitively benign finding",
+      "surgical": "Post-surgical state"
     },
-    "naming_convention": {
-      "CR": "Chest Radiograph (XR Chest)",
-      "AR": "Abdominal Radiograph (XR Abdomen)",
+    "naming_prefixes": {
+      "CR": "Chest Radiograph",
+      "AR": "Abdominal Radiograph",
+      "XR": "X-Ray (general)",
       "CT": "Computed Tomography",
       "US": "Ultrasound",
-      "MR": "Magnetic Resonance",
+      "MR": "MRI",
       "NM": "Nuclear Medicine"
     }
   },

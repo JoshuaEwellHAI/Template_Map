@@ -1,24 +1,22 @@
 {
   "_metadata": {
-    "version": "4.4.0",
-    "description": "Curated radiology template map for teleradiology after-hours/overflow coverage",
-    "last_updated": "2026-01-28",
-    "design_philosophy": "One template per study type with CPT variants mapped. Templates use nested components for shared content.",
-    "exclusions": [
-      "IR procedures",
-      "Biopsies/FNA",
-      "Mammography/Breast MRI",
-      "Prostate imaging",
-      "Most Nuclear Medicine"
-    ],
-    "inclusions_note": "Breast US (ER), VQ scans, HIDA scans included for ER coverage",
-    "billing_note": "Primary CPT is the most common; variants map to same template with technique differences noted",
-    "bladder_note": "Bladder is included in: US Renal (76770/76775) and US Pelvis (76856/76857). Dedicated bladder-only code 51798 (PVR) is a urology procedure code, not a radiology imaging code.",
+    "version": "5.0.0",
+    "description": "Radiology template map for structured reporting. Templates composed of reusable components with picklists.",
+    "last_updated": "2026-01-29",
+    "template_structure": {
+      "header": "Merge fields from PACS/EMR (Exam, Demographics, Clinical History, Indication)",
+      "technique": "Picklist for study-specific technique options",
+      "comparison": "Merge field + picklist for prior studies",
+      "findings": "Components with multiple picklists per anatomic region",
+      "impression": "AI-generated or default 'Normal exam.'"
+    },
     "component_integration": {
-      "description": "Templates contain structural text (e.g., 'FINDINGS:'). Components are reusable content that plugs into templates.",
       "component_map_file": "component-map.json",
-      "relationship": "Components define routes_to arrays specifying which templates they can be used in. This allows one component edit to propagate to all templates.",
-      "template_structure": "Templates define the report shell (headers, section labels). Components provide the actual sentence content."
+      "relationship": "Components define routes_to arrays for dependency tracking. Edits propagate to all linked templates."
+    },
+    "coverage": {
+      "included": ["X-Ray", "CT", "MRI", "Ultrasound", "Fluoroscopy", "Nuclear Medicine (VQ, HIDA)", "DEXA"],
+      "excluded": ["IR procedures", "Biopsies/FNA", "Mammography", "Prostate MRI"]
     }
   },
   "modalities": {

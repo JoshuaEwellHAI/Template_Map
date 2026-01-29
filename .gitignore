@@ -1,0 +1,35 @@
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+
+# Logs
+*.log
+
+# Node (if using build tools in future)
+node_modules/
+npm-debug.log
+
+# Python
+__pycache__/
+*.py[cod]
+.env
+
+# Large binary files (use Git LFS if needed)
+*.zip
+*.tar.gz
+
+# Keep source files but ignore duplicates
+# source/ folder contains reference materials

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Template Map</title>
+    <title>Template Map Editor</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
@@ -12,6 +12,7 @@
             --bg-secondary: #0a0a0a;
             --bg-tertiary: #111111;
             --bg-hover: #1a1a1a;
+            --bg-input: #0d0d0d;
             --border: #222222;
             --border-subtle: #1a1a1a;
             --text-primary: #e7e9ea;
@@ -22,6 +23,7 @@
             --success: #22c55e;
             --warning: #f59e0b;
             --danger: #ef4444;
+            --purple: #a78bfa;
         }
         
         body {
@@ -54,41 +56,52 @@
             white-space: nowrap;
         }
         
-        .stats-bar {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            flex: 1;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        
-        .stat {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 12px;
-        }
-        
-        .stat-value {
-            font-weight: 600;
-            color: var(--accent);
-        }
-        
-        .stat-label {
-            color: var(--text-muted);
-        }
-        
-        .stat-divider {
-            width: 1px;
-            height: 16px;
-            background: var(--border);
-        }
-        
         .header-actions {
             display: flex;
             align-items: center;
             gap: 8px;
+        }
+        
+        .btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            transition: all 0.15s;
+        }
+        
+        .btn:hover {
+            background: var(--bg-hover);
+            border-color: var(--text-muted);
+            color: var(--text-primary);
+        }
+        
+        .btn-primary {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+        
+        .btn-success {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+        
+        .btn svg {
+            width: 14px;
+            height: 14px;
         }
         
         .version-badge {
@@ -100,21 +113,17 @@
             color: var(--text-muted);
         }
         
-        .save-btn {
+        .changes-indicator {
             display: none;
-            align-items: center;
-            gap: 6px;
-            background: var(--success);
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 500;
-            cursor: pointer;
+            width: 8px;
+            height: 8px;
+            background: var(--warning);
+            border-radius: 50%;
         }
         
-        .save-btn:hover { opacity: 0.9; }
+        .changes-indicator.active {
+            display: block;
+        }
         
         /* 3-Panel Layout */
         .panels {
@@ -127,7 +136,7 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            min-width: 200px;
+            min-width: 250px;
         }
         
         .panel-header {
@@ -140,6 +149,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 8px;
         }
         
         .panel-header .count {
@@ -156,7 +166,6 @@
             padding: 8px;
         }
         
-        /* Resizer */
         .resizer {
             width: 4px;
             background: var(--border);
@@ -169,10 +178,8 @@
             background: var(--accent);
         }
         
-        /* Tree Items */
-        .tree-node {
-            margin-bottom: 4px;
-        }
+        /* Tree Navigation */
+        .tree-node { margin-bottom: 2px; }
         
         .tree-header {
             display: flex;
@@ -185,9 +192,7 @@
             color: var(--text-secondary);
         }
         
-        .tree-header:hover {
-            background: var(--bg-hover);
-        }
+        .tree-header:hover { background: var(--bg-hover); }
         
         .tree-toggle {
             width: 16px;
@@ -196,36 +201,22 @@
             transition: transform 0.15s;
         }
         
-        .tree-toggle svg {
-            width: 16px;
-            height: 16px;
-        }
+        .tree-toggle svg { width: 16px; height: 16px; }
         
-        .tree-node.open > .tree-header .tree-toggle {
-            transform: rotate(90deg);
-        }
+        .tree-node.open > .tree-header .tree-toggle { transform: rotate(90deg); }
         
         .tree-children {
             display: none;
             margin-left: 16px;
         }
         
-        .tree-node.open > .tree-children {
-            display: block;
-        }
+        .tree-node.open > .tree-children { display: block; }
         
-        .tree-title {
-            flex: 1;
-            font-weight: 500;
-        }
+        .tree-title { flex: 1; font-weight: 500; }
+        .tree-count { font-size: 11px; color: var(--text-muted); }
         
-        .tree-count {
-            font-size: 11px;
-            color: var(--text-muted);
-        }
-        
-        /* Template/Component Items */
-        .item {
+        /* Template Item */
+        .template-item {
             display: flex;
             align-items: center;
             gap: 8px;
@@ -236,24 +227,25 @@
             border: 1px solid transparent;
         }
         
-        .item:hover {
+        .template-item:hover {
             background: var(--bg-hover);
             border-color: var(--border-subtle);
         }
         
-        .item.selected {
+        .template-item.selected {
             background: var(--accent-dim);
             border-color: var(--accent);
         }
         
-        .item-code {
+        .template-item .cpt {
             font-family: "SF Mono", monospace;
             font-size: 12px;
             color: var(--accent);
             font-weight: 600;
+            min-width: 50px;
         }
         
-        .item-desc {
+        .template-item .desc {
             font-size: 12px;
             color: var(--text-secondary);
             flex: 1;
@@ -262,7 +254,7 @@
             text-overflow: ellipsis;
         }
         
-        .item-badge {
+        .template-item .comp-count {
             font-size: 10px;
             padding: 2px 6px;
             border-radius: 4px;
@@ -270,49 +262,165 @@
             color: var(--text-muted);
         }
         
-        /* Component Card */
-        .comp-card {
+        /* Template Editor Sections */
+        .template-section {
             background: var(--bg-tertiary);
             border: 1px solid var(--border);
             border-radius: 8px;
-            padding: 10px 12px;
-            margin-bottom: 6px;
-            cursor: pointer;
+            margin-bottom: 8px;
+            overflow: hidden;
         }
         
-        .comp-card:hover {
-            border-color: var(--accent);
-        }
+        .template-section.collapsed .section-content { display: none; }
+        .template-section.collapsed .section-toggle { transform: rotate(0deg); }
         
-        .comp-card.selected {
-            border-color: var(--accent);
-            background: var(--accent-dim);
-        }
-        
-        .comp-card-header {
+        .section-header {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            margin-bottom: 4px;
+            gap: 8px;
+            padding: 10px 12px;
+            background: var(--bg-secondary);
+            cursor: pointer;
+            border-bottom: 1px solid var(--border);
         }
         
-        .comp-card-id {
+        .section-header:hover { background: var(--bg-hover); }
+        
+        .section-icon { font-size: 14px; }
+        
+        .section-title {
             font-weight: 600;
-            font-size: 13px;
+            font-size: 12px;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            flex: 1;
+        }
+        
+        .section-badge {
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            background: var(--accent-dim);
             color: var(--accent);
         }
         
-        .comp-card-name {
-            font-size: 12px;
-            color: var(--text-secondary);
+        .section-toggle {
+            width: 16px;
+            height: 16px;
+            color: var(--text-muted);
+            transform: rotate(90deg);
+            transition: transform 0.15s;
         }
         
-        .comp-card-meta {
+        .section-toggle svg { width: 16px; height: 16px; }
+        .section-content { padding: 12px; }
+        
+        /* Merge Field Display */
+        .merge-field {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--purple);
+            background: rgba(167, 139, 250, 0.2);
+            color: var(--purple);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-family: "SF Mono", monospace;
+            border: 1px dashed rgba(167, 139, 250, 0.4);
+        }
+        
+        .merge-field::before {
+            content: "{{";
+            opacity: 0.6;
+        }
+        
+        .merge-field::after {
+            content: "}}";
+            opacity: 0.6;
+        }
+        
+        /* Field Row */
+        .field-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        
+        .field-row:last-child { border-bottom: none; }
+        
+        .field-label {
+            font-weight: 600;
+            font-size: 12px;
+            color: var(--text-secondary);
+            min-width: 120px;
+        }
+        
+        .field-value {
+            flex: 1;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        
+        /* Component Card in Findings */
+        .finding-component {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            overflow: hidden;
+        }
+        
+        .finding-component:hover { border-color: var(--accent); }
+        .finding-component.selected { border-color: var(--accent); background: var(--accent-dim); }
+        
+        .component-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            cursor: pointer;
+        }
+        
+        .component-order {
+            width: 24px;
+            height: 24px;
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .component-name {
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text-primary);
+            flex: 1;
+        }
+        
+        .component-id {
+            font-family: "SF Mono", monospace;
             font-size: 11px;
             color: var(--text-muted);
         }
         
-        .remove-btn {
+        .component-picklist-count {
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            background: var(--bg-tertiary);
+            color: var(--text-muted);
+        }
+        
+        .component-remove {
             background: none;
             border: none;
             color: var(--danger);
@@ -320,11 +428,45 @@
             padding: 4px;
             opacity: 0.6;
             display: flex;
-            align-items: center;
         }
         
-        .remove-btn:hover { opacity: 1; }
+        .component-remove:hover { opacity: 1; }
         
+        /* Picklist in Component */
+        .picklist-list {
+            padding: 8px 12px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        
+        .picklist-tag {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--success);
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--success);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            cursor: pointer;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+        
+        .picklist-tag:hover {
+            background: rgba(34, 197, 94, 0.3);
+        }
+        
+        .picklist-tag .opt-count {
+            background: rgba(0,0,0,0.2);
+            padding: 1px 5px;
+            border-radius: 8px;
+            font-size: 10px;
+        }
+        
+        /* Add Button */
         .add-btn {
             display: flex;
             align-items: center;
@@ -346,49 +488,63 @@
             color: var(--accent);
         }
         
-        /* Detail Section */
-        .detail-section {
-            margin-bottom: 16px;
+        /* Right Panel - Detail Editor */
+        .editor-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg-secondary);
         }
         
-        .detail-label {
+        .editor-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        
+        .editor-subtitle {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-family: "SF Mono", monospace;
+        }
+        
+        .editor-body {
+            padding: 16px;
+        }
+        
+        .editor-section {
+            margin-bottom: 20px;
+        }
+        
+        .editor-section-title {
             font-size: 11px;
             font-weight: 600;
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            margin-bottom: 6px;
+            margin-bottom: 10px;
         }
         
-        .detail-value {
-            font-size: 14px;
-            color: var(--text-primary);
-        }
-        
-        /* Picklist */
-        .picklist {
+        /* Picklist Editor */
+        .picklist-editor {
             background: var(--bg-tertiary);
             border: 1px solid var(--border);
             border-radius: 8px;
-            margin-bottom: 10px;
-            overflow: hidden;
+            margin-bottom: 12px;
         }
         
-        .picklist-header {
-            padding: 10px 12px;
-            background: var(--bg-secondary);
-            border-bottom: 1px solid var(--border);
+        .picklist-editor-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
             cursor: pointer;
         }
         
-        .picklist-header:hover {
-            background: var(--bg-hover);
-        }
+        .picklist-editor-header:hover { background: var(--bg-hover); }
         
-        .picklist-title {
+        .picklist-name {
             font-weight: 600;
             font-size: 13px;
             color: var(--text-primary);
@@ -400,73 +556,95 @@
         }
         
         .picklist-options {
-            display: none;
             padding: 8px;
         }
         
-        .picklist.open .picklist-options {
-            display: block;
-        }
-        
-        .option {
-            padding: 6px 10px;
-            border-radius: 4px;
+        .option-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            padding: 8px;
+            border-radius: 6px;
             margin-bottom: 4px;
-            font-size: 12px;
             border-left: 3px solid var(--text-muted);
+            background: var(--bg-secondary);
         }
         
-        .option[data-state="normal"] { border-left-color: #34d399; }
-        .option[data-state="abnormal"] { border-left-color: #fbbf24; }
-        .option[data-state="critical"] { border-left-color: #fb7185; }
-        .option[data-state="chronic"] { border-left-color: #a78bfa; }
-        .option[data-state="absent"] { border-left-color: #6b7280; }
-        .option[data-state="surgical"] { border-left-color: #60a5fa; }
-        .option[data-state="benign"] { border-left-color: #2dd4bf; }
+        .option-item[data-state="normal"] { border-left-color: #34d399; }
+        .option-item[data-state="abnormal"] { border-left-color: #fbbf24; }
+        .option-item[data-state="critical"] { border-left-color: #fb7185; }
+        .option-item[data-state="chronic"] { border-left-color: #a78bfa; }
+        .option-item[data-state="absent"] { border-left-color: #6b7280; }
         
         .option-state {
-            font-weight: 500;
-            font-size: 10px;
+            font-size: 9px;
+            font-weight: 600;
             text-transform: uppercase;
-            margin-right: 6px;
-        }
-        
-        /* Routes/Dependencies */
-        .route-badge {
-            display: inline-block;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 11px;
-            color: var(--text-secondary);
-            margin: 2px;
-            cursor: pointer;
-        }
-        
-        .route-badge:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-        }
-        
-        /* Empty State */
-        .empty-state {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
+            padding: 2px 6px;
+            border-radius: 3px;
+            background: var(--bg-tertiary);
             color: var(--text-muted);
-            font-size: 13px;
+            min-width: 60px;
             text-align: center;
-            padding: 20px;
         }
         
-        .empty-state svg {
-            width: 48px;
-            height: 48px;
+        .option-text {
+            flex: 1;
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+        
+        .option-actions {
+            display: flex;
+            gap: 4px;
+            opacity: 0;
+            transition: opacity 0.15s;
+        }
+        
+        .option-item:hover .option-actions { opacity: 1; }
+        
+        .option-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 4px;
+        }
+        
+        .option-btn:hover { color: var(--text-primary); }
+        .option-btn.danger:hover { color: var(--danger); }
+        
+        /* Form Inputs */
+        input[type="text"], textarea, select {
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            width: 100%;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        textarea { resize: vertical; min-height: 80px; }
+        
+        .form-row {
             margin-bottom: 12px;
-            opacity: 0.3;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 6px;
         }
         
         /* Modal */
@@ -479,6 +657,8 @@
             justify-content: center;
             align-items: center;
         }
+        
+        .modal-overlay.active { display: flex; }
         
         .modal {
             background: var(--bg-secondary);
@@ -500,10 +680,7 @@
             align-items: center;
         }
         
-        .modal-header h3 {
-            font-size: 16px;
-            font-weight: 600;
-        }
+        .modal-header h3 { font-size: 16px; font-weight: 600; }
         
         .modal-close {
             background: none;
@@ -514,44 +691,54 @@
             line-height: 1;
         }
         
-        .modal-filters {
-            padding: 12px 20px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        
-        .modal-filters select, .modal-filters input {
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border);
-            color: var(--text-primary);
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 13px;
-        }
-        
-        .modal-filters input {
-            flex: 1;
-            min-width: 150px;
-        }
-        
-        .modal-list {
+        .modal-body {
             flex: 1;
             overflow-y: auto;
+            padding: 20px;
         }
         
-        .modal-item {
-            padding: 12px 20px;
-            border-bottom: 1px solid var(--border-subtle);
+        .modal-footer {
+            padding: 16px 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+        
+        .modal-list-item {
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 8px;
             cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
         
-        .modal-item:hover {
+        .modal-list-item:hover {
             background: var(--bg-hover);
+            border-color: var(--accent);
+        }
+        
+        /* Empty State */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: var(--text-muted);
+            font-size: 13px;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .empty-state svg {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 12px;
+            opacity: 0.3;
         }
         
         /* Toast */
@@ -578,7 +765,6 @@
         ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #444; }
         
-        /* Loading */
         .loading {
             display: flex;
             align-items: center;
@@ -587,184 +773,295 @@
             color: var(--text-muted);
         }
         
-        /* View Toggle */
-        .view-toggle {
-            display: flex;
-            align-items: center;
-            gap: 2px;
-        }
-        
-        .view-toggle button {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            padding: 4px;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .view-toggle button:hover {
-            background: var(--bg-hover);
-            color: var(--text-secondary);
-        }
-        
-        .view-toggle button.active {
-            background: var(--accent-dim);
-            color: var(--accent);
-        }
-        
-        /* Table View */
-        .template-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 12px;
-        }
-        
-        .template-table th {
-            text-align: left;
-            padding: 8px 6px;
-            border-bottom: 1px solid var(--border);
-            color: var(--text-muted);
-            font-weight: 500;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.03em;
-            position: sticky;
-            top: 0;
+        /* Impression Section */
+        .impression-field {
             background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
         }
         
-        .template-table td {
-            padding: 6px;
-            border-bottom: 1px solid var(--border-subtle);
-            color: var(--text-secondary);
-        }
-        
-        .template-table tr {
-            cursor: pointer;
-        }
-        
-        .template-table tr:hover td {
-            background: var(--bg-hover);
-        }
-        
-        .template-table tr.selected td {
-            background: var(--accent-dim);
-        }
-        
-        .template-table .cpt {
-            font-family: "SF Mono", monospace;
-            color: var(--accent);
-            font-weight: 600;
-        }
-        
-        .template-table .modality {
+        .impression-label {
+            font-size: 10px;
             color: var(--text-muted);
-            font-size: 11px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
         }
+        
+        .impression-source {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--accent-dim);
+            color: var(--accent);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            margin-left: 8px;
+        }
+        
+        .impression-default {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        /* Findings header */
+        .findings-section .section-header { border-left: 3px solid var(--accent); }
+        .impression-section .section-header { border-left: 3px solid var(--success); }
+        .technique-section .section-header { border-left: 3px solid var(--warning); }
     </style>
 </head>
 <body>
     <header class="header">
-        <h1>Template Map</h1>
-        <div class="stats-bar" id="stats-bar">
-            <span class="loading">Loading...</span>
-        </div>
+        <h1>Template Map Editor</h1>
         <div class="header-actions">
+            <button class="btn" onclick="openNewTemplateModal()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                New Template
+            </button>
+            <button class="btn" onclick="openNewComponentModal()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 8v8M8 12h8"/></svg>
+                New Component
+            </button>
             <span class="version-badge" id="version">v?.?</span>
-            <button class="save-btn" id="save-btn" onclick="saveAllChanges()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/></svg>
-                Save
+            <div class="changes-indicator" id="changes-indicator"></div>
+            <button class="btn btn-success" id="save-btn" onclick="saveAllChanges()" style="display:none;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>
+                Save All
             </button>
         </div>
     </header>
     
     <div class="panels">
-        <!-- Panel 1: Templates -->
-        <div class="panel" id="panel-templates" style="width:30%">
+        <!-- Panel 1: Templates List -->
+        <div class="panel" id="panel-templates" style="width:28%">
             <div class="panel-header">
                 <span>Templates</span>
-                <div style="display:flex;align-items:center;gap:8px">
-                    <div class="view-toggle">
-                        <button id="view-tree" class="active" onclick="setView('tree')" title="Tree View">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
-                        </button>
-                        <button id="view-table" onclick="setView('table')" title="Table View">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-                        </button>
-                    </div>
-                    <span class="count" id="template-count">0</span>
-                </div>
+                <span class="count" id="template-count">0</span>
             </div>
-            <div class="panel-content" id="template-content">
-                <div class="loading">Loading templates...</div>
+            <div class="panel-content" id="template-list">
+                <div class="loading">Loading...</div>
             </div>
         </div>
         
         <div class="resizer" id="resizer1"></div>
         
-        <!-- Panel 2: Components -->
-        <div class="panel" id="panel-components" style="width:30%">
+        <!-- Panel 2: Template Structure -->
+        <div class="panel" id="panel-structure" style="width:36%">
             <div class="panel-header">
-                <span>Components</span>
-                <span class="count" id="component-count">0</span>
+                <span>Template Structure</span>
+                <div style="display:flex;gap:6px;">
+                    <button class="btn" id="duplicate-btn" onclick="duplicateCurrentTemplate()" style="display:none;">Duplicate</button>
+                </div>
             </div>
-            <div class="panel-content" id="component-list">
+            <div class="panel-content" id="template-structure">
                 <div class="empty-state">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-                    <div>Select a template to view its components</div>
+                    <div>Select a template to view its structure</div>
                 </div>
             </div>
         </div>
         
         <div class="resizer" id="resizer2"></div>
         
-        <!-- Panel 3: Details/Dependencies -->
-        <div class="panel" id="panel-details" style="flex:1">
+        <!-- Panel 3: Component/Picklist Editor -->
+        <div class="panel" id="panel-editor" style="flex:1">
             <div class="panel-header">
-                <span>Details</span>
-                <span class="count" id="detail-count">—</span>
+                <span>Editor</span>
             </div>
-            <div class="panel-content" id="detail-view">
+            <div class="panel-content" id="editor-content">
                 <div class="empty-state">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    <div>Select a component to view its details</div>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                    <div>Select a component to edit its picklists</div>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- Add Component Modal -->
-    <div class="modal-overlay" id="add-modal">
+    <!-- New Template Modal -->
+    <div class="modal-overlay" id="new-template-modal">
         <div class="modal">
             <div class="modal-header">
-                <h3>Add Component</h3>
-                <button class="modal-close" onclick="closeModal()">&times;</button>
+                <h3>Create New Template</h3>
+                <button class="modal-close" onclick="closeModal('new-template-modal')">&times;</button>
             </div>
-            <div class="modal-filters">
-                <select id="filter-modality" onchange="renderModalList()">
-                    <option value="">All Modalities</option>
-                </select>
-                <input type="text" id="filter-search" placeholder="Search components..." oninput="renderModalList()">
+            <div class="modal-body">
+                <div class="form-row">
+                    <label class="form-label">CPT Code</label>
+                    <input type="text" id="new-tpl-cpt" placeholder="e.g., 71045">
+                </div>
+                <div class="form-row">
+                    <label class="form-label">Procedure Name</label>
+                    <input type="text" id="new-tpl-name" placeholder="e.g., XR Chest 1 View">
+                </div>
+                <div class="form-row">
+                    <label class="form-label">Modality</label>
+                    <select id="new-tpl-modality">
+                        <option value="xray">X-Ray</option>
+                        <option value="ct">CT</option>
+                        <option value="mri">MRI</option>
+                        <option value="ultrasound">Ultrasound</option>
+                        <option value="fluoroscopy">Fluoroscopy</option>
+                        <option value="nuclear_medicine">Nuclear Medicine</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <label class="form-label">Body Region</label>
+                    <input type="text" id="new-tpl-region" placeholder="e.g., chest">
+                </div>
+                <div class="form-row">
+                    <label class="form-label">Description</label>
+                    <textarea id="new-tpl-desc" placeholder="Brief description of the template"></textarea>
+                </div>
             </div>
-            <div class="modal-list" id="modal-list"></div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal('new-template-modal')">Cancel</button>
+                <button class="btn btn-primary" onclick="createNewTemplate()">Create Template</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- New Component Modal -->
+    <div class="modal-overlay" id="new-component-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Create New Component</h3>
+                <button class="modal-close" onclick="closeModal('new-component-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <label class="form-label">Component ID</label>
+                    <input type="text" id="new-comp-id" placeholder="e.g., CR-lungsandpleura">
+                </div>
+                <div class="form-row">
+                    <label class="form-label">Display Name</label>
+                    <input type="text" id="new-comp-name" placeholder="e.g., Lungs and Pleura">
+                </div>
+                <div class="form-row">
+                    <label class="form-label">Modality</label>
+                    <select id="new-comp-modality">
+                        <option value="xray">X-Ray</option>
+                        <option value="ct">CT</option>
+                        <option value="mri">MRI</option>
+                        <option value="ultrasound">Ultrasound</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <label class="form-label">Body Region</label>
+                    <input type="text" id="new-comp-region" placeholder="e.g., chest">
+                </div>
+                <div class="form-row">
+                    <label class="form-label">Description</label>
+                    <textarea id="new-comp-desc" placeholder="What this component covers"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal('new-component-modal')">Cancel</button>
+                <button class="btn btn-primary" onclick="createNewComponent()">Create Component</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Component to Template Modal -->
+    <div class="modal-overlay" id="add-component-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Add Component to Findings</h3>
+                <button class="modal-close" onclick="closeModal('add-component-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <input type="text" id="component-search" placeholder="Search components..." oninput="filterComponentList()">
+                </div>
+                <div id="component-picker-list"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Picklist Modal -->
+    <div class="modal-overlay" id="add-picklist-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Add New Picklist</h3>
+                <button class="modal-close" onclick="closeModal('add-picklist-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <label class="form-label">Picklist ID</label>
+                    <input type="text" id="new-pl-id" placeholder="e.g., lung_opacities">
+                </div>
+                <div class="form-row">
+                    <label class="form-label">Display Name</label>
+                    <input type="text" id="new-pl-name" placeholder="e.g., Lung Opacities">
+                </div>
+                <div class="form-row">
+                    <label class="form-label">
+                        <input type="checkbox" id="new-pl-multi"> Allow Multiple Selections
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal('add-picklist-modal')">Cancel</button>
+                <button class="btn btn-primary" onclick="createNewPicklist()">Create Picklist</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Option Modal -->
+    <div class="modal-overlay" id="add-option-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Add New Option</h3>
+                <button class="modal-close" onclick="closeModal('add-option-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <label class="form-label">State</label>
+                    <select id="new-opt-state">
+                        <option value="absent">Absent</option>
+                        <option value="normal" selected>Normal</option>
+                        <option value="abnormal">Abnormal</option>
+                        <option value="critical">Critical</option>
+                        <option value="chronic">Chronic</option>
+                        <option value="benign">Benign</option>
+                        <option value="surgical">Surgical</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <label class="form-label">Text</label>
+                    <textarea id="new-opt-text" placeholder="The option text that will appear in the report"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal('add-option-modal')">Cancel</button>
+                <button class="btn btn-primary" onclick="createNewOption()">Add Option</button>
+            </div>
         </div>
     </div>
 
     <script>
+        // Data stores
         let templateMap = null;
         let componentMap = null;
         let currentTemplate = null;
         let currentComponent = null;
+        let currentPicklist = null;
         let hasChanges = false;
-        let templateFileHandle = null;
-        let componentFileHandle = null;
-        let autosaveTimeout = null;
-        let currentView = localStorage.getItem('templateView') || 'tree';
         
         const chevronSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>`;
+        
+        // Universal template header structure
+        const UNIVERSAL_HEADER = {
+            exam: { type: 'merge_field', source: 'Procedures', label: 'EXAM' },
+            demographics: {
+                patient_name: { type: 'merge_field', source: 'Patient Name' },
+                patient_age: { type: 'merge_field', source: 'Patient Age' },
+                patient_sex: { type: 'merge_field', source: 'Patient Sex' }
+            },
+            clinical_history: { type: 'merge_field', source: 'PMHx', label: 'CLINICAL HISTORY' },
+            indication: { type: 'merge_field', source: 'Indication', label: 'INDICATION' }
+        };
         
         // Load data
         async function loadData() {
@@ -777,143 +1074,55 @@
                 componentMap = await compResp.json();
                 renderAll();
             } catch (error) {
-                document.getElementById('template-tree').innerHTML = 
-                    '<div class="empty-state" style="color:#fb7185;">Error loading JSON<br><small>Run: python -m http.server 8080</small></div>';
+                console.error('Error loading data:', error);
+                document.getElementById('template-list').innerHTML = 
+                    '<div class="empty-state" style="color:#fb7185;">Error loading JSON<br><small>Run: python -m http.server 8000</small></div>';
             }
         }
         
         function renderAll() {
-            renderStats();
-            renderTemplates();
-            populateModalFilters();
-            updateViewButtons();
+            renderTemplateList();
+            document.getElementById('version').textContent = `v${templateMap._metadata?.version || '?'}`;
         }
         
-        function setView(view) {
-            currentView = view;
-            localStorage.setItem('templateView', view);
-            renderTemplates();
-            updateViewButtons();
-        }
-        
-        function updateViewButtons() {
-            document.getElementById('view-tree').classList.toggle('active', currentView === 'tree');
-            document.getElementById('view-table').classList.toggle('active', currentView === 'table');
-        }
-        
-        function renderTemplates() {
-            if (currentView === 'table') {
-                renderTemplateTable();
-            } else {
-                renderTemplateTree();
-            }
-        }
-        
-        function renderStats() {
-            const stats = calculateStats();
-            const meta = templateMap._metadata;
-            const compMeta = componentMap?._metadata;
-            
-            document.getElementById('version').textContent = `v${meta?.version || '?'}`;
-            
-            document.getElementById('stats-bar').innerHTML = `
-                <div class="stat"><span class="stat-value">${stats.modalities}</span><span class="stat-label">Modalities</span></div>
-                <div class="stat-divider"></div>
-                <div class="stat"><span class="stat-value">${stats.totalRegions}</span><span class="stat-label">Regions</span></div>
-                <div class="stat-divider"></div>
-                <div class="stat"><span class="stat-value">${stats.totalTemplates}</span><span class="stat-label">Templates</span></div>
-                <div class="stat-divider"></div>
-                <div class="stat"><span class="stat-value">${stats.totalCPT}</span><span class="stat-label">CPT Codes</span></div>
-                <div class="stat-divider"></div>
-                <div class="stat"><span class="stat-value">${stats.totalComponentTemplates}</span><span class="stat-label">Components</span></div>
-                <div class="stat-divider"></div>
-                <div class="stat"><span class="stat-value">${stats.totalPicklists}</span><span class="stat-label">Picklists</span></div>
-                <div class="stat-divider"></div>
-                <div class="stat"><span class="stat-value">${stats.totalOptions}</span><span class="stat-label">Options</span></div>
-                <div class="stat-divider"></div>
-                <div class="stat"><span class="stat-value">${stats.totalDependencies}</span><span class="stat-label">Dependencies</span></div>
-            `;
-            
-            document.getElementById('template-count').textContent = stats.totalTemplates;
-        }
-        
-        function calculateStats() {
-            let totalTemplates = 0, totalCPT = 0, totalRegions = 0;
-            let totalComponentTemplates = 0, totalPicklists = 0, totalOptions = 0, totalDependencies = 0;
-            const modalities = Object.keys(templateMap.modalities).length;
-            
-            for (const modKey in templateMap.modalities) {
-                const mod = templateMap.modalities[modKey];
-                for (const regKey in mod.regions) {
-                    totalRegions++;
-                    const region = mod.regions[regKey];
-                    for (const tplKey in region.templates) {
-                        totalTemplates++;
-                        const tpl = region.templates[tplKey];
-                        totalCPT += Object.keys(tpl.variants || {}).length;
-                        totalDependencies += (tpl.component_templates || []).length;
-                    }
-                }
-            }
-            
-            if (componentMap) {
-                for (const modKey in componentMap) {
-                    if (modKey.startsWith('_') || typeof componentMap[modKey] !== 'object') continue;
-                    for (const regKey in componentMap[modKey]) {
-                        if (regKey === 'display_name') continue;
-                        const region = componentMap[modKey][regKey];
-                        if (!region?.component_templates) continue;
-                        for (const compId in region.component_templates) {
-                            totalComponentTemplates++;
-                            const comp = region.component_templates[compId];
-                            for (const pkKey in comp.picklists || {}) {
-                                totalPicklists++;
-                                totalOptions += (comp.picklists[pkKey].options || []).length;
-                            }
-                        }
-                    }
-                }
-            }
-            
-            return { modalities, totalRegions, totalTemplates, totalCPT, totalComponentTemplates, totalPicklists, totalOptions, totalDependencies };
-        }
-        
-        function renderTemplateTree() {
+        function renderTemplateList() {
             let html = '';
+            let count = 0;
             
             for (const modKey in templateMap.modalities) {
                 const mod = templateMap.modalities[modKey];
-                const tplCount = Object.values(mod.regions).reduce((sum, r) => sum + Object.keys(r.templates).length, 0);
+                const modTemplates = Object.values(mod.regions).reduce((sum, r) => sum + Object.keys(r.templates).length, 0);
                 
                 html += `<div class="tree-node" data-mod="${modKey}">
                     <div class="tree-header" onclick="toggleNode(this.parentElement)">
                         <span class="tree-toggle">${chevronSvg}</span>
                         <span class="tree-title">${mod.display_name}</span>
-                        <span class="tree-count">${tplCount}</span>
+                        <span class="tree-count">${modTemplates}</span>
                     </div>
                     <div class="tree-children">`;
                 
                 for (const regKey in mod.regions) {
                     const region = mod.regions[regKey];
                     const templates = region.templates;
-                    const count = Object.keys(templates).length;
+                    const regCount = Object.keys(templates).length;
                     
                     html += `<div class="tree-node" data-reg="${regKey}">
                         <div class="tree-header" onclick="toggleNode(this.parentElement)">
                             <span class="tree-toggle">${chevronSvg}</span>
                             <span class="tree-title">${region.display_name}</span>
-                            <span class="tree-count">${count}</span>
+                            <span class="tree-count">${regCount}</span>
                         </div>
                         <div class="tree-children">`;
                     
                     for (const tplKey in templates) {
                         const tpl = templates[tplKey];
                         const compCount = (tpl.component_templates || []).length;
+                        count++;
                         
-                        html += `<div class="item" data-tpl="${tplKey}" data-mod="${modKey}" data-reg="${regKey}" onclick="selectTemplate(this)">
-                            <span class="item-code">${tpl.primary_cpt}</span>
-                            <span class="item-desc">${tpl.description}</span>
-                            <span class="item-badge">${compCount}</span>
+                        html += `<div class="template-item" data-tpl="${tplKey}" data-mod="${modKey}" data-reg="${regKey}" onclick="selectTemplate(this)">
+                            <span class="cpt">${tpl.primary_cpt}</span>
+                            <span class="desc">${tpl.description}</span>
+                            <span class="comp-count">${compCount}</span>
                         </div>`;
                     }
                     
@@ -923,42 +1132,8 @@
                 html += '</div></div>';
             }
             
-            document.getElementById('template-content').innerHTML = html;
-        }
-        
-        function renderTemplateTable() {
-            let html = `<table class="template-table">
-                <thead>
-                    <tr>
-                        <th>CPT</th>
-                        <th>Description</th>
-                        <th>Modality</th>
-                        <th>Comp</th>
-                    </tr>
-                </thead>
-                <tbody>`;
-            
-            for (const modKey in templateMap.modalities) {
-                const mod = templateMap.modalities[modKey];
-                for (const regKey in mod.regions) {
-                    const region = mod.regions[regKey];
-                    for (const tplKey in region.templates) {
-                        const tpl = region.templates[tplKey];
-                        const compCount = (tpl.component_templates || []).length;
-                        const selected = currentTemplate?.tpl === tplKey ? 'selected' : '';
-                        
-                        html += `<tr class="${selected}" data-tpl="${tplKey}" data-mod="${modKey}" data-reg="${regKey}" onclick="selectTemplate(this)">
-                            <td class="cpt">${tpl.primary_cpt}</td>
-                            <td>${tpl.description}</td>
-                            <td class="modality">${mod.display_name}</td>
-                            <td>${compCount}</td>
-                        </tr>`;
-                    }
-                }
-            }
-            
-            html += '</tbody></table>';
-            document.getElementById('template-content').innerHTML = html;
+            document.getElementById('template-list').innerHTML = html;
+            document.getElementById('template-count').textContent = count;
         }
         
         function toggleNode(node) {
@@ -966,125 +1141,149 @@
         }
         
         function selectTemplate(el) {
-            // Clear selection in both views
-            document.querySelectorAll('#template-content .item, #template-content tr').forEach(i => i.classList.remove('selected'));
+            document.querySelectorAll('.template-item').forEach(i => i.classList.remove('selected'));
             el.classList.add('selected');
             
             const { mod, reg, tpl } = el.dataset;
             currentTemplate = { mod, reg, tpl };
             currentComponent = null;
             
-            renderComponents();
-            document.getElementById('detail-view').innerHTML = `
-                <div class="empty-state">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    <div>Select a component to view its details</div>
-                </div>
-            `;
-            document.getElementById('detail-count').textContent = '—';
+            renderTemplateStructure();
+            document.getElementById('duplicate-btn').style.display = 'block';
+            renderEmptyEditor();
         }
         
-        function renderComponents() {
+        function renderTemplateStructure() {
             if (!currentTemplate) return;
             
             const tpl = templateMap.modalities[currentTemplate.mod].regions[currentTemplate.reg].templates[currentTemplate.tpl];
             const components = tpl.component_templates || [];
             
-            document.getElementById('component-count').textContent = components.length;
-            
             let html = '';
             
-            components.forEach(compId => {
+            // HEADER Section
+            html += `<div class="template-section">
+                <div class="section-header" onclick="this.parentElement.classList.toggle('collapsed')">
+                    <span class="section-icon">📋</span>
+                    <span class="section-title">Header</span>
+                    <span class="section-badge">Merge Fields</span>
+                    <span class="section-toggle">${chevronSvg}</span>
+                </div>
+                <div class="section-content">
+                    <div class="field-row">
+                        <span class="field-label">EXAM:</span>
+                        <span class="field-value"><span class="merge-field">Procedures</span></span>
+                    </div>
+                    <div class="field-row">
+                        <span class="field-label">DEMOGRAPHICS:</span>
+                        <span class="field-value">
+                            <span class="merge-field">Patient Name</span>
+                            <span class="merge-field">Patient Age</span>
+                            <span class="merge-field">Patient Sex</span>
+                        </span>
+                    </div>
+                    <div class="field-row">
+                        <span class="field-label">CLINICAL HISTORY:</span>
+                        <span class="field-value"><span class="merge-field">PMHx</span></span>
+                    </div>
+                    <div class="field-row">
+                        <span class="field-label">INDICATION:</span>
+                        <span class="field-value"><span class="merge-field">Indication</span></span>
+                    </div>
+                </div>
+            </div>`;
+            
+            // TECHNIQUE Section
+            html += `<div class="template-section technique-section">
+                <div class="section-header" onclick="this.parentElement.classList.toggle('collapsed')">
+                    <span class="section-icon">⚙️</span>
+                    <span class="section-title">Technique</span>
+                    <span class="section-badge">Picklist</span>
+                    <span class="section-toggle">${chevronSvg}</span>
+                </div>
+                <div class="section-content">
+                    <div class="picklist-tag" onclick="editTechniquePicklist()">
+                        TEC-${currentTemplate.mod}-${currentTemplate.reg}
+                        <span class="opt-count">Edit</span>
+                    </div>
+                </div>
+            </div>`;
+            
+            // COMPARISON Section
+            html += `<div class="template-section">
+                <div class="section-header" onclick="this.parentElement.classList.toggle('collapsed')">
+                    <span class="section-icon">🔄</span>
+                    <span class="section-title">Comparison</span>
+                    <span class="section-badge">Hybrid</span>
+                    <span class="section-toggle">${chevronSvg}</span>
+                </div>
+                <div class="section-content">
+                    <div class="field-row">
+                        <span class="field-value">
+                            <span class="merge-field">Prior Studies</span>
+                            <span class="picklist-tag">COMP-standard</span>
+                        </span>
+                    </div>
+                </div>
+            </div>`;
+            
+            // FINDINGS Section
+            html += `<div class="template-section findings-section">
+                <div class="section-header" onclick="this.parentElement.classList.toggle('collapsed')">
+                    <span class="section-icon">🔍</span>
+                    <span class="section-title">Findings</span>
+                    <span class="section-badge">${components.length} Components</span>
+                    <span class="section-toggle">${chevronSvg}</span>
+                </div>
+                <div class="section-content">`;
+            
+            components.forEach((compId, idx) => {
                 const comp = findComponent(compId);
-                const pkCount = comp ? Object.keys(comp.picklists || {}).length : 0;
-                const optCount = comp ? Object.values(comp.picklists || {}).reduce((s, p) => s + (p.options?.length || 0), 0) : 0;
+                const picklists = comp ? Object.keys(comp.picklists || {}) : [];
                 
-                html += `<div class="comp-card" data-comp="${compId}" onclick="selectComponent(this, '${compId}')">
-                    <div class="comp-card-header">
-                        <span class="comp-card-id">${compId}</span>
-                        <button class="remove-btn" onclick="event.stopPropagation(); removeComponent('${compId}')" title="Remove">
+                html += `<div class="finding-component${currentComponent === compId ? ' selected' : ''}" data-comp="${compId}">
+                    <div class="component-header" onclick="selectComponent('${compId}')">
+                        <span class="component-order">${idx + 1}</span>
+                        <span class="component-name">${comp?.display_name || compId}</span>
+                        <span class="component-id">${compId}</span>
+                        <span class="component-picklist-count">${picklists.length} picklists</span>
+                        <button class="component-remove" onclick="event.stopPropagation(); removeComponentFromTemplate('${compId}')" title="Remove">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M6 18L18 6M6 6l12 12"/></svg>
                         </button>
                     </div>
-                    <div class="comp-card-name">${comp?.display_name || 'Unknown'}</div>
-                    <div class="comp-card-meta">${pkCount} picklists · ${optCount} options</div>
+                    ${picklists.length > 0 ? `<div class="picklist-list">
+                        ${picklists.map(pk => {
+                            const opts = comp.picklists[pk].options?.length || 0;
+                            return `<span class="picklist-tag" onclick="event.stopPropagation(); selectPicklist('${compId}', '${pk}')">${comp.picklists[pk].display_name || pk} <span class="opt-count">${opts}</span></span>`;
+                        }).join('')}
+                    </div>` : ''}
                 </div>`;
             });
             
-            html += `<button class="add-btn" onclick="openModal()">
+            html += `<button class="add-btn" onclick="openAddComponentModal()">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M12 5v14M5 12h14"/></svg>
                 Add Component
             </button>`;
             
-            document.getElementById('component-list').innerHTML = html;
-        }
-        
-        function selectComponent(el, compId) {
-            document.querySelectorAll('.comp-card').forEach(c => c.classList.remove('selected'));
-            el.classList.add('selected');
-            currentComponent = compId;
-            renderComponentDetails(compId);
-        }
-        
-        function renderComponentDetails(compId) {
-            const comp = findComponent(compId);
-            if (!comp) {
-                document.getElementById('detail-view').innerHTML = '<div class="empty-state">Component not found</div>';
-                return;
-            }
+            html += '</div></div>';
             
-            const picklists = comp.picklists || {};
-            const pkCount = Object.keys(picklists).length;
-            const routes = comp.routes_to || [];
-            
-            document.getElementById('detail-count').textContent = `${pkCount} picklists`;
-            
-            let html = `
-                <div class="detail-section">
-                    <div class="detail-label">Component ID</div>
-                    <div class="detail-value" style="color:var(--accent);font-family:monospace">${compId}</div>
+            // IMPRESSION Section
+            html += `<div class="template-section impression-section">
+                <div class="section-header" onclick="this.parentElement.classList.toggle('collapsed')">
+                    <span class="section-icon">📝</span>
+                    <span class="section-title">Impression</span>
+                    <span class="section-badge">AI Generated</span>
+                    <span class="section-toggle">${chevronSvg}</span>
                 </div>
-                <div class="detail-section">
-                    <div class="detail-label">Display Name</div>
-                    <div class="detail-value">${comp.display_name}</div>
-                </div>
-                ${comp.description ? `<div class="detail-section">
-                    <div class="detail-label">Description</div>
-                    <div class="detail-value" style="color:var(--text-secondary);font-size:13px">${comp.description}</div>
-                </div>` : ''}
-                <div class="detail-section">
-                    <div class="detail-label">Used By (${routes.length} templates)</div>
-                    <div style="margin-top:4px">
-                        ${routes.map(r => `<span class="route-badge" onclick="navigateToTemplate('${r}')">${r}</span>`).join('')}
+                <div class="section-content">
+                    <div class="impression-field">
+                        <div class="impression-label">Default Text <span class="impression-source">AI Populated</span></div>
+                        <div class="impression-default">Normal exam.</div>
                     </div>
                 </div>
-                <div class="detail-section">
-                    <div class="detail-label">Picklists (${pkCount})</div>
-                </div>
-            `;
+            </div>`;
             
-            for (const pkKey in picklists) {
-                const pk = picklists[pkKey];
-                const options = pk.options || [];
-                
-                html += `<div class="picklist" onclick="this.classList.toggle('open')">
-                    <div class="picklist-header">
-                        <span class="picklist-title">${pk.display_name || pkKey}</span>
-                        <span class="picklist-meta">${options.length} options${pk.multiselect ? ' · multi' : ''}</span>
-                    </div>
-                    <div class="picklist-options">`;
-                
-                options.forEach(opt => {
-                    html += `<div class="option" data-state="${opt.state}">
-                        <span class="option-state" style="color:inherit">${opt.state}</span>
-                        ${opt.text}
-                    </div>`;
-                });
-                
-                html += '</div></div>';
-            }
-            
-            document.getElementById('detail-view').innerHTML = html;
+            document.getElementById('template-structure').innerHTML = html;
         }
         
         function findComponent(compId) {
@@ -1103,102 +1302,373 @@
             return null;
         }
         
-        function navigateToTemplate(tplKey) {
-            for (const modKey in templateMap.modalities) {
-                const mod = templateMap.modalities[modKey];
-                for (const regKey in mod.regions) {
-                    if (mod.regions[regKey].templates[tplKey]) {
-                        if (currentView === 'tree') {
-                            // Expand tree nodes
-                            const modNode = document.querySelector(`.tree-node[data-mod="${modKey}"]`);
-                            const regNode = modNode?.querySelector(`[data-reg="${regKey}"]`);
-                            if (modNode) modNode.classList.add('open');
-                            if (regNode) regNode.classList.add('open');
-                        }
-                        
-                        // Select template
-                        setTimeout(() => {
-                            const el = document.querySelector(`[data-tpl="${tplKey}"]`);
-                            if (el) {
-                                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                                selectTemplate(el);
-                            }
-                        }, 100);
-                        return;
+        function findComponentLocation(compId) {
+            for (const modKey in componentMap) {
+                if (modKey.startsWith('_')) continue;
+                const mod = componentMap[modKey];
+                if (typeof mod !== 'object') continue;
+                for (const regKey in mod) {
+                    if (regKey === 'display_name') continue;
+                    const region = mod[regKey];
+                    if (region?.component_templates?.[compId]) {
+                        return { modKey, regKey };
                     }
                 }
             }
+            return null;
         }
         
-        // Component management
-        function removeComponent(compId) {
-            if (!currentTemplate) return;
-            const tpl = templateMap.modalities[currentTemplate.mod].regions[currentTemplate.reg].templates[currentTemplate.tpl];
-            tpl.component_templates = (tpl.component_templates || []).filter(c => c !== compId);
-            
-            // Update routes_to
-            const comp = findComponent(compId);
-            if (comp?.routes_to) {
-                comp.routes_to = comp.routes_to.filter(r => r !== currentTemplate.tpl);
+        function selectComponent(compId) {
+            currentComponent = compId;
+            currentPicklist = null;
+            document.querySelectorAll('.finding-component').forEach(c => c.classList.remove('selected'));
+            document.querySelector(`.finding-component[data-comp="${compId}"]`)?.classList.add('selected');
+            renderComponentEditor();
+        }
+        
+        function selectPicklist(compId, picklistId) {
+            currentComponent = compId;
+            currentPicklist = picklistId;
+            renderPicklistEditor();
+        }
+        
+        function renderEmptyEditor() {
+            document.getElementById('editor-content').innerHTML = `
+                <div class="empty-state">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                    <div>Select a component to edit its picklists</div>
+                </div>
+            `;
+        }
+        
+        function renderComponentEditor() {
+            const comp = findComponent(currentComponent);
+            if (!comp) {
+                renderEmptyEditor();
+                return;
             }
+            
+            const picklists = comp.picklists || {};
+            const routes = comp.routes_to || [];
+            
+            let html = `
+                <div class="editor-header">
+                    <div class="editor-title">${comp.display_name}</div>
+                    <div class="editor-subtitle">${currentComponent}</div>
+                </div>
+                <div class="editor-body">
+                    <div class="editor-section">
+                        <div class="editor-section-title">Used by Templates (${routes.length})</div>
+                        <div style="display:flex;flex-wrap:wrap;gap:4px;">
+                            ${routes.map(r => `<span class="picklist-tag" style="background:var(--accent-dim);color:var(--accent);border-color:var(--accent);">${r}</span>`).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="editor-section">
+                        <div class="editor-section-title">Picklists (${Object.keys(picklists).length})</div>`;
+            
+            for (const pkKey in picklists) {
+                const pk = picklists[pkKey];
+                const opts = pk.options || [];
+                
+                html += `<div class="picklist-editor">
+                    <div class="picklist-editor-header" onclick="selectPicklist('${currentComponent}', '${pkKey}')">
+                        <span class="picklist-name">${pk.display_name || pkKey}</span>
+                        <span class="picklist-meta">${opts.length} options${pk.multiselect ? ' · multi-select' : ''}</span>
+                    </div>
+                </div>`;
+            }
+            
+            html += `<button class="add-btn" onclick="openAddPicklistModal()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M12 5v14M5 12h14"/></svg>
+                Add Picklist
+            </button>`;
+            
+            html += '</div></div>';
+            
+            document.getElementById('editor-content').innerHTML = html;
+        }
+        
+        function renderPicklistEditor() {
+            const comp = findComponent(currentComponent);
+            if (!comp || !currentPicklist) {
+                renderComponentEditor();
+                return;
+            }
+            
+            const pk = comp.picklists?.[currentPicklist];
+            if (!pk) {
+                renderComponentEditor();
+                return;
+            }
+            
+            const opts = pk.options || [];
+            
+            let html = `
+                <div class="editor-header">
+                    <div style="display:flex;align-items:center;gap:8px;">
+                        <button class="btn" onclick="renderComponentEditor()" style="padding:4px 8px;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M15 18l-6-6 6-6"/></svg>
+                        </button>
+                        <div>
+                            <div class="editor-title">${pk.display_name || currentPicklist}</div>
+                            <div class="editor-subtitle">${currentComponent} → ${currentPicklist}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="editor-body">
+                    <div class="editor-section">
+                        <div class="editor-section-title">Options (${opts.length})</div>
+                        <div class="picklist-options">`;
+            
+            opts.forEach((opt, idx) => {
+                html += `<div class="option-item" data-state="${opt.state}">
+                    <span class="option-state">${opt.state}</span>
+                    <span class="option-text">${opt.text}</span>
+                    <div class="option-actions">
+                        <button class="option-btn" onclick="editOption(${idx})" title="Edit">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                        </button>
+                        <button class="option-btn danger" onclick="deleteOption(${idx})" title="Delete">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><path d="M6 18L18 6M6 6l12 12"/></svg>
+                        </button>
+                    </div>
+                </div>`;
+            });
+            
+            html += `</div>
+                        <button class="add-btn" onclick="openAddOptionModal()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M12 5v14M5 12h14"/></svg>
+                            Add Option
+                        </button>
+                    </div>
+                </div>`;
+            
+            document.getElementById('editor-content').innerHTML = html;
+        }
+        
+        // Modal functions
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+        }
+        
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+        
+        function openNewTemplateModal() {
+            document.getElementById('new-tpl-cpt').value = '';
+            document.getElementById('new-tpl-name').value = '';
+            document.getElementById('new-tpl-region').value = '';
+            document.getElementById('new-tpl-desc').value = '';
+            openModal('new-template-modal');
+        }
+        
+        function openNewComponentModal() {
+            document.getElementById('new-comp-id').value = '';
+            document.getElementById('new-comp-name').value = '';
+            document.getElementById('new-comp-region').value = '';
+            document.getElementById('new-comp-desc').value = '';
+            openModal('new-component-modal');
+        }
+        
+        function openAddComponentModal() {
+            renderComponentPickerList();
+            openModal('add-component-modal');
+        }
+        
+        function openAddPicklistModal() {
+            document.getElementById('new-pl-id').value = '';
+            document.getElementById('new-pl-name').value = '';
+            document.getElementById('new-pl-multi').checked = false;
+            openModal('add-picklist-modal');
+        }
+        
+        function openAddOptionModal() {
+            document.getElementById('new-opt-state').value = 'normal';
+            document.getElementById('new-opt-text').value = '';
+            openModal('add-option-modal');
+        }
+        
+        // Create functions
+        function createNewTemplate() {
+            const cpt = document.getElementById('new-tpl-cpt').value.trim();
+            const name = document.getElementById('new-tpl-name').value.trim();
+            const modality = document.getElementById('new-tpl-modality').value;
+            const region = document.getElementById('new-tpl-region').value.trim().toLowerCase().replace(/\s+/g, '_');
+            const desc = document.getElementById('new-tpl-desc').value.trim();
+            
+            if (!cpt || !name || !region) {
+                showToast('Please fill in all required fields', 'error');
+                return;
+            }
+            
+            const tplId = `${cpt}-${modality}-${region}`.toLowerCase();
+            
+            // Ensure modality exists
+            if (!templateMap.modalities[modality]) {
+                templateMap.modalities[modality] = {
+                    display_name: modality.charAt(0).toUpperCase() + modality.slice(1),
+                    regions: {}
+                };
+            }
+            
+            // Ensure region exists
+            if (!templateMap.modalities[modality].regions[region]) {
+                templateMap.modalities[modality].regions[region] = {
+                    display_name: region.charAt(0).toUpperCase() + region.slice(1).replace(/_/g, ' '),
+                    templates: {}
+                };
+            }
+            
+            // Create template
+            templateMap.modalities[modality].regions[region].templates[tplId] = {
+                primary_cpt: cpt,
+                description: name,
+                template_file: `templates/${modality}/${region}/${cpt}-${name.toLowerCase().replace(/\s+/g, '-')}.json`,
+                variants: {
+                    [cpt]: {
+                        description: name,
+                        technique_note: ''
+                    }
+                },
+                common_use: desc,
+                component_templates: []
+            };
             
             markChanged();
-            renderComponents();
-            renderStats();
+            renderTemplateList();
+            closeModal('new-template-modal');
+            showToast(`Template ${cpt} created`, 'success');
         }
         
-        function addComponent(compId) {
-            if (!currentTemplate) return;
-            const tpl = templateMap.modalities[currentTemplate.mod].regions[currentTemplate.reg].templates[currentTemplate.tpl];
-            if (!tpl.component_templates) tpl.component_templates = [];
-            if (!tpl.component_templates.includes(compId)) {
-                tpl.component_templates.push(compId);
-                
-                // Update routes_to
-                const comp = findComponent(compId);
-                if (comp) {
-                    if (!comp.routes_to) comp.routes_to = [];
-                    if (!comp.routes_to.includes(currentTemplate.tpl)) {
-                        comp.routes_to.push(currentTemplate.tpl);
-                    }
-                }
-                
-                markChanged();
-            }
-            closeModal();
-            renderComponents();
-            renderStats();
-        }
-        
-        // Modal
-        function openModal() {
-            document.getElementById('add-modal').style.display = 'flex';
-            renderModalList();
-        }
-        
-        function closeModal() {
-            document.getElementById('add-modal').style.display = 'none';
-        }
-        
-        function populateModalFilters() {
-            const modalities = new Set();
-            for (const modKey in componentMap) {
-                if (!modKey.startsWith('_') && componentMap[modKey]?.display_name) {
-                    modalities.add(modKey);
-                }
+        function createNewComponent() {
+            const id = document.getElementById('new-comp-id').value.trim();
+            const name = document.getElementById('new-comp-name').value.trim();
+            const modality = document.getElementById('new-comp-modality').value;
+            const region = document.getElementById('new-comp-region').value.trim().toLowerCase().replace(/\s+/g, '_');
+            const desc = document.getElementById('new-comp-desc').value.trim();
+            
+            if (!id || !name || !region) {
+                showToast('Please fill in all required fields', 'error');
+                return;
             }
             
-            const select = document.getElementById('filter-modality');
-            select.innerHTML = '<option value="">All Modalities</option>';
-            modalities.forEach(m => {
-                select.innerHTML += `<option value="${m}">${componentMap[m].display_name}</option>`;
+            // Ensure modality exists
+            if (!componentMap[modality]) {
+                componentMap[modality] = {
+                    display_name: modality.charAt(0).toUpperCase() + modality.slice(1)
+                };
+            }
+            
+            // Ensure region exists
+            if (!componentMap[modality][region]) {
+                componentMap[modality][region] = {
+                    display_name: region.charAt(0).toUpperCase() + region.slice(1).replace(/_/g, ' '),
+                    component_templates: {}
+                };
+            }
+            
+            // Create component
+            componentMap[modality][region].component_templates[id] = {
+                id: id,
+                display_name: name,
+                description: desc,
+                routes_to: [],
+                picklists: {}
+            };
+            
+            markChanged();
+            closeModal('new-component-modal');
+            showToast(`Component ${id} created`, 'success');
+        }
+        
+        function createNewPicklist() {
+            const id = document.getElementById('new-pl-id').value.trim().toLowerCase().replace(/\s+/g, '_');
+            const name = document.getElementById('new-pl-name').value.trim();
+            const multi = document.getElementById('new-pl-multi').checked;
+            
+            if (!id || !name) {
+                showToast('Please fill in all required fields', 'error');
+                return;
+            }
+            
+            const loc = findComponentLocation(currentComponent);
+            if (!loc) {
+                showToast('Component not found', 'error');
+                return;
+            }
+            
+            const comp = componentMap[loc.modKey][loc.regKey].component_templates[currentComponent];
+            if (!comp.picklists) comp.picklists = {};
+            
+            comp.picklists[id] = {
+                display_name: name,
+                multiselect: multi,
+                options: []
+            };
+            
+            markChanged();
+            closeModal('add-picklist-modal');
+            renderComponentEditor();
+            renderTemplateStructure();
+            showToast(`Picklist ${name} created`, 'success');
+        }
+        
+        function createNewOption() {
+            const state = document.getElementById('new-opt-state').value;
+            const text = document.getElementById('new-opt-text').value.trim();
+            
+            if (!text) {
+                showToast('Please enter option text', 'error');
+                return;
+            }
+            
+            const loc = findComponentLocation(currentComponent);
+            if (!loc) {
+                showToast('Component not found', 'error');
+                return;
+            }
+            
+            const comp = componentMap[loc.modKey][loc.regKey].component_templates[currentComponent];
+            const pk = comp.picklists?.[currentPicklist];
+            if (!pk) {
+                showToast('Picklist not found', 'error');
+                return;
+            }
+            
+            if (!pk.options) pk.options = [];
+            
+            pk.options.push({
+                id: `${currentPicklist}-${pk.options.length + 1}`,
+                state: state,
+                text: text
             });
+            
+            markChanged();
+            closeModal('add-option-modal');
+            renderPicklistEditor();
+            showToast('Option added', 'success');
         }
         
-        function renderModalList() {
-            const modalityFilter = document.getElementById('filter-modality').value;
-            const searchFilter = document.getElementById('filter-search').value.toLowerCase();
+        function deleteOption(idx) {
+            if (!confirm('Delete this option?')) return;
             
+            const loc = findComponentLocation(currentComponent);
+            if (!loc) return;
+            
+            const comp = componentMap[loc.modKey][loc.regKey].component_templates[currentComponent];
+            const pk = comp.picklists?.[currentPicklist];
+            if (!pk?.options) return;
+            
+            pk.options.splice(idx, 1);
+            
+            markChanged();
+            renderPicklistEditor();
+            showToast('Option deleted', 'success');
+        }
+        
+        function renderComponentPickerList() {
             const currentComps = currentTemplate 
                 ? (templateMap.modalities[currentTemplate.mod].regions[currentTemplate.reg].templates[currentTemplate.tpl].component_templates || [])
                 : [];
@@ -1207,8 +1677,6 @@
             
             for (const modKey in componentMap) {
                 if (modKey.startsWith('_')) continue;
-                if (modalityFilter && modKey !== modalityFilter) continue;
-                
                 const mod = componentMap[modKey];
                 if (typeof mod !== 'object') continue;
                 
@@ -1221,12 +1689,9 @@
                         if (currentComps.includes(compId)) continue;
                         
                         const comp = region.component_templates[compId];
-                        const searchText = `${compId} ${comp.display_name} ${comp.description || ''}`.toLowerCase();
-                        if (searchFilter && !searchText.includes(searchFilter)) continue;
-                        
                         const pkCount = Object.keys(comp.picklists || {}).length;
                         
-                        html += `<div class="modal-item" onclick="addComponent('${compId}')">
+                        html += `<div class="modal-list-item" onclick="addComponentToTemplate('${compId}')">
                             <div>
                                 <div style="font-weight:600;color:var(--accent)">${compId}</div>
                                 <div style="font-size:12px;color:var(--text-secondary)">${comp.display_name}</div>
@@ -1239,22 +1704,95 @@
             }
             
             if (!html) {
-                html = '<div style="padding:24px;text-align:center;color:var(--text-muted)">No matching components</div>';
+                html = '<div style="padding:24px;text-align:center;color:var(--text-muted)">No available components</div>';
             }
             
-            document.getElementById('modal-list').innerHTML = html;
+            document.getElementById('component-picker-list').innerHTML = html;
         }
         
-        // Autosave
+        function filterComponentList() {
+            const search = document.getElementById('component-search').value.toLowerCase();
+            const items = document.querySelectorAll('#component-picker-list .modal-list-item');
+            
+            items.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                item.style.display = text.includes(search) ? 'flex' : 'none';
+            });
+        }
+        
+        function addComponentToTemplate(compId) {
+            if (!currentTemplate) return;
+            
+            const tpl = templateMap.modalities[currentTemplate.mod].regions[currentTemplate.reg].templates[currentTemplate.tpl];
+            if (!tpl.component_templates) tpl.component_templates = [];
+            
+            if (!tpl.component_templates.includes(compId)) {
+                tpl.component_templates.push(compId);
+                
+                // Update routes_to
+                const comp = findComponent(compId);
+                const loc = findComponentLocation(compId);
+                if (comp && loc) {
+                    if (!comp.routes_to) comp.routes_to = [];
+                    if (!comp.routes_to.includes(currentTemplate.tpl)) {
+                        componentMap[loc.modKey][loc.regKey].component_templates[compId].routes_to.push(currentTemplate.tpl);
+                    }
+                }
+                
+                markChanged();
+            }
+            
+            closeModal('add-component-modal');
+            renderTemplateStructure();
+            renderTemplateList();
+        }
+        
+        function removeComponentFromTemplate(compId) {
+            if (!currentTemplate) return;
+            if (!confirm(`Remove ${compId} from this template?`)) return;
+            
+            const tpl = templateMap.modalities[currentTemplate.mod].regions[currentTemplate.reg].templates[currentTemplate.tpl];
+            tpl.component_templates = (tpl.component_templates || []).filter(c => c !== compId);
+            
+            // Update routes_to
+            const loc = findComponentLocation(compId);
+            if (loc) {
+                const comp = componentMap[loc.modKey][loc.regKey].component_templates[compId];
+                if (comp?.routes_to) {
+                    comp.routes_to = comp.routes_to.filter(r => r !== currentTemplate.tpl);
+                }
+            }
+            
+            markChanged();
+            renderTemplateStructure();
+            renderTemplateList();
+        }
+        
+        function duplicateCurrentTemplate() {
+            if (!currentTemplate) return;
+            
+            const newCpt = prompt('Enter CPT code for duplicated template:');
+            if (!newCpt) return;
+            
+            const tpl = templateMap.modalities[currentTemplate.mod].regions[currentTemplate.reg].templates[currentTemplate.tpl];
+            const newId = `${newCpt}-${currentTemplate.mod}-${currentTemplate.reg}`.toLowerCase();
+            
+            templateMap.modalities[currentTemplate.mod].regions[currentTemplate.reg].templates[newId] = {
+                ...JSON.parse(JSON.stringify(tpl)),
+                primary_cpt: newCpt,
+                description: `${tpl.description} (Copy)`
+            };
+            
+            markChanged();
+            renderTemplateList();
+            showToast(`Template duplicated as ${newCpt}`, 'success');
+        }
+        
+        // Change tracking and saving
         function markChanged() {
             hasChanges = true;
             document.getElementById('save-btn').style.display = 'flex';
-            
-            // Debounced autosave
-            clearTimeout(autosaveTimeout);
-            autosaveTimeout = setTimeout(() => {
-                saveAllChanges();
-            }, 2000);
+            document.getElementById('changes-indicator').classList.add('active');
         }
         
         async function saveAllChanges() {
@@ -1262,24 +1800,25 @@
             btn.textContent = 'Saving...';
             
             try {
-                if ('showDirectoryPicker' in window && !templateFileHandle) {
+                if ('showDirectoryPicker' in window) {
                     const dirHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
-                    templateFileHandle = await dirHandle.getFileHandle('template-map.json', { create: true });
-                    componentFileHandle = await dirHandle.getFileHandle('component-map.json', { create: true });
-                }
-                
-                if (templateFileHandle && componentFileHandle) {
-                    const tplW = await templateFileHandle.createWritable();
+                    
+                    // Save template-map.json
+                    const tplHandle = await dirHandle.getFileHandle('template-map.json', { create: true });
+                    const tplW = await tplHandle.createWritable();
                     await tplW.write(JSON.stringify(templateMap, null, 2));
                     await tplW.close();
                     
-                    const compW = await componentFileHandle.createWritable();
+                    // Save component-map.json
+                    const compHandle = await dirHandle.getFileHandle('component-map.json', { create: true });
+                    const compW = await compHandle.createWritable();
                     await compW.write(JSON.stringify(componentMap, null, 2));
                     await compW.close();
                     
                     hasChanges = false;
                     btn.style.display = 'none';
-                    showToast('Saved', 'success');
+                    document.getElementById('changes-indicator').classList.remove('active');
+                    showToast('Saved successfully', 'success');
                 } else {
                     // Fallback: download
                     downloadJSON(templateMap, 'template-map.json');
@@ -1290,11 +1829,12 @@
                 }
             } catch (e) {
                 if (e.name !== 'AbortError') {
+                    console.error(e);
                     showToast('Save failed', 'error');
                 }
             }
             
-            btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/></svg> Save`;
+            btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg> Save All`;
         }
         
         function downloadJSON(data, filename) {
@@ -1321,7 +1861,7 @@
             const resizer1 = document.getElementById('resizer1');
             const resizer2 = document.getElementById('resizer2');
             const panel1 = document.getElementById('panel-templates');
-            const panel2 = document.getElementById('panel-components');
+            const panel2 = document.getElementById('panel-structure');
             
             let isResizing = false;
             let currentResizer = null;
@@ -1340,12 +1880,6 @@
                 currentResizer = null;
                 document.body.style.cursor = '';
                 document.body.style.userSelect = '';
-                
-                // Save panel sizes
-                localStorage.setItem('panelSizes', JSON.stringify({
-                    panel1: panel1.style.width,
-                    panel2: panel2.style.width
-                }));
             }
             
             function resize(e) {
@@ -1360,7 +1894,7 @@
                     panel1.style.width = width + 'px';
                 } else if (currentResizer === resizer2) {
                     const panel1Width = panel1.offsetWidth;
-                    const width = Math.max(200, Math.min(x - panel1Width - 4, rect.width - panel1Width - 200));
+                    const width = Math.max(250, Math.min(x - panel1Width - 4, rect.width - panel1Width - 250));
                     panel2.style.width = width + 'px';
                 }
             }
@@ -1369,14 +1903,6 @@
             resizer2.addEventListener('mousedown', e => startResize(e, resizer2));
             document.addEventListener('mousemove', resize);
             document.addEventListener('mouseup', stopResize);
-            
-            // Restore panel sizes
-            const saved = localStorage.getItem('panelSizes');
-            if (saved) {
-                const sizes = JSON.parse(saved);
-                if (sizes.panel1) panel1.style.width = sizes.panel1;
-                if (sizes.panel2) panel2.style.width = sizes.panel2;
-            }
         }
         
         // Keyboard shortcuts

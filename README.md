@@ -1,202 +1,203 @@
-# Radiology Template Mapping System
+# Radiology Template Map
 
-A modular, component-based architecture for radiology reporting templates that minimizes redundancy through nested dependencies.
-
-## Overview
-
-This system maps every CPT code to a template composed of reusable components. When you modify a component, changes automatically propagate to all templates that depend on it.
+A modular, component-based architecture for radiology reporting templates. Templates are composed of reusable components with picklists, enabling consistent reporting and easy maintenance.
 
 ## Quick Start
 
-1. **Understand the Architecture** → Read `architecture/ARCHITECTURE.md`
-2. **Learn Naming Conventions** → Read `architecture/NAMING_CONVENTIONS.md`
-3. **Browse Components** → See `architecture/COMPONENT_CATALOG.md`
-4. **Explore CPT Mappings** → Check `cpt-mapping/` by modality
+1. **Run locally**: `python -m http.server 8000`
+2. **Open browser**: http://localhost:8000
+3. **Or deploy to GitHub Pages**: The `index.html` serves as the main application
+
+## Live Demo
+
+If deployed to GitHub Pages: https://joshuaewellhai.github.io/Template_Map/
+
+## Features
+
+### Template Editor
+- **View all templates** organized by modality and body region
+- **Universal template structure**: Header, Technique, Comparison, Findings, Impression
+- **Create new templates** with full hierarchy
+- **Duplicate existing templates** with new CPT codes
+- **Add/remove components** from template findings
+
+### Component Management
+- **Reusable components** shared across multiple templates
+- **Dependency tracking** - see which templates use each component
+- **Multiple picklists per component** for different finding categories
+
+### Picklist Editor
+- **Create picklists** within components
+- **Add/edit/remove options** with clinical states (normal, abnormal, critical, etc.)
+- **Color-coded states** for quick visual identification
+
+### Data Persistence
+- **Auto-save** to JSON files
+- **Unsaved changes warning** before leaving
+- **Keyboard shortcut** (Ctrl/Cmd+S) to save
 
 ## Directory Structure
 
 ```
 Template Map/
+├── index.html                    # Main application (GitHub Pages entry)
+├── template-map-viewer.html      # Template editor application
+├── template-map.json             # Template definitions and CPT mappings
+├── component-map.json            # Component definitions with picklists
 ├── README.md                     # This file
 │
 ├── architecture/                 # System design documentation
-│   ├── ARCHITECTURE.md          # Core architecture and concepts
-│   ├── NAMING_CONVENTIONS.md    # Standardized naming rules
-│   └── COMPONENT_CATALOG.md     # Master component reference
+│   ├── ARCHITECTURE.md          # Core architecture concepts
+│   ├── NAMING_CONVENTIONS.md    # Naming standards
+│   └── COMPONENT_CATALOG.md     # Component reference
 │
-├── templates/                    # Individual CPT code templates
-│   ├── schema/                  # Template JSON schema
-│   │   └── template.schema.json
-│   │
-│   ├── xray/                    # X-Ray templates
-│   │   ├── chest/              # 71045-71048
-│   │   ├── abdomen/            # 74018-74021
-│   │   ├── spine/              # cervical, thoracic, lumbar, etc.
-│   │   ├── pelvis/             # 72170-72202
-│   │   ├── extremities/        # upper/ and lower/
-│   │   ├── ribs/               # 71100-71130
-│   │   └── special/            # skull, DEXA, bone age
-│   │
+├── templates/                    # Individual template JSON files
+│   ├── schema/                  # JSON schema for templates
+│   ├── xray/                    # X-Ray templates by body region
 │   ├── ct/                      # CT templates
-│   │   ├── head/               # 70450-70498
-│   │   ├── neck/               # 70490-70498
-│   │   ├── chest/              # 71250-75574
-│   │   ├── abdomen-pelvis/     # 74150-74263
-│   │   ├── spine/              # 72125-72132
-│   │   ├── extremities/        # 73200-73706
-│   │   └── special/            # scanogram, claudication
-│   │
 │   ├── mri/                     # MRI templates
-│   │   ├── brain/              # 70551-76390
-│   │   ├── head-neck/          # 70336-70549
-│   │   ├── spine/              # cervical, thoracic, lumbar
-│   │   ├── chest-abdomen/      # 71550-74185
-│   │   ├── musculoskeletal/    # upper/ and lower/
-│   │   ├── breast/             # 77046-77049
-│   │   └── special/            # elastography, MRCP
-│   │
 │   ├── ultrasound/              # Ultrasound templates
-│   │   ├── abdomen/            # 76700-76706
-│   │   ├── pelvis/             # 76830-76857
-│   │   ├── ob-gyn/             # 76801-76817
-│   │   ├── vascular/           # 93880-93975
-│   │   ├── superficial/        # 76536-76882
-│   │   ├── breast/             # 76641-76642
-│   │   └── special/            # renal, transplant, elastography
-│   │
-│   ├── fluoroscopy/             # 74220-74400
-│   ├── nuclear-medicine/        # cardiac, bone, thyroid, etc.
-│   ├── pet-ct/                  # 78608-78816
-│   └── mammography/             # 77063-77067, 19081-19283
+│   └── nuclear-medicine/        # Nuclear medicine templates
 │
-├── cpt-mapping/                  # CPT code → component mappings (summary files)
+├── components/                   # Component JSON files
+│   ├── headers/                 # Header components
+│   ├── atomic/                  # Atomic picklist elements
+│   ├── findings/                # Finding components
+│   ├── xray/                    # X-Ray specific components
+│   └── ct/                      # CT specific components
+│
+├── cpt-mapping/                  # CPT code reference files
 │   ├── schema/                  # JSON schemas
-│   ├── ct/, mri/, xr/, us/      # By modality
-│   └── ...
-│
-├── components/                   # Reusable template components
-│   ├── headers/                 # HDR.* components
-│   ├── techniques/              # TEC.* components
-│   ├── findings/                # SUB.* components by body region
-│   ├── impressions/             # IMP.* components
-│   └── atomic/                  # ATM.* picklist elements
-│
-├── picklists/                    # Option value libraries
+│   └── [modality]/              # By modality (ct, mri, xr, us, etc.)
 │
 └── source/                       # Original source files
-    ├── AutoTextExport (46).xml
-    └── cpt-code-2024.pdf
+    ├── AutoTextExport (46).xml  # Legacy template export
+    └── cpt-code-2024.pdf        # CPT code reference
 ```
 
-## Key Concepts
+## Data Model
 
-### Component Hierarchy
+### Templates (template-map.json)
+Each template represents a radiological exam mapped to CPT codes:
 
-```
-Layer 1: CPT Templates     → Complete template for a CPT code
-Layer 2: Section Components → Major report sections (Header, Findings, Impression)
-Layer 3: Subcomponents      → Finding blocks (Lungs, Heart, Liver, etc.)
-Layer 4: Atomic Elements    → Individual picklist items
-```
-
-### Example: Chest X-Ray
-
-```
-CPT.71046 (XR Chest 2 Views)
-├── HDR.chest.xr.standard        → Header
-├── TEC.chest.xr.2view           → Technique
-├── SUB.chest.xr.lungs_pleura    → Findings: Lungs ──┐
-├── SUB.chest.xr.heart_mediastinum                   │ SHARED across
-├── SUB.chest.xr.bones_soft_tissue                   │ all chest XR
-└── IMP.chest.xr.standard        → Impression       ─┘ CPT codes
+```json
+{
+  "primary_cpt": "71046",
+  "description": "XR Chest, 2 views",
+  "component_templates": ["CR-devices", "CR-lungsandpleura", "CR-heartmediastinum"],
+  "variants": { "71046": { "description": "2 views" } }
+}
 ```
 
-### Component Naming Pattern
+### Components (component-map.json)
+Reusable finding components with picklists:
 
-| Prefix | Type | Example |
-|--------|------|---------|
-| `HDR.` | Header | `HDR.ct.abdomen` |
-| `TEC.` | Technique | `TEC.mri.brain.without` |
-| `SUB.` | Subcomponent | `SUB.ct.chest.lungs_airways_pleura` |
-| `ATM.` | Atomic Element | `ATM.lungs.opacities` |
-| `IMP.` | Impression | `IMP.mri.spine.lumbar` |
+```json
+{
+  "CR-lungsandpleura": {
+    "display_name": "Lungs and Pleura",
+    "routes_to": ["xr-chest-portable", "xr-chest-2view"],
+    "picklists": {
+      "lung_opacities": {
+        "display_name": "Lung Opacities",
+        "options": [
+          { "state": "normal", "text": "Lungs are clear." },
+          { "state": "abnormal", "text": "Opacity in the..." }
+        ]
+      }
+    }
+  }
+}
+```
 
-## CPT Mapping Files
+### Universal Template Structure
+Every template follows this structure:
 
-Each mapping file contains:
-- CPT code definitions with variants
-- Component references for each code
-- Shared subcomponent definitions
-- Special protocol configurations (LI-RADS, Lung-RADS, etc.)
+| Section | Type | Description |
+|---------|------|-------------|
+| **EXAM** | Merge Field | Procedure name from PACS/EMR |
+| **DEMOGRAPHICS** | Merge Fields | Patient name, age, sex |
+| **CLINICAL HISTORY** | Merge Field | PMHx/Indication from EMR |
+| **TECHNIQUE** | Picklist | Study-specific technique options |
+| **COMPARISON** | Hybrid | Prior studies (merge field + picklist) |
+| **FINDINGS** | Components | Body region components with picklists |
+| **IMPRESSION** | AI Field | AI-generated or default "Normal exam." |
 
-### Supported Modalities
+## Option States
 
-| Modality | File(s) | CPT Codes |
-|----------|---------|-----------|
-| CT | ct_chest.json, ct_abdomen.json | 71250-71275, 74150-74178, etc. |
-| MRI | mri_neuro.json | 70551-70553, 72141-72158, etc. |
-| X-Ray | xr_chest.json, xr_msk.json | 71045-71048, 72040-73630, etc. |
-| Ultrasound | us_abdomen.json | 76700-76981, etc. |
-| Nuclear | nuclear.json, pet_ct.json | 78306-78816, etc. |
-| Fluoroscopy | fluoro_gi.json | 74220-74400 |
-| Mammography | mammo.json | 77063-77067, 19081-19283 |
+Each picklist option has a clinical state:
 
-## Template Variants
+| State | Color | Description |
+|-------|-------|-------------|
+| `absent` | Gray | Structure/device not present |
+| `normal` | Green | Normal finding |
+| `abnormal` | Yellow | Abnormal finding requiring attention |
+| `critical` | Red | Critical finding requiring immediate action |
+| `chronic` | Purple | Chronic/stable finding |
+| `benign` | Teal | Definitively benign finding |
+| `surgical` | Blue | Post-surgical state |
 
-Templates may have variants based on:
-- **Contrast**: without, with, with_without
-- **Gender**: male, female (for anatomical differences)
-- **Context**: routine, emergency, trauma, ICU
-- **Style**: structured (picklists), free_text
-- **Protocol**: PE, dissection, LI-RADS, Lung-RADS, TI-RADS
+## Modalities
+
+| Modality | Abbreviation | Templates |
+|----------|--------------|-----------|
+| X-Ray | XR | Chest, MSK, Abdomen, Spine |
+| CT | CT | Head, Neck, Chest, Abdomen/Pelvis |
+| MRI | MRI | Brain, Spine, Body, MSK |
+| Ultrasound | US | Abdomen, Pelvis, Vascular, OB |
+| Fluoroscopy | FL | UGI, Barium studies |
+| Nuclear Medicine | NM | VQ scan, HIDA |
+| DEXA | DXA | Bone density |
 
 ## Current Statistics
 
-- **4,795 templates** in source XML
-- **~200 unique CPT codes** mapped
+- **76 templates** mapped to CPT codes
+- **210+ CPT code variants**
 - **7 modalities** covered
-- **4 component layers** defined
+- Components organized by body region
 
-## Implementation Phases
+## Integration
 
-1. ✅ **Phase 1: Foundation** - Architecture, folder structure, schemas
-2. 🔄 **Phase 2: CPT Mapping** - Map all CPT codes to components
-3. ⏳ **Phase 3: Component Extraction** - Extract from existing templates
-4. ⏳ **Phase 4: Picklist Development** - Build atomic elements
-5. ⏳ **Phase 5: Assembly & Testing** - Validate and test
+### Merge Fields (HL7/EMR)
+The following merge fields are populated from PACS/EMR:
+- `Procedures` - Exam name
+- `Patient Name`, `Patient Age`, `Patient Sex`
+- `PMHx` / `Indication` - Clinical history
+- `Prior Studies` / `Comparison` - Prior exams
 
-## How to Use
+### AI Integration
+The Impression field is designed for AI population:
+- Default text: "Normal exam."
+- AI can populate structured impressions based on findings
 
-### Adding a New CPT Code
+## Development
 
-1. Find the appropriate modality file in `cpt-mapping/`
-2. Add a new entry to the `cpt_codes` array
-3. Define variants if needed (gender, context, style)
-4. Reference existing components or create new ones
-5. Update `COMPONENT_CATALOG.md` if adding new components
+### Running Locally
+```bash
+cd "Template Map"
+python -m http.server 8000
+# Open http://localhost:8000
+```
 
-### Modifying a Component
+### Deploying to GitHub Pages
+1. Push to GitHub repository
+2. Enable GitHub Pages in repository settings
+3. Set source to main branch, root folder
+4. Access at: `https://[username].github.io/[repo-name]/`
 
-1. Locate the component in `components/`
-2. Make your changes
-3. All templates using this component automatically inherit the changes
-4. Test affected templates
+### Making Changes
+1. Edit templates/components in the viewer UI
+2. Click "Save All" or press Ctrl/Cmd+S
+3. Changes save to `template-map.json` and `component-map.json`
+4. Commit and push to deploy
 
-### Adding a Picklist Option
+## Browser Support
+- Chrome (recommended)
+- Firefox
+- Safari
+- Edge
 
-1. Find the atomic element in `components/atomic/`
-2. Add your option to the `options` array
-3. Include output text template if applicable
+Requires JavaScript enabled. File System Access API used for saving (with download fallback).
 
-## Related Files
-
-- Original templates: `source/AutoTextExport (46).xml`
-- CPT reference: `source/cpt-code-2024.pdf`
-- Existing template naming: Maps to `architecture/NAMING_CONVENTIONS.md`
-
-## Notes
-
-- This is a mapping/planning system - actual template content is in the XML
-- Component IDs use dot notation (e.g., `SUB.ct.chest.lungs`)
-- Gender-specific variants exist for anatomical differences (pelvis, etc.)
-- Special protocols (LI-RADS, etc.) have dedicated component sets
+## License
+Internal use only - Harrison.ai

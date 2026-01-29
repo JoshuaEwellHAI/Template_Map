@@ -1738,39 +1738,54 @@
             return templateMap._section_picklists[picklistId];
         }
         
+        // Helper to expand right panel
+        function expandEditorPanel() {
+            const editorPanel = document.getElementById('panel-editor');
+            if (editorPanel?.classList.contains('collapsed')) {
+                editorPanel.classList.remove('collapsed');
+                localStorage.setItem('panel-panel-editor-collapsed', 'false');
+            }
+        }
+        
         function editTechniquePicklist() {
             const picklistId = `TEC-${currentTemplate.mod}-${currentTemplate.reg}`;
             currentSectionPicklist = { type: 'technique', id: picklistId };
+            expandEditorPanel();
             renderSectionPicklistEditor(picklistId, 'Technique');
         }
         
         function editComparisonPicklist() {
             const picklistId = 'COMP-standard';
             currentSectionPicklist = { type: 'comparison', id: picklistId };
+            expandEditorPanel();
             renderSectionPicklistEditor(picklistId, 'Comparison');
         }
         
         function editContrastPicklist() {
             const picklistId = `CONTRAST-${currentTemplate.mod}`;
             currentSectionPicklist = { type: 'contrast', id: picklistId };
+            expandEditorPanel();
             renderSectionPicklistEditor(picklistId, 'Contrast / Materials');
         }
         
         function editQualityPicklist() {
             const picklistId = `QUALITY-${currentTemplate.mod}`;
             currentSectionPicklist = { type: 'quality', id: picklistId };
+            expandEditorPanel();
             renderSectionPicklistEditor(picklistId, 'Quality / Limitations');
         }
         
         function editDifferentialPicklist() {
             const picklistId = `DIFF-${currentTemplate.mod}-${currentTemplate.reg}`;
             currentSectionPicklist = { type: 'differential', id: picklistId };
+            expandEditorPanel();
             renderSectionPicklistEditor(picklistId, 'Differential Diagnosis');
         }
         
         function editRecommendationsPicklist() {
             const picklistId = 'REC-followup';
             currentSectionPicklist = { type: 'recommendations', id: picklistId };
+            expandEditorPanel();
             renderSectionPicklistEditor(picklistId, 'Recommendations');
         }
         
@@ -1973,13 +1988,16 @@
             currentPicklist = null;
             document.querySelectorAll('.finding-component').forEach(c => c.classList.remove('selected'));
             document.querySelector(`.finding-component[data-comp="${compId}"]`)?.classList.add('selected');
+            expandEditorPanel();
             renderComponentEditor();
         }
         
         function selectPicklist(compId, picklistId) {
             currentComponent = compId;
             currentPicklist = picklistId;
+            expandEditorPanel();
             renderPicklistEditor();
+            renderTemplateStructure(); // Re-render to show selected state
         }
         
         function renderEmptyEditor() {

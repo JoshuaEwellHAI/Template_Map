@@ -137,6 +137,42 @@
             flex-direction: column;
             overflow: hidden;
             min-width: 250px;
+            transition: min-width 0.2s, width 0.2s, flex 0.2s;
+        }
+        
+        /* Collapsed panel state */
+        .panel.collapsed {
+            min-width: 40px;
+            width: 40px;
+            flex: 0 0 40px;
+        }
+        
+        .panel.collapsed .panel-content {
+            display: none;
+        }
+        
+        .panel.collapsed .panel-header {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            padding: 16px 10px;
+            justify-content: flex-start;
+            flex-direction: column-reverse;
+            gap: 12px;
+        }
+        
+        .panel.collapsed .panel-header-title {
+            flex: 1;
+        }
+        
+        .panel.collapsed .panel-header .count,
+        .panel.collapsed .panel-header-actions,
+        .panel.collapsed .add-template-form {
+            display: none;
+        }
+        
+        .panel.collapsed .panel-collapse-btn {
+            transform: rotate(180deg);
+            writing-mode: horizontal-tb;
         }
         
         .panel-header {
@@ -150,6 +186,21 @@
             align-items: center;
             justify-content: space-between;
             gap: 8px;
+            flex-shrink: 0;
+        }
+        
+        .panel-header-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .panel-header-title {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         
         .panel-header .count {
@@ -158,6 +209,40 @@
             border-radius: 10px;
             font-size: 11px;
             color: var(--text-muted);
+            flex-shrink: 0;
+        }
+        
+        .panel-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .panel-collapse-btn {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.15s;
+            flex-shrink: 0;
+        }
+        
+        .panel-collapse-btn:hover {
+            background: var(--bg-hover);
+            border-color: var(--border);
+            color: var(--text-primary);
+        }
+        
+        .panel-collapse-btn svg {
+            width: 14px;
+            height: 14px;
+            transition: transform 0.2s;
         }
         
         .panel-content {
@@ -187,6 +272,13 @@
         
         .resizer:hover, .resizer.active {
             background: var(--accent);
+        }
+        
+        /* Hide resizer when adjacent panel is collapsed */
+        .panel.collapsed + .resizer,
+        .resizer + .panel.collapsed {
+            width: 1px;
+            cursor: default;
         }
         
         /* Tree Navigation */
@@ -1300,8 +1392,13 @@
         <!-- Panel 1: Templates List -->
         <div class="panel" id="panel-templates" style="width:28%">
             <div class="panel-header">
-                <span>Templates</span>
-                <span class="count" id="template-count">0</span>
+                <div class="panel-header-left">
+                    <span class="panel-header-title">Templates</span>
+                    <span class="count" id="template-count">0</span>
+                </div>
+                <button class="panel-collapse-btn" onclick="togglePanel('panel-templates')" title="Collapse panel">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+                </button>
             </div>
             <!-- Add Template Form at top of panel -->
             <div class="add-template-form" id="add-template-form">
@@ -1341,10 +1438,18 @@
         <!-- Panel 2: Template Structure -->
         <div class="panel" id="panel-structure" style="width:36%">
             <div class="panel-header">
-                <span>Template Structure</span>
-                <div style="display:flex;gap:6px;">
+                <button class="panel-collapse-btn" onclick="togglePanel('panel-structure')" title="Collapse panel">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+                </button>
+                <div class="panel-header-left">
+                    <span class="panel-header-title">Report Editor</span>
+                </div>
+                <div class="panel-header-actions">
                     <button class="btn" id="duplicate-btn" onclick="duplicateCurrentTemplate()" style="display:none;">Duplicate</button>
                 </div>
+                <button class="panel-collapse-btn" onclick="togglePanel('panel-structure')" title="Collapse panel">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                </button>
             </div>
             <div class="panel-content" id="template-structure">
                 <div class="empty-state">
@@ -1359,7 +1464,15 @@
         <!-- Panel 3: Component/Picklist Editor -->
         <div class="panel" id="panel-editor" style="flex:1">
             <div class="panel-header">
-                <span>Editor</span>
+                <button class="panel-collapse-btn" onclick="togglePanel('panel-editor')" title="Collapse panel">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+                </button>
+                <div class="panel-header-left">
+                    <span class="panel-header-title">Picklist Editor</span>
+                </div>
+                <button class="panel-collapse-btn" onclick="togglePanel('panel-editor')" title="Collapse panel">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                </button>
             </div>
             <div class="panel-content" id="editor-content">
                 <div class="empty-state">
@@ -1564,6 +1677,7 @@
                 templateMap = await tplResp.json();
                 componentMap = await compResp.json();
                 renderAll();
+                restorePanelStates();
             } catch (error) {
                 console.error('Error loading data:', error);
                 document.getElementById('template-list').innerHTML = 
@@ -2963,6 +3077,31 @@
             a.href = URL.createObjectURL(blob);
             a.download = filename;
             a.click();
+        }
+        
+        // ═══════════════════════════════════════════════════════════
+        // PANEL COLLAPSE/EXPAND
+        // ═══════════════════════════════════════════════════════════
+        
+        function togglePanel(panelId) {
+            const panel = document.getElementById(panelId);
+            if (!panel) return;
+            
+            panel.classList.toggle('collapsed');
+            
+            // Store preference in localStorage
+            const collapsed = panel.classList.contains('collapsed');
+            localStorage.setItem(`panel-${panelId}-collapsed`, collapsed);
+        }
+        
+        // Restore panel states from localStorage on load
+        function restorePanelStates() {
+            ['panel-templates', 'panel-structure', 'panel-editor'].forEach(panelId => {
+                const collapsed = localStorage.getItem(`panel-${panelId}-collapsed`) === 'true';
+                if (collapsed) {
+                    document.getElementById(panelId)?.classList.add('collapsed');
+                }
+            });
         }
         
         function showToast(msg, type = 'info') {

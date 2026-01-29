@@ -366,8 +366,8 @@
         }
         
         /* ========================================
-           TEXT EDITOR STYLES
-           Clean, simple text editor format
+           TEMPLATE EDITOR STYLES
+           Template Builder-style document editor
            ======================================== */
         
         /* Editor container */
@@ -375,13 +375,13 @@
             display: flex;
             flex-direction: column;
             height: 100%;
-            background: var(--bg-primary);
+            background: #0a0c10;
         }
         
-        /* Simple header bar */
+        /* Header bar */
         .editor-header-bar {
             background: var(--bg-secondary);
-            padding: 10px 20px;
+            padding: 8px 16px;
             border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
@@ -408,20 +408,31 @@
             gap: 8px;
         }
         
-        /* Text content area */
+        /* Canvas area - document container */
         .text-content {
             flex: 1;
             overflow-y: auto;
-            padding: 24px 32px;
+            padding: 20px;
+            background: #0a0c10;
         }
         
+        /* The template document - paper-like container */
         .text-document {
-            max-width: 720px;
+            max-width: 750px;
             margin: 0 auto;
-            font-family: "Consolas", "SF Mono", monospace;
+            padding: 24px 28px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-family: 'Segoe UI', Arial, sans-serif;
             font-size: 13px;
-            line-height: 1.8;
+            line-height: 1.6;
             color: var(--text-primary);
+            min-height: 500px;
+        }
+        
+        .text-document:focus-within {
+            border-color: var(--accent);
         }
         
         /* Text line - each field on its own line */
@@ -430,6 +441,12 @@
             display: flex;
             align-items: baseline;
             gap: 4px;
+            padding: 2px 0;
+        }
+        
+        .text-line:hover {
+            background: rgba(255,255,255,0.02);
+            border-radius: 3px;
         }
         
         .text-label {
@@ -523,26 +540,25 @@
             opacity: 0.7;
         }
         
-        /* Finding line with actions */
+        /* Finding row with actions (Template Builder style) */
         .text-finding {
             display: flex;
-            align-items: baseline;
+            align-items: flex-start;
             gap: 8px;
             margin-bottom: 4px;
-            padding: 2px 0;
+            padding: 4px 0;
         }
         
         .text-finding:hover {
             background: rgba(255,255,255,0.02);
+            border-radius: 3px;
         }
         
         .text-finding-label {
-            color: var(--text-secondary);
-            font-weight: 600;
             min-width: 140px;
             display: flex;
             align-items: baseline;
-            gap: 2px;
+            gap: 4px;
         }
         
         .text-finding-label .text-label {
@@ -551,7 +567,7 @@
         }
         
         .text-finding:hover .text-label-tag {
-            opacity: 0.7;
+            opacity: 0.6;
         }
         
         .text-finding-content {
@@ -570,63 +586,81 @@
         }
         
         .text-action-btn {
-            background: none;
-            border: none;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 3px;
             color: var(--text-muted);
             cursor: pointer;
-            padding: 2px;
+            padding: 2px 6px;
             font-size: 11px;
         }
         
         .text-action-btn:hover {
+            background: var(--bg-hover);
             color: var(--text-primary);
         }
         
         .text-action-btn.danger:hover {
-            color: var(--danger);
+            background: rgba(248, 81, 73, 0.2);
+            color: #f85149;
+            border-color: #f85149;
         }
         
-        /* Merge field - simple inline link style */
+        /* Merge field - yellow inline tag (Template Builder style) */
         .merge-link {
-            color: #a78bfa;
-            text-decoration: none;
+            display: inline;
+            padding: 1px 6px;
+            margin: 0 2px;
+            border-radius: 3px;
+            background: rgba(210, 153, 34, 0.2);
+            border: 1px dashed #d29922;
+            color: #d29922;
+            font-size: 12px;
             cursor: default;
+            user-select: none;
         }
         
-        .merge-link::before { content: "{{"; opacity: 0.6; }
-        .merge-link::after { content: "}}"; opacity: 0.6; }
-        
-        /* Picklist - simple inline link style */
+        /* Picklist - green inline tag (Template Builder style) */
         .picklist-link {
-            color: #22c55e;
-            text-decoration: underline;
-            text-decoration-style: dotted;
-            text-underline-offset: 2px;
+            display: inline;
+            padding: 1px 6px;
+            margin: 0 2px;
+            border-radius: 3px;
+            background: rgba(63, 185, 80, 0.15);
+            border-bottom: 1px dashed #3fb950;
+            color: #3fb950;
             cursor: pointer;
+            user-select: none;
         }
         
         .picklist-link:hover {
-            color: #4ade80;
-            text-decoration-style: solid;
+            background: rgba(63, 185, 80, 0.25);
+            border-bottom-style: solid;
         }
         
         .picklist-link.selected {
+            background: rgba(88, 166, 255, 0.2);
+            border-color: var(--accent);
             color: var(--accent);
-            background: var(--accent-dim);
-            padding: 1px 4px;
-            border-radius: 2px;
         }
         
-        /* Add link */
+        /* Add button (Template Builder style) */
         .add-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            border: 1px dashed var(--border);
+            border-radius: 4px;
+            background: transparent;
             color: var(--text-muted);
-            font-size: 12px;
             cursor: pointer;
-            margin-top: 8px;
-            display: inline-block;
+            font-size: 11px;
+            margin-top: 10px;
         }
         
         .add-link:hover {
+            border-color: var(--accent);
             color: var(--accent);
         }
         
@@ -634,8 +668,8 @@
         .text-impression {
             width: 100%;
             min-height: 60px;
-            padding: 8px;
-            background: transparent;
+            padding: 10px 12px;
+            background: rgba(255,255,255,0.02);
             border: 1px solid var(--border);
             border-radius: 4px;
             color: var(--text-primary);
@@ -643,19 +677,20 @@
             font-size: 13px;
             line-height: 1.6;
             resize: vertical;
-            margin-top: 4px;
+            margin-top: 6px;
         }
         
         .text-impression:focus {
             outline: none;
             border-color: var(--accent);
+            background: rgba(255,255,255,0.04);
         }
         
         /* Footer */
         .editor-footer {
             background: var(--bg-secondary);
             border-top: 1px solid var(--border);
-            padding: 10px 20px;
+            padding: 10px 16px;
             display: flex;
             align-items: center;
             gap: 8px;

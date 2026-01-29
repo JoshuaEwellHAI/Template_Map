@@ -366,447 +366,223 @@
         }
         
         /* ========================================
-           REPORT EDITOR STYLES
-           NotariOS Dicta-style rich text report editor
+           TEXT EDITOR STYLES
+           Clean, simple text editor format
            ======================================== */
         
-        /* Report editor container */
-        .report-editor {
+        /* Editor container */
+        .text-editor {
             display: flex;
             flex-direction: column;
             height: 100%;
-            background: #0d1117;
+            background: var(--bg-primary);
         }
         
-        /* Template info header */
-        .report-header {
-            background: linear-gradient(135deg, #1a365d, #2563eb);
-            padding: 12px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .report-header-left {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-        
-        .report-template-badge {
-            background: rgba(0,0,0,0.3);
-            padding: 6px 14px;
-            border-radius: 4px;
-            font-size: 13px;
-            color: white;
-            font-weight: 500;
-        }
-        
-        .report-cpt {
-            font-family: "SF Mono", monospace;
-            font-size: 14px;
-            font-weight: 600;
-            color: #60a5fa;
-        }
-        
-        .report-desc {
-            font-size: 13px;
-            color: rgba(255,255,255,0.8);
-        }
-        
-        /* Format toolbar */
-        .format-toolbar {
+        /* Simple header bar */
+        .editor-header-bar {
             background: var(--bg-secondary);
+            padding: 10px 20px;
             border-bottom: 1px solid var(--border);
-            padding: 8px 16px;
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 12px;
         }
         
-        .format-group {
-            display: flex;
-            align-items: center;
-            gap: 2px;
-            padding-right: 12px;
-            margin-right: 12px;
-            border-right: 1px solid var(--border);
-        }
-        
-        .format-group:last-child {
-            border-right: none;
-            margin-right: 0;
-        }
-        
-        .format-btn {
-            width: 32px;
-            height: 28px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: transparent;
-            border: 1px solid transparent;
-            border-radius: 4px;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all 0.15s;
-        }
-        
-        .format-btn:hover {
-            background: var(--bg-hover);
-            color: var(--text-primary);
-        }
-        
-        .format-btn.active {
-            background: var(--accent-dim);
+        .editor-cpt {
+            font-family: "SF Mono", monospace;
+            font-size: 13px;
+            font-weight: 600;
             color: var(--accent);
-            border-color: var(--accent);
         }
         
-        .format-btn svg {
-            width: 16px;
-            height: 16px;
-        }
-        
-        .format-label {
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-right: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        
-        .format-spacer { flex: 1; }
-        
-        .format-mode {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            padding: 4px;
-            background: var(--bg-tertiary);
-            border-radius: 6px;
-        }
-        
-        .format-mode-btn {
-            padding: 5px 12px;
-            font-size: 11px;
-            font-weight: 500;
-            border-radius: 4px;
-            border: none;
-            cursor: pointer;
-            background: transparent;
-            color: var(--text-muted);
-            transition: all 0.15s;
-        }
-        
-        .format-mode-btn.active {
-            background: var(--accent);
-            color: white;
-        }
-        
-        .format-mode-btn:hover:not(.active) {
+        .editor-title {
+            font-size: 14px;
             color: var(--text-primary);
+            font-weight: 500;
         }
         
-        /* Report content area - the actual editable document */
-        .report-content {
+        .editor-spacer { flex: 1; }
+        
+        .editor-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        /* Text content area */
+        .text-content {
             flex: 1;
             overflow-y: auto;
-            padding: 24px 40px;
-            background: #0a0f14;
+            padding: 24px 32px;
         }
         
-        .report-document {
-            max-width: 800px;
+        .text-document {
+            max-width: 720px;
             margin: 0 auto;
-            font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
-            font-size: 14px;
-            line-height: 1.7;
+            font-family: "Consolas", "SF Mono", monospace;
+            font-size: 13px;
+            line-height: 1.8;
             color: var(--text-primary);
         }
         
-        /* Section in the document */
-        .doc-section {
-            margin-bottom: 24px;
+        /* Text line - each field on its own line */
+        .text-line {
+            margin-bottom: 4px;
+            display: flex;
+            align-items: baseline;
+            gap: 4px;
         }
         
-        .doc-section-header {
+        .text-label {
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+        
+        /* Section header */
+        .text-section {
+            margin-top: 20px;
+            margin-bottom: 8px;
             font-weight: 700;
             font-size: 13px;
-            color: #60a5fa;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .doc-section-header::after {
-            content: "";
-            flex: 1;
-            height: 1px;
-            background: linear-gradient(to right, rgba(96, 165, 250, 0.3), transparent);
-        }
-        
-        /* Editable content block */
-        .doc-content {
-            min-height: 24px;
-            padding: 8px 12px;
-            background: rgba(255,255,255,0.02);
-            border: 1px solid transparent;
-            border-radius: 4px;
-            margin-bottom: 4px;
-            cursor: text;
-            transition: all 0.15s;
-        }
-        
-        .doc-content:hover {
-            background: rgba(255,255,255,0.04);
-            border-color: var(--border);
-        }
-        
-        .doc-content:focus {
-            outline: none;
-            background: rgba(255,255,255,0.05);
-            border-color: var(--accent);
-        }
-        
-        .doc-content[contenteditable="true"]:empty::before {
-            content: attr(data-placeholder);
-            color: var(--text-muted);
-            font-style: italic;
-        }
-        
-        /* Merge field inline tag */
-        .doc-merge-field {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            background: rgba(167, 139, 250, 0.2);
-            color: #a78bfa;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-family: "SF Mono", monospace;
-            border: 1px solid rgba(167, 139, 250, 0.3);
-            margin: 0 2px;
-            cursor: default;
-            user-select: none;
-        }
-        
-        /* Picklist inline tag */
-        .doc-picklist {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            background: rgba(34, 197, 94, 0.15);
-            color: #22c55e;
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: 500;
-            border: 1px solid rgba(34, 197, 94, 0.3);
-            margin: 2px 4px;
-            cursor: pointer;
-            transition: all 0.15s;
-            user-select: none;
-        }
-        
-        .doc-picklist:hover {
-            background: rgba(34, 197, 94, 0.25);
-            border-color: rgba(34, 197, 94, 0.5);
-        }
-        
-        .doc-picklist.selected {
-            background: var(--accent-dim);
             color: var(--accent);
-            border-color: var(--accent);
+            text-transform: uppercase;
         }
         
-        .doc-picklist svg {
-            width: 12px;
-            height: 12px;
-            opacity: 0.7;
+        .text-section:first-child {
+            margin-top: 0;
         }
         
-        .doc-picklist-count {
-            background: rgba(0,0,0,0.3);
-            padding: 1px 5px;
-            border-radius: 8px;
-            font-size: 10px;
-            margin-left: 2px;
+        /* Subheader for findings */
+        .text-subheader {
+            margin-top: 12px;
+            margin-bottom: 4px;
+            color: var(--text-secondary);
+            font-weight: 600;
         }
         
-        /* Finding row in document */
-        .doc-finding {
+        /* Finding line with actions */
+        .text-finding {
             display: flex;
-            align-items: flex-start;
+            align-items: baseline;
             gap: 8px;
-            padding: 6px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.03);
+            margin-bottom: 4px;
+            padding: 2px 0;
         }
         
-        .doc-finding:last-child {
-            border-bottom: none;
+        .text-finding:hover {
+            background: rgba(255,255,255,0.02);
         }
         
-        .doc-finding-label {
-            min-width: 160px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            font-size: 13px;
-            padding-top: 5px;
-        }
-        
-        .doc-finding-label input {
-            background: transparent;
-            border: none;
+        .text-finding-label {
             color: var(--text-secondary);
             font-weight: 600;
-            font-size: 13px;
-            width: 100%;
-            padding: 0;
+            min-width: 0;
         }
         
-        .doc-finding-label input:focus {
-            outline: none;
-            color: var(--text-primary);
-        }
-        
-        .doc-finding-picklists {
+        .text-finding-content {
             flex: 1;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
         }
         
-        .doc-finding-actions {
+        .text-finding-actions {
+            opacity: 0;
             display: flex;
             gap: 4px;
-            opacity: 0;
             transition: opacity 0.15s;
         }
         
-        .doc-finding:hover .doc-finding-actions {
+        .text-finding:hover .text-finding-actions {
             opacity: 1;
         }
         
-        .doc-action-btn {
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: transparent;
-            border: 1px solid transparent;
-            border-radius: 4px;
+        .text-action-btn {
+            background: none;
+            border: none;
             color: var(--text-muted);
             cursor: pointer;
-            transition: all 0.15s;
+            padding: 2px;
+            font-size: 11px;
         }
         
-        .doc-action-btn:hover {
-            background: var(--bg-hover);
-            border-color: var(--border);
+        .text-action-btn:hover {
             color: var(--text-primary);
         }
         
-        .doc-action-btn.danger:hover {
-            background: rgba(239, 68, 68, 0.1);
-            border-color: rgba(239, 68, 68, 0.3);
+        .text-action-btn.danger:hover {
             color: var(--danger);
         }
         
-        .doc-action-btn svg {
-            width: 12px;
-            height: 12px;
+        /* Merge field - simple inline link style */
+        .merge-link {
+            color: #a78bfa;
+            text-decoration: none;
+            cursor: default;
         }
         
-        /* Add component button */
-        .doc-add-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 14px;
-            border: 1px dashed var(--border);
-            border-radius: 6px;
-            background: transparent;
-            color: var(--text-muted);
+        .merge-link::before { content: "{{"; opacity: 0.6; }
+        .merge-link::after { content: "}}"; opacity: 0.6; }
+        
+        /* Picklist - simple inline link style */
+        .picklist-link {
+            color: #22c55e;
+            text-decoration: underline;
+            text-decoration-style: dotted;
+            text-underline-offset: 2px;
             cursor: pointer;
-            font-size: 12px;
-            margin-top: 12px;
-            transition: all 0.15s;
         }
         
-        .doc-add-btn:hover {
-            border-color: var(--accent);
+        .picklist-link:hover {
+            color: #4ade80;
+            text-decoration-style: solid;
+        }
+        
+        .picklist-link.selected {
             color: var(--accent);
             background: var(--accent-dim);
+            padding: 1px 4px;
+            border-radius: 2px;
         }
         
-        .doc-add-btn svg {
-            width: 14px;
-            height: 14px;
+        /* Add link */
+        .add-link {
+            color: var(--text-muted);
+            font-size: 12px;
+            cursor: pointer;
+            margin-top: 8px;
+            display: inline-block;
         }
         
-        /* Impression textarea */
-        .doc-impression {
+        .add-link:hover {
+            color: var(--accent);
+        }
+        
+        /* Impression area */
+        .text-impression {
             width: 100%;
-            min-height: 80px;
-            padding: 12px;
-            background: rgba(255,255,255,0.02);
+            min-height: 60px;
+            padding: 8px;
+            background: transparent;
             border: 1px solid var(--border);
-            border-radius: 6px;
+            border-radius: 4px;
             color: var(--text-primary);
-            font-size: 14px;
-            line-height: 1.6;
             font-family: inherit;
+            font-size: 13px;
+            line-height: 1.6;
             resize: vertical;
+            margin-top: 4px;
         }
         
-        .doc-impression:focus {
+        .text-impression:focus {
             outline: none;
             border-color: var(--accent);
-            background: rgba(255,255,255,0.04);
         }
         
-        /* Report footer */
-        .report-footer {
+        /* Footer */
+        .editor-footer {
             background: var(--bg-secondary);
             border-top: 1px solid var(--border);
             padding: 10px 20px;
             display: flex;
             align-items: center;
             gap: 8px;
-        }
-        
-        .footer-btn {
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            border: none;
-            transition: all 0.15s;
-        }
-        
-        .footer-btn-primary {
-            background: var(--success);
-            color: white;
-        }
-        
-        .footer-btn-secondary {
-            background: var(--bg-tertiary);
-            color: var(--text-secondary);
-            border: 1px solid var(--border);
-        }
-        
-        .footer-btn-danger {
-            background: transparent;
-            color: var(--danger);
-            border: 1px solid var(--danger);
         }
         
         .footer-spacer { flex: 1; }
@@ -1764,127 +1540,76 @@
             const tpl = templateMap.modalities[currentTemplate.mod].regions[currentTemplate.reg].templates[currentTemplate.tpl];
             const components = tpl.component_templates || [];
             
-            // Icons
-            const listIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>`;
-            const plusIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>`;
+            // Helper to create merge field link
+            const mergeField = (name) => `<span class="merge-link">${name}</span>`;
             
-            // Build NotariOS Dicta-style report editor
-            let html = `<div class="report-editor">`;
+            // Helper to create picklist link
+            const picklistLink = (id, name, count, onclick, selected = false) => 
+                `<span class="picklist-link${selected ? ' selected' : ''}" onclick="${onclick}">${name}</span>`;
             
-            // Header with template info
-            html += `<div class="report-header">
-                <div class="report-header-left">
-                    <span class="report-template-badge">Template</span>
-                    <span class="report-cpt">${tpl.primary_cpt}</span>
-                    <span class="report-desc">${tpl.description}</span>
+            // Build clean text editor
+            let html = `<div class="text-editor">`;
+            
+            // Simple header
+            html += `<div class="editor-header-bar">
+                <span class="editor-cpt">${tpl.primary_cpt}</span>
+                <span class="editor-title">${tpl.description}</span>
+                <div class="editor-spacer"></div>
+                <div class="editor-actions">
+                    <button class="btn" onclick="duplicateCurrentTemplate()">Duplicate</button>
+                    <button class="btn btn-primary" onclick="saveAllChanges()">Save</button>
                 </div>
             </div>`;
             
-            // Format toolbar
-            html += `<div class="format-toolbar">
-                <span class="format-label">Format</span>
-                <div class="format-group">
-                    <button class="format-btn" title="Bold" onclick="document.execCommand('bold')">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 4h8a4 4 0 014 4 4 4 0 01-4 4H6V4zM6 12h9a4 4 0 014 4 4 4 0 01-4 4H6v-8z"/></svg>
-                    </button>
-                    <button class="format-btn" title="Italic" onclick="document.execCommand('italic')">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="4" x2="10" y2="4"/><line x1="14" y1="20" x2="5" y2="20"/><line x1="15" y1="4" x2="9" y2="20"/></svg>
-                    </button>
-                    <button class="format-btn" title="Underline" onclick="document.execCommand('underline')">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4v6a6 6 0 006 6 6 6 0 006-6V4"/><line x1="4" y1="20" x2="20" y2="20"/></svg>
-                    </button>
-                </div>
-                <div class="format-group">
-                    <button class="format-btn" title="Bullet List" onclick="document.execCommand('insertUnorderedList')">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="4" cy="6" r="1" fill="currentColor"/><circle cx="4" cy="12" r="1" fill="currentColor"/><circle cx="4" cy="18" r="1" fill="currentColor"/></svg>
-                    </button>
-                    <button class="format-btn" title="Numbered List" onclick="document.execCommand('insertOrderedList')">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 6h11M10 12h11M10 18h11"/><text x="3" y="8" font-size="8" fill="currentColor">1</text><text x="3" y="14" font-size="8" fill="currentColor">2</text><text x="3" y="20" font-size="8" fill="currentColor">3</text></svg>
-                    </button>
-                </div>
-                <div class="format-group">
-                    <button class="format-btn" title="Highlight" onclick="document.execCommand('hiliteColor', false, '#ffeb3b')">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-                    </button>
-                </div>
-                <div class="format-spacer"></div>
-                <span class="format-label">Editing</span>
-            </div>`;
-            
-            // Report content area - the document
-            html += `<div class="report-content"><div class="report-document">`;
+            // Text document area
+            html += `<div class="text-content"><div class="text-document">`;
             
             // ═══════════════════════════════════════════════════════════
-            // PROCEDURE Section
+            // DEMOGRAPHICS
             // ═══════════════════════════════════════════════════════════
-            html += `<div class="doc-section">
-                <div class="doc-section-header">Procedure</div>
-                <div class="doc-content" contenteditable="true" data-placeholder="Enter procedure description...">${tpl.primary_cpt} ${tpl.description}</div>
-            </div>`;
+            html += `<div class="text-section">DEMOGRAPHICS:</div>`;
+            html += `<div class="text-line"><span class="text-label">Facility:</span> ${mergeField('Facility Name')}</div>`;
+            html += `<div class="text-line"><span class="text-label">Patient:</span> ${mergeField('Patient Name')}, ${mergeField('DOB/Age')}, ${mergeField('Sex')}</div>`;
+            html += `<div class="text-line"><span class="text-label">Referring:</span> ${mergeField('Referring Physician')}</div>`;
+            html += `<div class="text-line"><span class="text-label">Exam:</span> ${tpl.primary_cpt} ${tpl.description}</div>`;
             
             // ═══════════════════════════════════════════════════════════
-            // CLINICAL HISTORY Section
+            // CLINICAL INFORMATION
             // ═══════════════════════════════════════════════════════════
-            html += `<div class="doc-section">
-                <div class="doc-section-header">Clinical History</div>
-                <div class="doc-content" contenteditable="false" data-placeholder="Clinical history will be populated from PACS/EMR...">
-                    <span class="doc-merge-field">HPI</span>
-                    <span class="doc-merge-field">PMHx</span>
-                    <span class="doc-merge-field">Indication</span>
-                </div>
-            </div>`;
+            html += `<div class="text-section">CLINICAL INFORMATION:</div>`;
+            html += `<div class="text-line"><span class="text-label">History:</span> ${mergeField('HPI')} / ${mergeField('PMHx')}</div>`;
+            html += `<div class="text-line"><span class="text-label">Indication:</span> ${mergeField('Indication')}</div>`;
             
             // ═══════════════════════════════════════════════════════════
-            // TECHNIQUE Section
+            // TECHNIQUE
             // ═══════════════════════════════════════════════════════════
             const tecId = `TEC-${currentTemplate.mod}-${currentTemplate.reg}`;
             const contrastId = `CONTRAST-${currentTemplate.mod}`;
             const tecCount = templateMap._section_picklists?.[tecId]?.options?.length || 0;
             const contrastCount = templateMap._section_picklists?.[contrastId]?.options?.length || 0;
             
-            html += `<div class="doc-section">
-                <div class="doc-section-header">Technique</div>
-                <div class="doc-content" contenteditable="false">
-                    <span class="doc-picklist" onclick="editTechniquePicklist()">
-                        ${listIcon} ${tecId} <span class="doc-picklist-count">${tecCount}</span>
-                    </span>
-                    <span class="doc-picklist" onclick="editContrastPicklist()">
-                        ${listIcon} ${contrastId} <span class="doc-picklist-count">${contrastCount}</span>
-                    </span>
-                </div>
-            </div>`;
+            html += `<div class="text-section">TECHNIQUE:</div>`;
+            html += `<div class="text-line"><span class="text-label">Procedure:</span> ${picklistLink(tecId, tecId + ' (' + tecCount + ')', tecCount, 'editTechniquePicklist()')}</div>`;
+            html += `<div class="text-line"><span class="text-label">Contrast:</span> ${picklistLink(contrastId, contrastId + ' (' + contrastCount + ')', contrastCount, 'editContrastPicklist()')}</div>`;
             
             // ═══════════════════════════════════════════════════════════
-            // COMPARISON Section
+            // COMPARISON
             // ═══════════════════════════════════════════════════════════
-            html += `<div class="doc-section">
-                <div class="doc-section-header">Comparison</div>
-                <div class="doc-content" contenteditable="false" data-placeholder="Prior studies will be populated...">
-                    <span class="doc-merge-field">Prior Studies</span>
-                </div>
-            </div>`;
+            html += `<div class="text-section">COMPARISON:</div>`;
+            html += `<div class="text-line">${mergeField('Prior Studies')}</div>`;
             
             // ═══════════════════════════════════════════════════════════
-            // FINDINGS Section
+            // FINDINGS
             // ═══════════════════════════════════════════════════════════
             const qualityId = `QUALITY-${currentTemplate.mod}`;
             const qualityCount = templateMap._section_picklists?.[qualityId]?.options?.length || 0;
             
-            html += `<div class="doc-section">
-                <div class="doc-section-header">Findings</div>
-                <div class="doc-findings-container">`;
+            html += `<div class="text-section">FINDINGS:</div>`;
             
-            // Quality row
-            html += `<div class="doc-finding">
-                <span class="doc-finding-label">
-                    <input type="text" value="Quality" onchange="updateHeaderLabel(this, 'quality')">
-                </span>
-                <span class="doc-finding-picklists">
-                    <span class="doc-picklist" onclick="editQualityPicklist()">
-                        ${listIcon} ${qualityId} <span class="doc-picklist-count">${qualityCount}</span>
-                    </span>
-                </span>
-                <span class="doc-finding-actions"></span>
+            // Quality
+            html += `<div class="text-finding">
+                <span class="text-finding-label">Quality:</span>
+                <span class="text-finding-content">${picklistLink(qualityId, qualityId + ' (' + qualityCount + ')', qualityCount, 'editQualityPicklist()')}</span>
             </div>`;
             
             // Component findings
@@ -1893,68 +1618,49 @@
                 const picklists = comp ? Object.keys(comp.picklists || {}) : [];
                 const displayName = comp?.display_name || compId;
                 
-                html += `<div class="doc-finding" data-comp="${compId}">
-                    <span class="doc-finding-label">
-                        <input type="text" value="${displayName}" onchange="updateFindingLabel(this, '${compId}')">
-                    </span>
-                    <span class="doc-finding-picklists">`;
-                
+                let picklistsHtml = '';
                 if (picklists.length > 0) {
-                    picklists.forEach(pk => {
+                    picklistsHtml = picklists.map(pk => {
                         const pkData = comp.picklists[pk];
                         const optCount = pkData.options?.length || 0;
                         const isSelected = currentComponent === compId && currentPicklist === pk;
-                        html += `<span class="doc-picklist${isSelected ? ' selected' : ''}" onclick="selectPicklist('${compId}', '${pk}')">
-                            ${listIcon} ${pkData.display_name || pk} <span class="doc-picklist-count">${optCount}</span>
-                        </span>`;
-                    });
+                        return picklistLink(pk, (pkData.display_name || pk) + ' (' + optCount + ')', optCount, `selectPicklist('${compId}', '${pk}')`, isSelected);
+                    }).join(', ');
                 } else {
-                    html += `<span class="doc-picklist" onclick="selectComponent('${compId}')">
-                        ${listIcon} ${compId} <span class="doc-picklist-count">0</span>
-                    </span>`;
+                    picklistsHtml = picklistLink(compId, compId + ' (0)', 0, `selectComponent('${compId}')`);
                 }
                 
-                html += `</span>
-                    <span class="doc-finding-actions">
-                        <button class="doc-action-btn" onclick="moveComponent(${idx}, -1)" title="Move Up">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg>
-                        </button>
-                        <button class="doc-action-btn" onclick="moveComponent(${idx}, 1)" title="Move Down">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-                        </button>
-                        <button class="doc-action-btn danger" onclick="removeComponentFromTemplate('${compId}')" title="Remove">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"/></svg>
-                        </button>
+                html += `<div class="text-finding" data-comp="${compId}">
+                    <span class="text-finding-label">${displayName}:</span>
+                    <span class="text-finding-content">${picklistsHtml}</span>
+                    <span class="text-finding-actions">
+                        <span class="text-action-btn" onclick="moveComponent(${idx}, -1)" title="Move Up">↑</span>
+                        <span class="text-action-btn" onclick="moveComponent(${idx}, 1)" title="Move Down">↓</span>
+                        <span class="text-action-btn danger" onclick="removeComponentFromTemplate('${compId}')" title="Remove">×</span>
                     </span>
                 </div>`;
             });
             
-            html += `<button class="doc-add-btn" onclick="openAddComponentModal()">
-                ${plusIcon} Add Finding Component
-            </button>`;
-            
-            html += `</div></div>`; // Close doc-findings-container and doc-section
+            html += `<span class="add-link" onclick="openAddComponentModal()">+ Add Finding Component</span>`;
             
             // ═══════════════════════════════════════════════════════════
-            // IMPRESSION Section
+            // IMPRESSION
             // ═══════════════════════════════════════════════════════════
             const defaultImpression = tpl.impression?.default_text || 'Normal exam.';
-            html += `<div class="doc-section">
-                <div class="doc-section-header">Impression</div>
-                <textarea class="doc-impression" onchange="updateImpressionText(this)" placeholder="Enter impression...">${defaultImpression}</textarea>
-            </div>`;
+            html += `<div class="text-section">IMPRESSION:</div>`;
+            html += `<textarea class="text-impression" onchange="updateImpressionText(this)" placeholder="Enter impression...">${defaultImpression}</textarea>`;
             
-            html += `</div></div>`; // Close report-document and report-content
+            html += `</div></div>`; // Close text-document and text-content
             
-            // Footer with action buttons
-            html += `<div class="report-footer">
-                <button class="footer-btn footer-btn-primary" onclick="saveAllChanges()">Save Changes</button>
-                <button class="footer-btn footer-btn-secondary" onclick="renderTemplateStructure()">Reset</button>
+            // Footer
+            html += `<div class="editor-footer">
+                <button class="btn btn-success" onclick="saveAllChanges()">Save Changes</button>
+                <button class="btn" onclick="renderTemplateStructure()">Reset</button>
                 <div class="footer-spacer"></div>
-                <button class="footer-btn footer-btn-danger" onclick="if(confirm('Delete this template?')) deleteTemplate()">Delete Template</button>
+                <button class="btn" style="color:var(--danger);" onclick="if(confirm('Delete this template?')) deleteTemplate()">Delete Template</button>
             </div>`;
             
-            html += `</div>`; // Close report-editor
+            html += `</div>`; // Close text-editor
             
             document.getElementById('template-structure').innerHTML = html;
         }

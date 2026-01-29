@@ -933,20 +933,76 @@
             margin: 0;
             border-radius: 0;
         }
+        
+        /* Add Template Form in left panel */
+        .add-template-form {
+            border-bottom: 1px solid var(--border);
+            background: var(--bg-secondary);
+        }
+        
+        .add-template-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: all 0.15s;
+        }
+        
+        .add-template-toggle:hover {
+            background: var(--bg-hover);
+            color: var(--accent);
+        }
+        
+        .add-template-toggle .toggle-chevron {
+            margin-left: auto;
+            transition: transform 0.2s;
+        }
+        
+        .add-template-form.open .toggle-chevron {
+            transform: rotate(180deg);
+        }
+        
+        .add-template-fields {
+            display: none;
+            padding: 12px;
+            gap: 8px;
+            flex-direction: column;
+            background: var(--bg-tertiary);
+            border-top: 1px solid var(--border);
+        }
+        
+        .add-template-form.open .add-template-fields {
+            display: flex;
+        }
+        
+        .quick-input {
+            width: 100%;
+            padding: 8px 10px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 12px;
+        }
+        
+        .quick-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        .quick-input::placeholder {
+            color: var(--text-muted);
+        }
     </style>
 </head>
 <body>
     <header class="header">
         <h1>Template Map Editor</h1>
         <div class="header-actions">
-            <button class="btn" onclick="openNewTemplateModal()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-                New Template
-            </button>
-            <button class="btn" onclick="openNewComponentModal()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 8v8M8 12h8"/></svg>
-                New Component
-            </button>
             <span class="version-badge" id="version">v?.?</span>
             <div class="changes-indicator" id="changes-indicator"></div>
             <button class="btn btn-success" id="save-btn" onclick="saveAllChanges()" style="display:none;">
@@ -962,6 +1018,34 @@
             <div class="panel-header">
                 <span>Templates</span>
                 <span class="count" id="template-count">0</span>
+            </div>
+            <!-- Add Template Form at top of panel -->
+            <div class="add-template-form" id="add-template-form">
+                <div class="add-template-toggle" onclick="toggleAddTemplateForm()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M12 5v14M5 12h14"/></svg>
+                    <span>Add Template</span>
+                    <svg class="toggle-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M6 9l6 6 6-6"/></svg>
+                </div>
+                <div class="add-template-fields" id="add-template-fields">
+                    <select id="quick-tpl-modality" class="quick-input">
+                        <option value="">Select Modality...</option>
+                        <option value="xray">X-Ray</option>
+                        <option value="ct">CT</option>
+                        <option value="mri">MRI</option>
+                        <option value="ultrasound">Ultrasound</option>
+                        <option value="fluoroscopy">Fluoroscopy</option>
+                        <option value="nuclear_medicine">Nuclear Medicine</option>
+                        <option value="mammography">Mammography</option>
+                    </select>
+                    <select id="quick-tpl-region" class="quick-input">
+                        <option value="">Select Region...</option>
+                    </select>
+                    <input type="text" id="quick-tpl-cpt" class="quick-input" placeholder="CPT Code (e.g., 71046)">
+                    <input type="text" id="quick-tpl-title" class="quick-input" placeholder="Title (e.g., XR Chest 2 View)">
+                    <button class="btn btn-primary" style="width:100%;" onclick="quickCreateTemplate()">
+                        Create Template
+                    </button>
+                </div>
             </div>
             <div class="panel-content" id="template-list">
                 <div class="loading">Loading...</div>
@@ -1650,6 +1734,124 @@
             document.getElementById('new-opt-state').value = 'normal';
             document.getElementById('new-opt-text').value = '';
             openModal('add-option-modal');
+        }
+        
+        // Add Template form in left panel
+        function toggleAddTemplateForm() {
+            document.getElementById('add-template-form').classList.toggle('open');
+        }
+        
+        // Region options based on modality
+        const MODALITY_REGIONS = {
+            xray: ['chest', 'abdomen', 'spine', 'extremity', 'pelvis', 'skull', 'other'],
+            ct: ['head', 'neck', 'chest', 'abdomen', 'pelvis', 'abdomen_pelvis', 'spine', 'extremity', 'other'],
+            mri: ['brain', 'spine', 'abdomen', 'pelvis', 'extremity', 'neck', 'chest', 'cardiac', 'other'],
+            ultrasound: ['abdomen', 'pelvis', 'obstetric', 'thyroid', 'breast', 'vascular', 'cardiac', 'musculoskeletal', 'other'],
+            fluoroscopy: ['gi', 'gu', 'spine', 'arthrography', 'other'],
+            nuclear_medicine: ['cardiac', 'bone', 'thyroid', 'renal', 'pulmonary', 'hepatobiliary', 'pet', 'other'],
+            mammography: ['screening', 'diagnostic', 'other']
+        };
+        
+        // Update region dropdown when modality changes
+        document.getElementById('quick-tpl-modality').addEventListener('change', function() {
+            const regionSelect = document.getElementById('quick-tpl-region');
+            const modality = this.value;
+            
+            regionSelect.innerHTML = '<option value="">Select Region...</option>';
+            
+            if (modality && MODALITY_REGIONS[modality]) {
+                MODALITY_REGIONS[modality].forEach(region => {
+                    const displayName = region.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+                    regionSelect.innerHTML += `<option value="${region}">${displayName}</option>`;
+                });
+            }
+        });
+        
+        // Quick create template from left panel
+        function quickCreateTemplate() {
+            const modality = document.getElementById('quick-tpl-modality').value;
+            const region = document.getElementById('quick-tpl-region').value;
+            const cpt = document.getElementById('quick-tpl-cpt').value.trim();
+            const title = document.getElementById('quick-tpl-title').value.trim();
+            
+            if (!modality) {
+                showToast('Please select a modality', 'error');
+                return;
+            }
+            if (!region) {
+                showToast('Please select a body region', 'error');
+                return;
+            }
+            if (!cpt) {
+                showToast('Please enter a CPT code', 'error');
+                return;
+            }
+            if (!title) {
+                showToast('Please enter a title', 'error');
+                return;
+            }
+            
+            const tplId = `${cpt}-${modality}-${region}`.toLowerCase();
+            
+            // Ensure modality exists
+            if (!templateMap.modalities[modality]) {
+                const displayName = modality.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+                templateMap.modalities[modality] = {
+                    display_name: displayName,
+                    regions: {}
+                };
+            }
+            
+            // Ensure region exists
+            if (!templateMap.modalities[modality].regions[region]) {
+                const displayName = region.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+                templateMap.modalities[modality].regions[region] = {
+                    display_name: displayName,
+                    templates: {}
+                };
+            }
+            
+            // Check if template already exists
+            if (templateMap.modalities[modality].regions[region].templates[tplId]) {
+                showToast('Template with this CPT already exists in this region', 'error');
+                return;
+            }
+            
+            // Create template
+            templateMap.modalities[modality].regions[region].templates[tplId] = {
+                primary_cpt: cpt,
+                description: title,
+                template_file: `templates/${modality}/${region}/${cpt}-${title.toLowerCase().replace(/\s+/g, '-')}.json`,
+                variants: {
+                    [cpt]: {
+                        description: title,
+                        technique_note: ''
+                    }
+                },
+                common_use: '',
+                component_templates: []
+            };
+            
+            // Clear form
+            document.getElementById('quick-tpl-modality').value = '';
+            document.getElementById('quick-tpl-region').innerHTML = '<option value="">Select Region...</option>';
+            document.getElementById('quick-tpl-cpt').value = '';
+            document.getElementById('quick-tpl-title').value = '';
+            
+            // Close form
+            document.getElementById('add-template-form').classList.remove('open');
+            
+            markChanged();
+            renderTemplateList();
+            showToast(`Template ${cpt} - ${title} created`, 'success');
+            
+            // Auto-expand to show the new template
+            setTimeout(() => {
+                const modNode = document.querySelector(`.tree-node[data-mod="${modality}"]`);
+                if (modNode) modNode.classList.add('open');
+                const regNode = document.querySelector(`.tree-node[data-reg="${region}"]`);
+                if (regNode) regNode.classList.add('open');
+            }, 100);
         }
         
         // Create functions

@@ -166,9 +166,9 @@
             padding: 8px;
         }
         
-        /* Document panel has different background */
+        /* Template editor panel */
         #panel-structure .panel-content {
-            background: #2a2a2a;
+            background: var(--bg-primary);
             padding: 0;
         }
         
@@ -269,307 +269,356 @@
         }
         
         /* ========================================
-           REPORT DOCUMENT EDITOR STYLES
-           PowerScribe-like text editor appearance
+           TEMPLATE EDITOR STYLES
+           PowerScribe-like template editor interface
            ======================================== */
         
-        /* Document container - looks like a paper document */
-        .report-document {
-            background: #ffffff;
-            color: #1a1a1a;
-            border-radius: 4px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-            margin: 8px;
-            padding: 32px 40px;
-            min-height: calc(100% - 16px);
-            font-family: "Times New Roman", Times, Georgia, serif;
-            font-size: 14px;
-            line-height: 1.6;
+        /* Editor container - dark admin panel style */
+        .tpl-editor {
+            background: var(--bg-primary);
+            padding: 12px;
+            min-height: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-size: 13px;
         }
         
-        /* Report line - each row in the report */
-        .report-line {
+        /* Template header bar */
+        .tpl-header-bar {
+            background: linear-gradient(135deg, var(--accent), #0d7fd4);
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin-bottom: 12px;
             display: flex;
-            align-items: flex-start;
-            margin-bottom: 4px;
-            min-height: 24px;
+            align-items: center;
+            justify-content: space-between;
         }
         
-        .report-line:hover {
-            background: rgba(29, 155, 240, 0.05);
-            margin-left: -8px;
-            margin-right: -8px;
-            padding-left: 8px;
-            padding-right: 8px;
-            border-radius: 2px;
-        }
-        
-        /* Editable header label */
-        .report-header {
-            font-weight: 700;
-            color: #000;
-            min-width: 160px;
-            flex-shrink: 0;
-            text-transform: uppercase;
-            font-size: 13px;
-            letter-spacing: 0.02em;
-            padding: 2px 0;
-            cursor: text;
-            border-bottom: 1px solid transparent;
-        }
-        
-        .report-header:hover {
-            border-bottom: 1px dashed #999;
-        }
-        
-        .report-header:focus {
-            outline: none;
-            border-bottom: 1px solid var(--accent);
-            background: rgba(29, 155, 240, 0.1);
-        }
-        
-        /* Section divider */
-        .report-section {
-            margin-top: 16px;
-            margin-bottom: 8px;
-        }
-        
-        .report-section:first-child {
-            margin-top: 0;
-        }
-        
-        .report-section-title {
-            font-weight: 700;
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 0.02em;
-            color: #000;
-            border-bottom: 1px solid #ccc;
-            padding-bottom: 4px;
-            margin-bottom: 8px;
-            cursor: text;
-        }
-        
-        .report-section-title:hover {
-            border-bottom: 1px solid var(--accent);
-        }
-        
-        .report-section-title:focus {
-            outline: none;
-            background: rgba(29, 155, 240, 0.1);
-        }
-        
-        /* Merge field in document */
-        .report-merge-field {
-            display: inline;
-            color: #6366f1;
-            font-family: inherit;
-            font-style: italic;
-            background: rgba(99, 102, 241, 0.1);
-            padding: 0 4px;
-            border-radius: 2px;
-            cursor: default;
-        }
-        
-        .report-merge-field::before {
-            content: "[";
-            color: #a5a5a5;
-        }
-        
-        .report-merge-field::after {
-            content: "]";
-            color: #a5a5a5;
-        }
-        
-        /* Report content area */
-        .report-content {
-            flex: 1;
-            color: #333;
-        }
-        
-        /* Subheader within findings */
-        .report-subheader {
+        .tpl-header-bar h2 {
+            color: white;
+            font-size: 18px;
             font-weight: 600;
-            color: #000;
-            display: inline;
-            cursor: text;
-            border-bottom: 1px solid transparent;
+            margin: 0;
         }
         
-        .report-subheader:hover {
-            border-bottom: 1px dashed #999;
+        .tpl-header-bar .cpt-badge {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-family: "SF Mono", monospace;
+            font-size: 14px;
+            font-weight: 600;
         }
         
-        .report-subheader:focus {
-            outline: none;
-            border-bottom: 1px solid var(--accent);
-            background: rgba(29, 155, 240, 0.1);
+        /* Section card */
+        .tpl-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            overflow: hidden;
         }
         
-        /* Component/Picklist inline element */
-        .report-component {
-            display: inline;
-            color: #059669;
-            background: rgba(5, 150, 105, 0.08);
-            padding: 1px 6px;
-            border-radius: 3px;
-            cursor: pointer;
-            border: 1px solid transparent;
-            transition: all 0.15s;
-        }
+        .tpl-section.collapsed .tpl-section-body { display: none; }
+        .tpl-section.collapsed .tpl-section-toggle { transform: rotate(-90deg); }
         
-        .report-component:hover {
-            background: rgba(5, 150, 105, 0.15);
-            border-color: rgba(5, 150, 105, 0.3);
-        }
-        
-        .report-component.selected {
-            background: rgba(29, 155, 240, 0.15);
-            border-color: var(--accent);
-            color: #0284c7;
-        }
-        
-        .report-component-label {
-            font-size: 9px;
-            text-transform: uppercase;
-            letter-spacing: 0.03em;
-            opacity: 0.7;
-            margin-right: 4px;
-        }
-        
-        /* Findings area with indented components */
-        .report-findings {
-            margin-left: 0;
-        }
-        
-        .report-finding-row {
+        .tpl-section-header {
             display: flex;
-            align-items: flex-start;
-            padding: 4px 0;
-            border-bottom: 1px solid #f0f0f0;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            background: var(--bg-tertiary);
+            cursor: pointer;
+            border-bottom: 1px solid var(--border);
+            user-select: none;
         }
         
-        .report-finding-row:last-child {
+        .tpl-section-header:hover {
+            background: var(--bg-hover);
+        }
+        
+        .tpl-section-toggle {
+            color: var(--text-muted);
+            transition: transform 0.15s;
+            flex-shrink: 0;
+        }
+        
+        .tpl-section-toggle svg {
+            width: 16px;
+            height: 16px;
+        }
+        
+        .tpl-section-title {
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-primary);
+            flex: 1;
+        }
+        
+        .tpl-section-badge {
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            background: var(--accent-dim);
+            color: var(--accent);
+        }
+        
+        .tpl-section-body {
+            padding: 12px 16px;
+        }
+        
+        /* Field row in section */
+        .tpl-field {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        
+        .tpl-field:last-child {
             border-bottom: none;
         }
         
-        .report-finding-row:hover {
-            background: rgba(29, 155, 240, 0.03);
-            margin-left: -8px;
-            margin-right: -8px;
-            padding-left: 8px;
-            padding-right: 8px;
+        .tpl-field-label {
+            font-weight: 500;
+            color: var(--text-secondary);
+            min-width: 100px;
+            font-size: 12px;
         }
         
-        .report-finding-label {
-            font-weight: 600;
-            color: #000;
-            min-width: 180px;
-            flex-shrink: 0;
-            padding-right: 12px;
-            cursor: text;
-        }
-        
-        .report-finding-label:hover {
-            text-decoration: underline;
-            text-decoration-style: dashed;
-            text-underline-offset: 2px;
-        }
-        
-        .report-finding-label:focus {
-            outline: none;
-            background: rgba(29, 155, 240, 0.1);
-        }
-        
-        .report-finding-value {
+        .tpl-field-value {
             flex: 1;
-            color: #333;
-        }
-        
-        /* Remove button for components */
-        .report-remove-btn {
-            display: inline-flex;
+            display: flex;
             align-items: center;
-            justify-content: center;
-            width: 16px;
-            height: 16px;
-            background: none;
-            border: none;
-            color: #dc2626;
-            cursor: pointer;
-            opacity: 0;
-            margin-left: 4px;
-            padding: 0;
-            transition: opacity 0.15s;
+            flex-wrap: wrap;
+            gap: 6px;
         }
         
-        .report-finding-row:hover .report-remove-btn {
-            opacity: 0.6;
-        }
-        
-        .report-remove-btn:hover {
-            opacity: 1 !important;
-        }
-        
-        /* Impression section */
-        .report-impression {
-            margin-top: 16px;
-            padding-top: 12px;
-            border-top: 1px solid #ccc;
-        }
-        
-        .report-impression-text {
-            color: #333;
-            font-style: italic;
-        }
-        
-        .report-ai-badge {
-            display: inline-block;
-            font-size: 9px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            background: rgba(99, 102, 241, 0.1);
-            color: #6366f1;
-            padding: 2px 6px;
-            border-radius: 3px;
-            margin-left: 8px;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            font-style: normal;
-        }
-        
-        /* Add component button in document */
-        .report-add-btn {
+        /* Merge field tag */
+        .tpl-merge-field {
             display: inline-flex;
             align-items: center;
             gap: 4px;
-            padding: 4px 12px;
-            margin-top: 8px;
-            border: 1px dashed #ccc;
+            background: rgba(167, 139, 250, 0.15);
+            color: var(--purple);
+            padding: 4px 10px;
             border-radius: 4px;
-            background: #fafafa;
-            color: #666;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             font-size: 12px;
-            cursor: pointer;
+            border: 1px dashed rgba(167, 139, 250, 0.4);
         }
         
-        .report-add-btn:hover {
+        .tpl-merge-field::before { content: "{{"; opacity: 0.5; font-size: 10px; }
+        .tpl-merge-field::after { content: "}}"; opacity: 0.5; font-size: 10px; }
+        
+        /* Picklist/Component tag */
+        .tpl-picklist {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(34, 197, 94, 0.15);
+            color: var(--success);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            transition: all 0.15s;
+        }
+        
+        .tpl-picklist:hover {
+            background: rgba(34, 197, 94, 0.25);
+            border-color: rgba(34, 197, 94, 0.5);
+        }
+        
+        .tpl-picklist.selected {
+            background: var(--accent-dim);
+            color: var(--accent);
+            border-color: var(--accent);
+        }
+        
+        .tpl-picklist-icon {
+            width: 14px;
+            height: 14px;
+            opacity: 0.7;
+        }
+        
+        .tpl-picklist-count {
+            background: rgba(0,0,0,0.2);
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-size: 10px;
+        }
+        
+        /* Finding component row */
+        .tpl-finding {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 10px 12px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            margin-bottom: 6px;
+            transition: all 0.15s;
+        }
+        
+        .tpl-finding:hover {
+            border-color: var(--accent);
+        }
+        
+        .tpl-finding-drag {
+            color: var(--text-muted);
+            cursor: grab;
+            padding: 4px;
+            opacity: 0.5;
+        }
+        
+        .tpl-finding:hover .tpl-finding-drag {
+            opacity: 1;
+        }
+        
+        .tpl-finding-drag svg {
+            width: 14px;
+            height: 14px;
+        }
+        
+        .tpl-finding-label {
+            min-width: 140px;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 13px;
+            padding: 4px 0;
+        }
+        
+        .tpl-finding-label input {
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 13px;
+            width: 100%;
+            padding: 0;
+        }
+        
+        .tpl-finding-label input:focus {
+            outline: none;
+            background: var(--bg-input);
+            padding: 4px 8px;
+            margin: -4px -8px;
+            border-radius: 4px;
+        }
+        
+        .tpl-finding-picklists {
+            flex: 1;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        
+        .tpl-finding-actions {
+            display: flex;
+            gap: 4px;
+            opacity: 0;
+            transition: opacity 0.15s;
+        }
+        
+        .tpl-finding:hover .tpl-finding-actions {
+            opacity: 1;
+        }
+        
+        .tpl-action-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+        }
+        
+        .tpl-action-btn:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+        
+        .tpl-action-btn.danger:hover {
+            color: var(--danger);
+        }
+        
+        .tpl-action-btn svg {
+            width: 14px;
+            height: 14px;
+        }
+        
+        /* Add button */
+        .tpl-add-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            width: 100%;
+            padding: 10px;
+            border: 1px dashed var(--border);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 12px;
+            margin-top: 6px;
+            transition: all 0.15s;
+        }
+        
+        .tpl-add-btn:hover {
             border-color: var(--accent);
             color: var(--accent);
-            background: rgba(29, 155, 240, 0.05);
+            background: var(--accent-dim);
         }
         
-        .report-add-btn svg {
-            width: 12px;
-            height: 12px;
+        .tpl-add-btn svg {
+            width: 14px;
+            height: 14px;
         }
+        
+        /* Impression section special styling */
+        .tpl-impression-input {
+            width: 100%;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            padding: 12px;
+            font-size: 14px;
+            min-height: 60px;
+            resize: vertical;
+        }
+        
+        .tpl-impression-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        /* Static text display */
+        .tpl-static-text {
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+        
+        /* Section color accents */
+        .tpl-section[data-section="demographics"] .tpl-section-header { border-left: 3px solid #60a5fa; }
+        .tpl-section[data-section="clinical"] .tpl-section-header { border-left: 3px solid #a78bfa; }
+        .tpl-section[data-section="technique"] .tpl-section-header { border-left: 3px solid #f59e0b; }
+        .tpl-section[data-section="comparison"] .tpl-section-header { border-left: 3px solid #6b7280; }
+        .tpl-section[data-section="findings"] .tpl-section-header { border-left: 3px solid var(--accent); }
+        .tpl-section[data-section="impression"] .tpl-section-header { border-left: 3px solid var(--success); }
         
         /* Picklist tag in component */
         .picklist-tag {
             display: inline-flex;
             align-items: center;
             gap: 4px;
-            background: var(--success);
             background: rgba(34, 197, 94, 0.2);
             color: var(--success);
             padding: 4px 10px;
@@ -588,24 +637,6 @@
             padding: 1px 5px;
             border-radius: 8px;
             font-size: 10px;
-        }
-        
-        /* Template title at top of document */
-        .report-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: #000;
-            margin-bottom: 16px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #000;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        }
-        
-        .report-cpt {
-            font-family: "SF Mono", monospace;
-            color: var(--accent);
-            font-size: 14px;
-            margin-right: 8px;
         }
         
         /* Right Panel - Detail Editor */
@@ -1484,145 +1515,193 @@
             const tpl = templateMap.modalities[currentTemplate.mod].regions[currentTemplate.reg].templates[currentTemplate.tpl];
             const components = tpl.component_templates || [];
             
-            // Build document-style report editor
-            let html = `<div class="report-document">`;
+            const chevron = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>`;
+            const dragIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/></svg>`;
+            const listIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>`;
             
-            // Document title (CPT + Description)
-            html += `<div class="report-title">
-                <span class="report-cpt">${tpl.primary_cpt}</span>
-                ${tpl.description}
+            // Build PowerScribe-like template editor
+            let html = `<div class="tpl-editor">`;
+            
+            // Template header bar
+            html += `<div class="tpl-header-bar">
+                <h2>${tpl.description}</h2>
+                <span class="cpt-badge">${tpl.primary_cpt}</span>
             </div>`;
             
             // ═══════════════════════════════════════════════════════════
-            // DEMOGRAPHICS
+            // DEMOGRAPHICS Section
             // ═══════════════════════════════════════════════════════════
-            html += `<div class="report-section">
-                <div class="report-section-title" contenteditable="true" onblur="updateHeaderLabel(this, 'demographics_title')">DEMOGRAPHICS:</div>
-                <div class="report-line">
-                    <span class="report-header" contenteditable="true" onblur="updateHeaderLabel(this, 'facility')">Facility:</span>
-                    <span class="report-content"><span class="report-merge-field">Facility Name</span></span>
+            html += `<div class="tpl-section" data-section="demographics">
+                <div class="tpl-section-header" onclick="this.parentElement.classList.toggle('collapsed')">
+                    <span class="tpl-section-toggle">${chevron}</span>
+                    <span class="tpl-section-title">Demographics</span>
+                    <span class="tpl-section-badge">4 fields</span>
                 </div>
-                <div class="report-line">
-                    <span class="report-header" contenteditable="true" onblur="updateHeaderLabel(this, 'patient')">Patient:</span>
-                    <span class="report-content">
-                        <span class="report-merge-field">Patient Name</span>, 
-                        <span class="report-merge-field">DOB/Age</span>, 
-                        <span class="report-merge-field">Sex</span>
-                    </span>
-                </div>
-                <div class="report-line">
-                    <span class="report-header" contenteditable="true" onblur="updateHeaderLabel(this, 'referring')">Referring:</span>
-                    <span class="report-content"><span class="report-merge-field">Referring Physician</span></span>
-                </div>
-                <div class="report-line">
-                    <span class="report-header" contenteditable="true" onblur="updateHeaderLabel(this, 'exam')">Exam:</span>
-                    <span class="report-content">${tpl.primary_cpt} ${tpl.description}</span>
-                </div>
-            </div>`;
-            
-            // ═══════════════════════════════════════════════════════════
-            // CLINICAL INFORMATION
-            // ═══════════════════════════════════════════════════════════
-            html += `<div class="report-section">
-                <div class="report-section-title" contenteditable="true" onblur="updateHeaderLabel(this, 'clinical_title')">CLINICAL INFORMATION:</div>
-                <div class="report-line">
-                    <span class="report-header" contenteditable="true" onblur="updateHeaderLabel(this, 'history')">History:</span>
-                    <span class="report-content"><span class="report-merge-field">HPI / PMHx</span></span>
-                </div>
-                <div class="report-line">
-                    <span class="report-header" contenteditable="true" onblur="updateHeaderLabel(this, 'indication')">Indication:</span>
-                    <span class="report-content"><span class="report-merge-field">Indication</span></span>
-                </div>
-            </div>`;
-            
-            // ═══════════════════════════════════════════════════════════
-            // TECHNIQUE (inline format)
-            // ═══════════════════════════════════════════════════════════
-            html += `<div class="report-section">
-                <div class="report-section-title" contenteditable="true" onblur="updateHeaderLabel(this, 'technique_title')">TECHNIQUE:</div>
-                <div class="report-line" style="margin-left:0;">
-                    <span class="report-content">
-                        <span class="report-component" onclick="editTechniquePicklist()">
-                            <span class="report-component-label">Procedure:</span>
-                            TEC-${currentTemplate.mod}-${currentTemplate.reg}
+                <div class="tpl-section-body">
+                    <div class="tpl-field">
+                        <span class="tpl-field-label">Facility</span>
+                        <span class="tpl-field-value"><span class="tpl-merge-field">Facility Name</span></span>
+                    </div>
+                    <div class="tpl-field">
+                        <span class="tpl-field-label">Patient</span>
+                        <span class="tpl-field-value">
+                            <span class="tpl-merge-field">Patient Name</span>
+                            <span class="tpl-merge-field">DOB/Age</span>
+                            <span class="tpl-merge-field">Sex</span>
                         </span>
-                        <span class="report-component" onclick="editContrastPicklist()">
-                            <span class="report-component-label">Contrast:</span>
-                            CONTRAST-${currentTemplate.mod}
+                    </div>
+                    <div class="tpl-field">
+                        <span class="tpl-field-label">Referring</span>
+                        <span class="tpl-field-value"><span class="tpl-merge-field">Referring Physician</span></span>
+                    </div>
+                    <div class="tpl-field">
+                        <span class="tpl-field-label">Exam</span>
+                        <span class="tpl-field-value"><span class="tpl-static-text">${tpl.primary_cpt} ${tpl.description}</span></span>
+                    </div>
+                </div>
+            </div>`;
+            
+            // ═══════════════════════════════════════════════════════════
+            // CLINICAL INFORMATION Section
+            // ═══════════════════════════════════════════════════════════
+            html += `<div class="tpl-section" data-section="clinical">
+                <div class="tpl-section-header" onclick="this.parentElement.classList.toggle('collapsed')">
+                    <span class="tpl-section-toggle">${chevron}</span>
+                    <span class="tpl-section-title">Clinical Information</span>
+                    <span class="tpl-section-badge">2 fields</span>
+                </div>
+                <div class="tpl-section-body">
+                    <div class="tpl-field">
+                        <span class="tpl-field-label">History</span>
+                        <span class="tpl-field-value"><span class="tpl-merge-field">HPI / PMHx</span></span>
+                    </div>
+                    <div class="tpl-field">
+                        <span class="tpl-field-label">Indication</span>
+                        <span class="tpl-field-value"><span class="tpl-merge-field">Indication</span></span>
+                    </div>
+                </div>
+            </div>`;
+            
+            // ═══════════════════════════════════════════════════════════
+            // TECHNIQUE Section
+            // ═══════════════════════════════════════════════════════════
+            html += `<div class="tpl-section" data-section="technique">
+                <div class="tpl-section-header" onclick="this.parentElement.classList.toggle('collapsed')">
+                    <span class="tpl-section-toggle">${chevron}</span>
+                    <span class="tpl-section-title">Technique</span>
+                    <span class="tpl-section-badge">2 picklists</span>
+                </div>
+                <div class="tpl-section-body">
+                    <div class="tpl-field">
+                        <span class="tpl-field-label">Procedure</span>
+                        <span class="tpl-field-value">
+                            <span class="tpl-picklist" onclick="editTechniquePicklist()">
+                                ${listIcon}
+                                TEC-${currentTemplate.mod}-${currentTemplate.reg}
+                            </span>
                         </span>
-                    </span>
+                    </div>
+                    <div class="tpl-field">
+                        <span class="tpl-field-label">Contrast</span>
+                        <span class="tpl-field-value">
+                            <span class="tpl-picklist" onclick="editContrastPicklist()">
+                                ${listIcon}
+                                CONTRAST-${currentTemplate.mod}
+                            </span>
+                        </span>
+                    </div>
                 </div>
             </div>`;
             
             // ═══════════════════════════════════════════════════════════
-            // COMPARISON
+            // COMPARISON Section
             // ═══════════════════════════════════════════════════════════
-            html += `<div class="report-section">
-                <div class="report-section-title" contenteditable="true" onblur="updateHeaderLabel(this, 'comparison_title')">COMPARISON:</div>
-                <div class="report-line" style="margin-left:0;">
-                    <span class="report-content"><span class="report-merge-field">Prior Studies</span></span>
+            html += `<div class="tpl-section" data-section="comparison">
+                <div class="tpl-section-header" onclick="this.parentElement.classList.toggle('collapsed')">
+                    <span class="tpl-section-toggle">${chevron}</span>
+                    <span class="tpl-section-title">Comparison</span>
+                    <span class="tpl-section-badge">merge field</span>
+                </div>
+                <div class="tpl-section-body">
+                    <div class="tpl-field">
+                        <span class="tpl-field-label">Prior Studies</span>
+                        <span class="tpl-field-value"><span class="tpl-merge-field">Prior Studies</span></span>
+                    </div>
                 </div>
             </div>`;
             
             // ═══════════════════════════════════════════════════════════
-            // FINDINGS (with Quality as first item)
+            // FINDINGS Section
             // ═══════════════════════════════════════════════════════════
-            html += `<div class="report-section">
-                <div class="report-section-title" contenteditable="true" onblur="updateHeaderLabel(this, 'findings_title')">FINDINGS:</div>
-                <div class="report-findings">`;
+            html += `<div class="tpl-section" data-section="findings">
+                <div class="tpl-section-header" onclick="this.parentElement.classList.toggle('collapsed')">
+                    <span class="tpl-section-toggle">${chevron}</span>
+                    <span class="tpl-section-title">Findings</span>
+                    <span class="tpl-section-badge">${components.length + 1} components</span>
+                </div>
+                <div class="tpl-section-body">`;
             
-            // Quality/Limitations as FIRST finding row
-            html += `<div class="report-finding-row" data-comp="quality">
-                <span class="report-finding-label" contenteditable="true" onblur="updateHeaderLabel(this, 'quality')">Quality:</span>
-                <span class="report-finding-value">
-                    <span class="report-component" onclick="editQualityPicklist()">
-                        <span class="report-component-label">Picklist:</span>
+            // Quality row (always first)
+            html += `<div class="tpl-finding">
+                <span class="tpl-finding-drag">${dragIcon}</span>
+                <span class="tpl-finding-label"><input type="text" value="Quality" onchange="updateHeaderLabel(this, 'quality')"></span>
+                <span class="tpl-finding-picklists">
+                    <span class="tpl-picklist" onclick="editQualityPicklist()">
+                        ${listIcon}
                         QUALITY-${currentTemplate.mod}
                     </span>
                 </span>
+                <span class="tpl-finding-actions"></span>
             </div>`;
             
             // Anatomic finding components
-            if (components.length === 0) {
-                html += `<div class="report-line" style="color:#666;font-style:italic;padding:8px 0;">
-                    No anatomic finding components. Click below to add.
-                </div>`;
-            } else {
-                components.forEach((compId, idx) => {
-                    const comp = findComponent(compId);
-                    const picklists = comp ? Object.keys(comp.picklists || {}) : [];
-                    const displayName = comp?.display_name || compId;
-                    
-                    html += `<div class="report-finding-row" data-comp="${compId}">
-                        <span class="report-finding-label" contenteditable="true" data-comp="${compId}" onblur="updateFindingLabel(this, '${compId}')">${displayName}:</span>
-                        <span class="report-finding-value">`;
-                    
-                    if (picklists.length > 0) {
-                        picklists.forEach((pk, pkIdx) => {
-                            const pkData = comp.picklists[pk];
-                            const optCount = pkData.options?.length || 0;
-                            const isSelected = currentComponent === compId;
-                            html += `<span class="report-component${isSelected ? ' selected' : ''}" onclick="selectPicklist('${compId}', '${pk}')">
-                                <span class="report-component-label">Picklist:</span>
-                                ${pkData.display_name || pk} (${optCount})
-                            </span> `;
-                        });
-                    } else {
-                        html += `<span class="report-component" onclick="selectComponent('${compId}')">
-                            <span class="report-component-label">Component:</span>
-                            ${compId}
+            components.forEach((compId, idx) => {
+                const comp = findComponent(compId);
+                const picklists = comp ? Object.keys(comp.picklists || {}) : [];
+                const displayName = comp?.display_name || compId;
+                
+                html += `<div class="tpl-finding" data-comp="${compId}">
+                    <span class="tpl-finding-drag">${dragIcon}</span>
+                    <span class="tpl-finding-label">
+                        <input type="text" value="${displayName}" onchange="updateFindingLabel(this, '${compId}')">
+                    </span>
+                    <span class="tpl-finding-picklists">`;
+                
+                if (picklists.length > 0) {
+                    picklists.forEach(pk => {
+                        const pkData = comp.picklists[pk];
+                        const optCount = pkData.options?.length || 0;
+                        const isSelected = currentComponent === compId && currentPicklist === pk;
+                        html += `<span class="tpl-picklist${isSelected ? ' selected' : ''}" onclick="selectPicklist('${compId}', '${pk}')">
+                            ${listIcon}
+                            ${pkData.display_name || pk}
+                            <span class="tpl-picklist-count">${optCount}</span>
                         </span>`;
-                    }
-                    
-                    html += `<button class="report-remove-btn" onclick="removeComponentFromTemplate('${compId}')" title="Remove">
+                    });
+                } else {
+                    html += `<span class="tpl-picklist" onclick="selectComponent('${compId}')">
+                        ${listIcon}
+                        ${compId}
+                        <span class="tpl-picklist-count">0</span>
+                    </span>`;
+                }
+                
+                html += `</span>
+                    <span class="tpl-finding-actions">
+                        <button class="tpl-action-btn" onclick="moveComponent(${idx}, -1)" title="Move Up">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg>
+                        </button>
+                        <button class="tpl-action-btn" onclick="moveComponent(${idx}, 1)" title="Move Down">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                        </button>
+                        <button class="tpl-action-btn danger" onclick="removeComponentFromTemplate('${compId}')" title="Remove">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"/></svg>
                         </button>
                     </span>
-                    </div>`;
-                });
-            }
+                </div>`;
+            });
             
-            html += `<button class="report-add-btn" onclick="openAddComponentModal()">
+            html += `<button class="tpl-add-btn" onclick="openAddComponentModal()">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
                 Add Finding Component
             </button>`;
@@ -1630,21 +1709,52 @@
             html += `</div></div>`;
             
             // ═══════════════════════════════════════════════════════════
-            // IMPRESSION
+            // IMPRESSION Section
             // ═══════════════════════════════════════════════════════════
-            html += `<div class="report-impression">
-                <div class="report-section-title" contenteditable="true" onblur="updateHeaderLabel(this, 'impression_title')">IMPRESSION:</div>
-                <div class="report-line">
-                    <span class="report-header" contenteditable="true" onblur="updateHeaderLabel(this, 'diagnosis')">Diagnosis:</span>
-                    <span class="report-content">
-                        <span class="report-impression-text" contenteditable="true" onblur="updateImpressionText(this)">Normal exam.</span>
-                    </span>
+            const defaultImpression = tpl.impression?.default_text || 'Normal exam.';
+            html += `<div class="tpl-section" data-section="impression">
+                <div class="tpl-section-header" onclick="this.parentElement.classList.toggle('collapsed')">
+                    <span class="tpl-section-toggle">${chevron}</span>
+                    <span class="tpl-section-title">Impression</span>
+                    <span class="tpl-section-badge">editable</span>
+                </div>
+                <div class="tpl-section-body">
+                    <div class="tpl-field" style="flex-direction:column;align-items:stretch;">
+                        <span class="tpl-field-label" style="margin-bottom:8px;">Default Impression Text</span>
+                        <textarea class="tpl-impression-input" onchange="updateImpressionText(this)">${defaultImpression}</textarea>
+                    </div>
                 </div>
             </div>`;
             
-            html += `</div>`; // Close report-document
+            html += `</div>`; // Close tpl-editor
             
             document.getElementById('template-structure').innerHTML = html;
+        }
+        
+        // Move component up/down in findings
+        function moveComponent(idx, direction) {
+            if (!currentTemplate) return;
+            
+            const tpl = templateMap.modalities[currentTemplate.mod].regions[currentTemplate.reg].templates[currentTemplate.tpl];
+            const components = tpl.component_templates || [];
+            
+            const newIdx = idx + direction;
+            if (newIdx < 0 || newIdx >= components.length) return;
+            
+            [components[idx], components[newIdx]] = [components[newIdx], components[idx]];
+            
+            markChanged();
+            renderTemplateStructure();
+        }
+        
+        // Update finding label from input
+        function updateFindingLabel(el, compId) {
+            const newValue = el.value.trim();
+            const loc = findComponentLocation(compId);
+            if (loc) {
+                componentMap[loc.modKey][loc.regKey].component_templates[compId].display_name = newValue;
+                markChanged();
+            }
         }
         
         // Update impression default text
@@ -1652,7 +1762,7 @@
             if (!currentTemplate) return;
             const tpl = templateMap.modalities[currentTemplate.mod].regions[currentTemplate.reg].templates[currentTemplate.tpl];
             if (!tpl.impression) tpl.impression = {};
-            tpl.impression.default_text = el.textContent.trim();
+            tpl.impression.default_text = el.value.trim();
             markChanged();
         }
         
@@ -1665,16 +1775,6 @@
             if (!tpl.custom_labels) tpl.custom_labels = {};
             tpl.custom_labels[field] = newValue;
             markChanged();
-        }
-        
-        // Update finding subheader label
-        function updateFindingLabel(el, compId) {
-            const newValue = el.textContent.trim().replace(/:$/, '');
-            const loc = findComponentLocation(compId);
-            if (loc) {
-                componentMap[loc.modKey][loc.regKey].component_templates[compId].display_name = newValue;
-                markChanged();
-            }
         }
         
         // Placeholder functions for section picklist editing

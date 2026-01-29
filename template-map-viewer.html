@@ -366,89 +366,386 @@
         }
         
         /* ========================================
-           TEMPLATE EDITOR STYLES
-           Template Builder-style document editor
+           TEMPLATE BUILDER EDITOR STYLES
+           Exact match to Template Builder dashboard
            ======================================== */
         
-        /* Editor container */
-        .text-editor {
+        /* Main editor container */
+        .te-editor {
             display: flex;
             flex-direction: column;
             height: 100%;
-            background: #0a0c10;
+            background: #0d1117;
         }
         
-        /* Header bar */
-        .editor-header-bar {
-            background: var(--bg-secondary);
-            padding: 8px 16px;
-            border-bottom: 1px solid var(--border);
+        /* Toolbar */
+        .te-toolbar {
+            background: #161b22;
+            padding: 8px 12px;
+            border-bottom: 1px solid #30363d;
             display: flex;
             align-items: center;
             gap: 12px;
         }
         
-        .editor-cpt {
+        .te-toolbar-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+        }
+        
+        .te-toolbar-cpt {
             font-family: "SF Mono", monospace;
             font-size: 13px;
             font-weight: 600;
-            color: var(--accent);
+            color: #58a6ff;
+            background: rgba(88, 166, 255, 0.1);
+            padding: 4px 8px;
+            border-radius: 4px;
         }
         
-        .editor-title {
+        .te-toolbar-title {
+            flex: 1;
+            min-width: 200px;
             font-size: 14px;
-            color: var(--text-primary);
-            font-weight: 500;
+            font-weight: 600;
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            padding: 4px 8px;
+            color: #e6edf3;
         }
         
-        .editor-spacer { flex: 1; }
+        .te-toolbar-title:hover {
+            border-color: #30363d;
+        }
         
-        .editor-actions {
+        .te-toolbar-title:focus {
+            outline: none;
+            border-color: #58a6ff;
+            background: #21262d;
+        }
+        
+        .te-toolbar-right {
             display: flex;
-            gap: 8px;
+            gap: 6px;
         }
         
-        /* Canvas area - document container */
-        .text-content {
+        .te-toolbar-btn {
+            padding: 6px 10px;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            background: #21262d;
+            color: #e6edf3;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        
+        .te-toolbar-btn:hover {
+            background: #1f2328;
+            border-color: #484f58;
+        }
+        
+        .te-btn-primary {
+            background: #58a6ff;
+            border-color: #58a6ff;
+            color: #fff;
+        }
+        
+        .te-btn-primary:hover {
+            background: #4c9aed;
+        }
+        
+        /* Insert bar */
+        .te-insert-bar {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: #21262d;
+            border-bottom: 1px solid #30363d;
+        }
+        
+        .te-insert-label {
+            font-size: 11px;
+            color: #6e7681;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .te-insert-btn {
+            padding: 4px 8px;
+            border: none;
+            border-radius: 3px;
+            background: transparent;
+            color: #8b949e;
+            cursor: pointer;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .te-insert-btn:hover {
+            background: #1f2328;
+            color: #e6edf3;
+        }
+        
+        .te-insert-sep {
+            width: 1px;
+            height: 16px;
+            background: #30363d;
+            margin: 0 4px;
+        }
+        
+        .te-insert-hint {
+            font-size: 11px;
+            color: #6e7681;
+            margin-left: auto;
+        }
+        
+        /* Canvas area */
+        .te-canvas {
             flex: 1;
             overflow-y: auto;
-            padding: 20px;
+            padding: 16px;
             background: #0a0c10;
         }
         
-        /* The template document - paper-like container */
-        .text-document {
+        /* The document - paper style */
+        .te-document {
             max-width: 750px;
             margin: 0 auto;
-            padding: 24px 28px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
+            padding: 20px 24px;
+            background: #161b22;
+            border: 1px solid #30363d;
             border-radius: 6px;
             font-family: 'Segoe UI', Arial, sans-serif;
             font-size: 13px;
             line-height: 1.6;
-            color: var(--text-primary);
-            min-height: 500px;
+            color: #e6edf3;
+            min-height: 400px;
+            white-space: pre-wrap;
         }
         
-        .text-document:focus-within {
-            border-color: var(--accent);
+        .te-document:focus-within {
+            border-color: #58a6ff;
         }
         
-        /* Text line - each field on its own line */
-        .text-line {
-            margin-bottom: 4px;
+        /* Heading H1 (section headers) */
+        .te-heading {
+            display: inline-block;
+            padding: 0 2px;
+            border-radius: 3px;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .te-heading:hover {
+            background: rgba(88, 166, 255, 0.10);
+        }
+        
+        .te-heading-h1 {
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            color: #58a6ff;
+        }
+        
+        /* Field label */
+        .te-label {
+            color: #8b949e;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .te-label:hover {
+            color: #e6edf3;
+        }
+        
+        /* Merge field (yellow) */
+        .te-field {
+            display: inline;
+            padding: 1px 4px;
+            margin: 0 1px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: inherit;
+            user-select: none;
+        }
+        
+        .te-field:hover {
+            filter: brightness(1.2);
+        }
+        
+        .te-field-merge {
+            background: rgba(210, 153, 34, 0.2);
+            border: 1px solid #d29922;
+            color: #d29922;
+        }
+        
+        /* Picklist (green) */
+        .te-picklist {
+            display: inline;
+            cursor: pointer;
+            user-select: none;
+            background: rgba(63, 185, 80, 0.08);
+            border-bottom: 1px dashed #3fb950;
+            padding: 1px 3px;
+            border-radius: 2px;
+        }
+        
+        .te-picklist:hover {
+            background: rgba(63, 185, 80, 0.18);
+            border-bottom-style: solid;
+        }
+        
+        .te-picklist.active {
+            background: rgba(63, 185, 80, 0.25);
+            border-bottom: 2px solid #3fb950;
+        }
+        
+        .te-picklist-value {
+            color: #e6edf3;
+        }
+        
+        /* Finding row */
+        .te-finding-row {
             display: flex;
             align-items: baseline;
-            gap: 4px;
+            gap: 6px;
+            margin: 2px 0;
             padding: 2px 0;
         }
         
-        .text-line:hover {
-            background: rgba(255,255,255,0.02);
+        .te-finding-row:hover {
+            background: rgba(255, 255, 255, 0.02);
             border-radius: 3px;
         }
         
+        .te-finding-label {
+            min-width: 120px;
+        }
+        
+        .te-finding-actions {
+            margin-left: auto;
+            opacity: 0;
+            display: flex;
+            gap: 4px;
+            transition: opacity 0.15s;
+        }
+        
+        .te-finding-row:hover .te-finding-actions {
+            opacity: 1;
+        }
+        
+        .te-action-btn {
+            padding: 2px 6px;
+            background: #21262d;
+            border: 1px solid #30363d;
+            border-radius: 3px;
+            color: #8b949e;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        
+        .te-action-btn:hover {
+            background: #1f2328;
+            color: #e6edf3;
+        }
+        
+        .te-action-danger:hover {
+            background: rgba(248, 81, 73, 0.2);
+            color: #f85149;
+            border-color: #f85149;
+        }
+        
+        /* Add component button */
+        .te-add-component {
+            display: inline-block;
+            padding: 4px 8px;
+            border: 1px dashed #30363d;
+            border-radius: 4px;
+            background: transparent;
+            color: #8b949e;
+            cursor: pointer;
+            font-size: 11px;
+            margin: 6px 0;
+        }
+        
+        .te-add-component:hover {
+            border-color: #58a6ff;
+            color: #58a6ff;
+        }
+        
+        /* Impression area */
+        .te-impression-area {
+            min-height: 60px;
+            padding: 8px 10px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid #30363d;
+            border-radius: 4px;
+            margin-top: 4px;
+            outline: none;
+            line-height: 1.5;
+        }
+        
+        .te-impression-area:focus {
+            border-color: #58a6ff;
+            background: rgba(255, 255, 255, 0.04);
+        }
+        
+        /* Footer */
+        .te-footer {
+            background: #161b22;
+            border-top: 1px solid #30363d;
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .te-footer-btn {
+            padding: 6px 12px;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            background: #21262d;
+            color: #e6edf3;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        
+        .te-footer-btn:hover {
+            background: #1f2328;
+        }
+        
+        .te-btn-success {
+            background: #3fb950;
+            border-color: #3fb950;
+            color: #fff;
+        }
+        
+        .te-btn-success:hover {
+            background: #2ea043;
+        }
+        
+        .te-btn-danger {
+            background: transparent;
+            border-color: #f85149;
+            color: #f85149;
+        }
+        
+        .te-btn-danger:hover {
+            background: rgba(248, 81, 73, 0.2);
+        }
+        
+        .te-footer-spacer {
+            flex: 1;
+        }
+        
+        /* Legacy text-* classes kept for compatibility */
         .text-label {
             color: var(--text-secondary);
             font-weight: 600;
@@ -1650,100 +1947,76 @@
             
             const tpl = templateMap.modalities[currentTemplate.mod].regions[currentTemplate.reg].templates[currentTemplate.tpl];
             const components = tpl.component_templates || [];
+            const labels = tpl.custom_labels || {};
             
-            // Helper to create merge field link
-            const mergeField = (name) => `<span class="merge-link">${name}</span>`;
+            // Build Template Builder-style editor
+            let html = `<div class="te-editor">`;
             
-            // Helper to create picklist link
-            const picklistLink = (id, name, count, onclick, selected = false) => 
-                `<span class="picklist-link${selected ? ' selected' : ''}" onclick="${onclick}">${name}</span>`;
-            
-            // Build clean text editor
-            let html = `<div class="text-editor">`;
-            
-            // Simple header
-            html += `<div class="editor-header-bar">
-                <span class="editor-cpt">${tpl.primary_cpt}</span>
-                <span class="editor-title">${tpl.description}</span>
-                <div class="editor-spacer"></div>
-                <div class="editor-actions">
-                    <button class="btn" onclick="duplicateCurrentTemplate()">Duplicate</button>
-                    <button class="btn btn-primary" onclick="saveAllChanges()">Save</button>
+            // ═══════════════════════════════════════════════════════════
+            // TOOLBAR (Template Builder style)
+            // ═══════════════════════════════════════════════════════════
+            html += `<div class="te-toolbar">
+                <div class="te-toolbar-left">
+                    <span class="te-toolbar-cpt">${tpl.primary_cpt}</span>
+                    <input type="text" class="te-toolbar-title" value="${tpl.description}" 
+                        onchange="updateTemplateDescription(this.value)">
+                </div>
+                <div class="te-toolbar-right">
+                    <button class="te-toolbar-btn" onclick="duplicateCurrentTemplate()">Duplicate</button>
+                    <button class="te-toolbar-btn te-btn-primary" onclick="saveAllChanges()">Save</button>
                 </div>
             </div>`;
             
-            // Text document area
-            html += `<div class="text-content"><div class="text-document">`;
-            
-            // Get custom labels or use defaults
-            const labels = tpl.custom_labels || {};
-            
-            // Helper for editable section header
-            const sectionHeader = (defaultLabel, tag) => {
-                const label = labels[tag] || defaultLabel;
-                return `<div class="text-section">
-                    <input type="text" class="text-section-label" value="${label}" 
-                        onchange="updateSectionLabel('${tag}', this.value)" 
-                        data-tag="${tag}">
-                    <span class="text-section-tag">[${tag}]</span>
-                </div>`;
-            };
-            
-            // Helper for editable field label
-            const fieldLabel = (defaultLabel, tag) => {
-                const label = labels[tag] || defaultLabel;
-                return `<input type="text" class="text-label" value="${label}" 
-                    onchange="updateSectionLabel('${tag}', this.value)" 
-                    data-tag="${tag}"><span class="text-label-tag">[${tag}]</span>`;
-            };
+            // ═══════════════════════════════════════════════════════════
+            // INSERT TOOLBAR
+            // ═══════════════════════════════════════════════════════════
+            html += `<div class="te-insert-bar">
+                <span class="te-insert-label">Insert:</span>
+                <button class="te-insert-btn" onclick="openAddComponentModal()">
+                    <span style="color:#3fb950;">▤</span> Component
+                </button>
+                <span class="te-insert-sep"></span>
+                <span class="te-insert-hint">Click any <span style="color:#d29922;">merge field</span> or <span style="color:#3fb950;">picklist</span> to edit</span>
+            </div>`;
             
             // ═══════════════════════════════════════════════════════════
-            // DEMOGRAPHICS
+            // EDITOR CANVAS
             // ═══════════════════════════════════════════════════════════
-            html += sectionHeader('DEMOGRAPHICS:', 'section.demographics');
-            html += `<div class="text-line">${fieldLabel('Facility:', 'field.facility')} ${mergeField('Facility Name')}</div>`;
-            html += `<div class="text-line">${fieldLabel('Patient:', 'field.patient')} ${mergeField('Patient Name')}, ${mergeField('DOB/Age')}, ${mergeField('Sex')}</div>`;
-            html += `<div class="text-line">${fieldLabel('Referring:', 'field.referring')} ${mergeField('Referring Physician')}</div>`;
-            html += `<div class="text-line">${fieldLabel('Exam:', 'field.exam')} ${tpl.primary_cpt} ${tpl.description}</div>`;
+            html += `<div class="te-canvas">`;
+            html += `<div class="te-document">`;
             
-            // ═══════════════════════════════════════════════════════════
-            // CLINICAL INFORMATION
-            // ═══════════════════════════════════════════════════════════
-            html += sectionHeader('CLINICAL INFORMATION:', 'section.clinical');
-            html += `<div class="text-line">${fieldLabel('History:', 'field.history')} ${mergeField('HPI')} / ${mergeField('PMHx')}</div>`;
-            html += `<div class="text-line">${fieldLabel('Indication:', 'field.indication')} ${mergeField('Indication')}</div>`;
+            // --- DEMOGRAPHICS ---
+            html += `<span class="te-heading te-heading-h1" onclick="editHeading('section.demographics')">${labels['section.demographics'] || 'DEMOGRAPHICS'}</span>\n`;
+            html += `<span class="te-label" onclick="editHeading('field.facility')">${labels['field.facility'] || 'Facility:'}</span> <span class="te-field te-field-merge">Facility Name</span>\n`;
+            html += `<span class="te-label" onclick="editHeading('field.patient')">${labels['field.patient'] || 'Patient:'}</span> <span class="te-field te-field-merge">Patient Name</span>, <span class="te-field te-field-merge">DOB/Age</span>, <span class="te-field te-field-merge">Sex</span>\n`;
+            html += `<span class="te-label" onclick="editHeading('field.referring')">${labels['field.referring'] || 'Referring:'}</span> <span class="te-field te-field-merge">Referring Physician</span>\n`;
+            html += `<span class="te-label" onclick="editHeading('field.exam')">${labels['field.exam'] || 'Exam:'}</span> ${tpl.primary_cpt} ${tpl.description}\n\n`;
             
-            // ═══════════════════════════════════════════════════════════
-            // TECHNIQUE
-            // ═══════════════════════════════════════════════════════════
+            // --- CLINICAL INFORMATION ---
+            html += `<span class="te-heading te-heading-h1" onclick="editHeading('section.clinical')">${labels['section.clinical'] || 'CLINICAL INFORMATION'}</span>\n`;
+            html += `<span class="te-label" onclick="editHeading('field.history')">${labels['field.history'] || 'History:'}</span> <span class="te-field te-field-merge">HPI</span> / <span class="te-field te-field-merge">PMHx</span>\n`;
+            html += `<span class="te-label" onclick="editHeading('field.indication')">${labels['field.indication'] || 'Indication:'}</span> <span class="te-field te-field-merge">Indication</span>\n\n`;
+            
+            // --- TECHNIQUE ---
             const tecId = `TEC-${currentTemplate.mod}-${currentTemplate.reg}`;
             const contrastId = `CONTRAST-${currentTemplate.mod}`;
             const tecCount = templateMap._section_picklists?.[tecId]?.options?.length || 0;
             const contrastCount = templateMap._section_picklists?.[contrastId]?.options?.length || 0;
             
-            html += sectionHeader('TECHNIQUE:', 'section.technique');
-            html += `<div class="text-line">${fieldLabel('Procedure:', 'field.procedure')} ${picklistLink(tecId, tecId + ' (' + tecCount + ')', tecCount, 'editTechniquePicklist()')}</div>`;
-            html += `<div class="text-line">${fieldLabel('Contrast:', 'field.contrast')} ${picklistLink(contrastId, contrastId + ' (' + contrastCount + ')', contrastCount, 'editContrastPicklist()')}</div>`;
+            html += `<span class="te-heading te-heading-h1" onclick="editHeading('section.technique')">${labels['section.technique'] || 'TECHNIQUE'}</span>\n`;
+            html += `<span class="te-label" onclick="editHeading('field.procedure')">${labels['field.procedure'] || 'Procedure:'}</span> <span class="te-picklist" onclick="editTechniquePicklist()"><span class="te-picklist-value">${tecId}</span></span>\n`;
+            html += `<span class="te-label" onclick="editHeading('field.contrast')">${labels['field.contrast'] || 'Contrast:'}</span> <span class="te-picklist" onclick="editContrastPicklist()"><span class="te-picklist-value">${contrastId}</span></span>\n\n`;
             
-            // ═══════════════════════════════════════════════════════════
-            // COMPARISON
-            // ═══════════════════════════════════════════════════════════
-            html += sectionHeader('COMPARISON:', 'section.comparison');
-            html += `<div class="text-line">${mergeField('Prior Studies')}</div>`;
+            // --- COMPARISON ---
+            html += `<span class="te-heading te-heading-h1" onclick="editHeading('section.comparison')">${labels['section.comparison'] || 'COMPARISON'}</span>\n`;
+            html += `<span class="te-field te-field-merge">Prior Studies</span>\n\n`;
             
-            // ═══════════════════════════════════════════════════════════
-            // FINDINGS
-            // ═══════════════════════════════════════════════════════════
+            // --- FINDINGS ---
             const qualityId = `QUALITY-${currentTemplate.mod}`;
             const qualityCount = templateMap._section_picklists?.[qualityId]?.options?.length || 0;
             
-            html += sectionHeader('FINDINGS:', 'section.findings');
-            
-            // Quality
-            html += `<div class="text-finding">
-                <span class="text-finding-label">${fieldLabel('Quality:', 'field.quality')}</span>
-                <span class="text-finding-content">${picklistLink(qualityId, qualityId + ' (' + qualityCount + ')', qualityCount, 'editQualityPicklist()')}</span>
-            </div>`;
+            html += `<span class="te-heading te-heading-h1" onclick="editHeading('section.findings')">${labels['section.findings'] || 'FINDINGS'}</span>\n`;
+            html += `<span class="te-label" onclick="editHeading('field.quality')">${labels['field.quality'] || 'Quality:'}</span> <span class="te-picklist" onclick="editQualityPicklist()"><span class="te-picklist-value">${qualityId}</span></span>\n`;
             
             // Component findings
             components.forEach((compId, idx) => {
@@ -1751,56 +2024,73 @@
                 const picklists = comp ? Object.keys(comp.picklists || {}) : [];
                 const displayName = comp?.display_name || compId;
                 
-                let picklistsHtml = '';
+                html += `<div class="te-finding-row" data-comp="${compId}">`;
+                html += `<span class="te-label te-finding-label" onclick="editHeading('finding.${compId}')">${displayName}:</span> `;
+                
                 if (picklists.length > 0) {
-                    picklistsHtml = picklists.map(pk => {
+                    picklists.forEach((pk, pkIdx) => {
                         const pkData = comp.picklists[pk];
-                        const optCount = pkData.options?.length || 0;
                         const isSelected = currentComponent === compId && currentPicklist === pk;
-                        return picklistLink(pk, (pkData.display_name || pk) + ' (' + optCount + ')', optCount, `selectPicklist('${compId}', '${pk}')`, isSelected);
-                    }).join(', ');
+                        html += `<span class="te-picklist${isSelected ? ' active' : ''}" onclick="selectPicklist('${compId}', '${pk}')"><span class="te-picklist-value">${pkData.display_name || pk}</span></span>`;
+                        if (pkIdx < picklists.length - 1) html += ` `;
+                    });
                 } else {
-                    picklistsHtml = picklistLink(compId, compId + ' (0)', 0, `selectComponent('${compId}')`);
+                    html += `<span class="te-picklist" onclick="selectComponent('${compId}')"><span class="te-picklist-value">${compId}</span></span>`;
                 }
                 
-                html += `<div class="text-finding" data-comp="${compId}">
-                    <span class="text-finding-label">
-                        <input type="text" class="text-label" value="${displayName}:" 
-                            onchange="updateFindingLabel(this, '${compId}')" 
-                            data-tag="finding.${compId}">
-                        <span class="text-label-tag">[${compId}]</span>
-                    </span>
-                    <span class="text-finding-content">${picklistsHtml}</span>
-                    <span class="text-finding-actions">
-                        <span class="text-action-btn" onclick="moveComponent(${idx}, -1)" title="Move Up">↑</span>
-                        <span class="text-action-btn" onclick="moveComponent(${idx}, 1)" title="Move Down">↓</span>
-                        <span class="text-action-btn danger" onclick="removeComponentFromTemplate('${compId}')" title="Remove">×</span>
-                    </span>
-                </div>`;
+                html += `<span class="te-finding-actions">`;
+                html += `<button class="te-action-btn" onclick="moveComponent(${idx}, -1)" title="Move Up">↑</button>`;
+                html += `<button class="te-action-btn" onclick="moveComponent(${idx}, 1)" title="Move Down">↓</button>`;
+                html += `<button class="te-action-btn te-action-danger" onclick="removeComponentFromTemplate('${compId}')" title="Remove">×</button>`;
+                html += `</span>`;
+                html += `</div>`;
             });
             
-            html += `<span class="add-link" onclick="openAddComponentModal()">+ Add Finding Component</span>`;
+            html += `<button class="te-add-component" onclick="openAddComponentModal()">+ Add Finding</button>\n\n`;
             
-            // ═══════════════════════════════════════════════════════════
-            // IMPRESSION
-            // ═══════════════════════════════════════════════════════════
+            // --- IMPRESSION ---
             const defaultImpression = tpl.impression?.default_text || 'Normal exam.';
-            html += sectionHeader('IMPRESSION:', 'section.impression');
-            html += `<textarea class="text-impression" onchange="updateImpressionText(this)" placeholder="Enter impression...">${defaultImpression}</textarea>`;
+            html += `<span class="te-heading te-heading-h1" onclick="editHeading('section.impression')">${labels['section.impression'] || 'IMPRESSION'}</span>\n`;
+            html += `<div class="te-impression-area" contenteditable="true" onblur="updateImpressionFromDiv(this)">${defaultImpression}</div>`;
             
-            html += `</div></div>`; // Close text-document and text-content
+            html += `</div></div>`; // Close te-document and te-canvas
             
-            // Footer
-            html += `<div class="editor-footer">
-                <button class="btn btn-success" onclick="saveAllChanges()">Save Changes</button>
-                <button class="btn" onclick="renderTemplateStructure()">Reset</button>
-                <div class="footer-spacer"></div>
-                <button class="btn" style="color:var(--danger);" onclick="if(confirm('Delete this template?')) deleteTemplate()">Delete Template</button>
+            // ═══════════════════════════════════════════════════════════
+            // FOOTER
+            // ═══════════════════════════════════════════════════════════
+            html += `<div class="te-footer">
+                <button class="te-footer-btn te-btn-success" onclick="saveAllChanges()">Save Changes</button>
+                <button class="te-footer-btn" onclick="renderTemplateStructure()">Reset</button>
+                <div class="te-footer-spacer"></div>
+                <button class="te-footer-btn te-btn-danger" onclick="if(confirm('Delete this template?')) deleteTemplate()">Delete</button>
             </div>`;
             
-            html += `</div>`; // Close text-editor
+            html += `</div>`; // Close te-editor
             
             document.getElementById('template-structure').innerHTML = html;
+        }
+        
+        function updateImpressionFromDiv(el) {
+            if (!currentTemplate) return;
+            const tpl = templateMap.modalities[currentTemplate.mod].regions[currentTemplate.reg].templates[currentTemplate.tpl];
+            if (!tpl.impression) tpl.impression = {};
+            tpl.impression.default_text = el.innerText.trim();
+            markChanged();
+        }
+        
+        function updateTemplateDescription(value) {
+            if (!currentTemplate) return;
+            const tpl = templateMap.modalities[currentTemplate.mod].regions[currentTemplate.reg].templates[currentTemplate.tpl];
+            tpl.description = value.trim();
+            markChanged();
+        }
+        
+        function editHeading(tag) {
+            const newValue = prompt('Edit label:', tag);
+            if (newValue !== null) {
+                updateSectionLabel(tag, newValue);
+                renderTemplateStructure();
+            }
         }
         
         // Move component up/down in findings

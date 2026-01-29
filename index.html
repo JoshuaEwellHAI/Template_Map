@@ -752,6 +752,276 @@
             flex: 1;
         }
         
+        /* ════════════════════════════════════════════════════════════
+           WORD PROCESSOR EDITOR STYLES
+           ════════════════════════════════════════════════════════════ */
+        
+        .word-editor {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            background: #1e1e1e;
+        }
+        
+        /* Toolbar */
+        .word-toolbar {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 12px;
+            background: #2d2d2d;
+            border-bottom: 1px solid #404040;
+            flex-wrap: wrap;
+        }
+        
+        .word-toolbar-group {
+            position: relative;
+        }
+        
+        .word-tool {
+            padding: 4px 8px;
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 3px;
+            color: #ccc;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        
+        .word-tool:hover {
+            background: #3c3c3c;
+            border-color: #555;
+        }
+        
+        .word-tool-btn {
+            padding: 4px 12px;
+            background: #0078d4;
+            border: none;
+            border-radius: 3px;
+            color: #fff;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        
+        .word-tool-btn:hover {
+            background: #106ebe;
+        }
+        
+        .word-sep {
+            width: 1px;
+            height: 20px;
+            background: #404040;
+            margin: 0 6px;
+        }
+        
+        .word-toolbar-right {
+            margin-left: auto;
+        }
+        
+        .word-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            min-width: 150px;
+            background: #2d2d2d;
+            border: 1px solid #404040;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            z-index: 100;
+        }
+        
+        .word-toolbar-group:focus-within .word-dropdown,
+        .word-dropdown.open {
+            display: block;
+        }
+        
+        .word-dropdown-item {
+            padding: 6px 12px;
+            color: #ccc;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        
+        .word-dropdown-item:hover {
+            background: #3c3c3c;
+        }
+        
+        .word-dropdown-sep {
+            height: 1px;
+            background: #404040;
+            margin: 4px 0;
+        }
+        
+        /* Canvas / Page area */
+        .word-canvas {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            background: #1a1a1a;
+        }
+        
+        .word-page {
+            max-width: 816px; /* 8.5 inches at 96dpi */
+            min-height: 1056px; /* 11 inches */
+            margin: 0 auto;
+            padding: 48px 60px;
+            background: #fff;
+            color: #1a1a1a;
+            font-family: 'Segoe UI', 'Calibri', Arial, sans-serif;
+            font-size: 11pt;
+            line-height: 1.5;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        
+        /* Document content */
+        .word-title {
+            text-align: center;
+            font-size: 14pt;
+            font-weight: 700;
+            color: #0066cc;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #0066cc;
+        }
+        
+        .word-h1 {
+            font-size: 11pt;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #333;
+            margin: 16px 0 6px;
+            cursor: pointer;
+        }
+        
+        .word-h1:hover {
+            background: #e8f4ff;
+        }
+        
+        .word-tag {
+            font-size: 8pt;
+            font-weight: 400;
+            color: #888;
+            text-transform: none;
+        }
+        
+        .word-line {
+            margin: 2px 0;
+        }
+        
+        .word-label {
+            font-weight: 600;
+            color: #444;
+            cursor: pointer;
+        }
+        
+        .word-label:hover {
+            background: #e8f4ff;
+        }
+        
+        .word-merge {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 0 4px;
+            border-radius: 2px;
+            color: #856404;
+            font-size: 10pt;
+            cursor: pointer;
+        }
+        
+        .word-merge:hover {
+            background: #ffe69c;
+        }
+        
+        .word-pick {
+            background: #d4edda;
+            border: 1px solid #28a745;
+            padding: 0 4px;
+            border-radius: 2px;
+            color: #155724;
+            font-size: 10pt;
+            cursor: pointer;
+        }
+        
+        .word-pick:hover {
+            background: #b1dfbb;
+        }
+        
+        .word-pick.active {
+            background: #28a745;
+            color: #fff;
+        }
+        
+        .word-finding {
+            margin: 2px 0;
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+        
+        .word-finding:hover {
+            background: #f5f5f5;
+        }
+        
+        .word-finding:hover .word-actions {
+            opacity: 1;
+        }
+        
+        .word-actions {
+            opacity: 0;
+            margin-left: 8px;
+            transition: opacity 0.15s;
+        }
+        
+        .word-actions button {
+            padding: 0 4px;
+            background: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 2px;
+            color: #666;
+            cursor: pointer;
+            font-size: 10px;
+        }
+        
+        .word-actions button:hover {
+            background: #e0e0e0;
+        }
+        
+        .word-add {
+            color: #0066cc;
+            cursor: pointer;
+            font-size: 10pt;
+            margin: 8px 0;
+        }
+        
+        .word-add:hover {
+            text-decoration: underline;
+        }
+        
+        .word-impression {
+            min-height: 40px;
+            padding: 8px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            outline: none;
+        }
+        
+        .word-impression:focus {
+            border-color: #0066cc;
+            background: #fff;
+        }
+        
+        /* Status bar */
+        .word-statusbar {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 12px;
+            background: #2d2d2d;
+            border-top: 1px solid #404040;
+            font-size: 11px;
+            color: #888;
+        }
+        
         /* RTF Toolbar */
         .te-rtf-toolbar {
             display: flex;
@@ -2129,134 +2399,92 @@
             const components = tpl.component_templates || [];
             const labels = tpl.custom_labels || {};
             
-            // Build Template Builder-style editor
-            let html = `<div class="te-editor">`;
+            // Build Word-style editor
+            let html = `<div class="word-editor">`;
             
             // ═══════════════════════════════════════════════════════════
-            // TOOLBAR (Template Builder style)
+            // WORD TOOLBAR
             // ═══════════════════════════════════════════════════════════
-            html += `<div class="te-toolbar">
-                <div class="te-toolbar-left">
-                    <span class="te-toolbar-cpt">${tpl.primary_cpt}</span>
-                    <input type="text" class="te-toolbar-title" value="${tpl.description}" 
-                        onchange="updateTemplateDescription(this.value)">
+            html += `<div class="word-toolbar">
+                <div class="word-toolbar-group">
+                    <button class="word-tool" onclick="toggleDropdown('textDD')" title="Insert Text Field">☐ Text ▾</button>
+                    <div class="word-dropdown" id="textDD">
+                        <div class="word-dropdown-item" onclick="insertTextField('text'); closeDropdowns();">Text Field</div>
+                        <div class="word-dropdown-item" onclick="insertTextField('size'); closeDropdowns();">Size (mm/cm)</div>
+                        <div class="word-dropdown-item" onclick="insertTextField('location'); closeDropdowns();">Location</div>
+                    </div>
                 </div>
-                <div class="te-toolbar-right">
-                    <button class="te-toolbar-btn" onclick="duplicateCurrentTemplate()">Duplicate</button>
-                    <button class="te-toolbar-btn te-btn-primary" onclick="saveAllChanges()">Save</button>
+                <div class="word-toolbar-group">
+                    <button class="word-tool" style="color:#3fb950;" onclick="toggleDropdown('pickDD')" title="Insert Picklist">▤ Pick ▾</button>
+                    <div class="word-dropdown" id="pickDD">
+                        <div class="word-dropdown-item" onclick="openAddComponentModal(); closeDropdowns();">Add Finding Component</div>
+                        <div class="word-dropdown-sep"></div>
+                        <div class="word-dropdown-item" onclick="insertPicklist('normal'); closeDropdowns();">Normal/Abnormal</div>
+                    </div>
+                </div>
+                <span class="word-sep"></span>
+                <button class="word-tool" onclick="insertHeadingH1()" title="Header">H1</button>
+                <button class="word-tool" onclick="insertHeadingH2()" title="Subheader">H2</button>
+                <span class="word-sep"></span>
+                <div class="word-toolbar-group">
+                    <button class="word-tool" style="color:#d29922;" onclick="toggleDropdown('mergeDD')" title="Insert Merge Field">⚡ Merge ▾</button>
+                    <div class="word-dropdown" id="mergeDD">
+                        <div class="word-dropdown-item" onclick="insertMergeField('Patient Name'); closeDropdowns();">Patient Name</div>
+                        <div class="word-dropdown-item" onclick="insertMergeField('DOB'); closeDropdowns();">DOB/Age</div>
+                        <div class="word-dropdown-item" onclick="insertMergeField('Sex'); closeDropdowns();">Sex</div>
+                        <div class="word-dropdown-sep"></div>
+                        <div class="word-dropdown-item" onclick="insertMergeField('Referring'); closeDropdowns();">Referring Physician</div>
+                        <div class="word-dropdown-item" onclick="insertMergeField('Facility'); closeDropdowns();">Facility Name</div>
+                        <div class="word-dropdown-sep"></div>
+                        <div class="word-dropdown-item" onclick="insertMergeField('Priors'); closeDropdowns();">Prior Studies</div>
+                    </div>
+                </div>
+                <button class="word-tool" style="color:#a5a5ff;" onclick="openAutotextModal()" title="AutoText">🔗 AutoText</button>
+                <div class="word-toolbar-right">
+                    <button class="word-tool-btn" onclick="saveAllChanges()">Save</button>
                 </div>
             </div>`;
             
             // ═══════════════════════════════════════════════════════════
-            // RTF TOOLBAR (Template Builder style)
+            // DOCUMENT AREA (Word-style)
             // ═══════════════════════════════════════════════════════════
-            html += `<div class="te-rtf-toolbar">
-                <div class="te-dropdown" id="textDD">
-                    <button class="te-toolbar-item" onclick="toggleDropdown('textDD')">
-                        <span class="te-icon">☐</span> Text <span class="te-caret">▾</span>
-                    </button>
-                    <div class="te-dropdown-menu">
-                        <div class="te-dropdown-item" onclick="insertTextField('text')">Text Field</div>
-                        <div class="te-dropdown-item" onclick="insertTextField('size')">Size (mm/cm)</div>
-                        <div class="te-dropdown-item" onclick="insertTextField('location')">Location</div>
-                        <div class="te-dropdown-item" onclick="insertTextField('laterality')">Laterality</div>
-                    </div>
-                </div>
-                <div class="te-dropdown" id="pickDD">
-                    <button class="te-toolbar-item" onclick="toggleDropdown('pickDD')">
-                        <span class="te-icon" style="color:#3fb950;">▤</span> Pick <span class="te-caret">▾</span>
-                    </button>
-                    <div class="te-dropdown-menu">
-                        <div class="te-dropdown-item" onclick="openAddComponentModal(); closeDropdowns();">Add Component</div>
-                        <div class="te-dropdown-divider"></div>
-                        <div class="te-dropdown-item" onclick="insertPicklist('normal_abnormal'); closeDropdowns();">Normal/Abnormal</div>
-                        <div class="te-dropdown-item" onclick="insertPicklist('impression'); closeDropdowns();">Impression</div>
-                    </div>
-                </div>
-                <span class="te-toolbar-sep"></span>
-                <button class="te-toolbar-item" onclick="insertHeadingH1()" title="Insert Header">H1</button>
-                <button class="te-toolbar-item" onclick="insertHeadingH2()" title="Insert Subheader">H2</button>
-                <span class="te-toolbar-sep"></span>
-                <div class="te-dropdown" id="mergeDD">
-                    <button class="te-toolbar-item" onclick="toggleDropdown('mergeDD')">
-                        <span class="te-icon" style="color:#d29922;">⚡</span> Merge <span class="te-caret">▾</span>
-                    </button>
-                    <div class="te-dropdown-menu">
-                        <div class="te-dropdown-item" onclick="insertMergeField('Patient Name'); closeDropdowns();">Patient Name</div>
-                        <div class="te-dropdown-item" onclick="insertMergeField('DOB/Age'); closeDropdowns();">DOB/Age</div>
-                        <div class="te-dropdown-item" onclick="insertMergeField('Sex'); closeDropdowns();">Sex</div>
-                        <div class="te-dropdown-item" onclick="insertMergeField('MRN'); closeDropdowns();">MRN</div>
-                        <div class="te-dropdown-divider"></div>
-                        <div class="te-dropdown-item" onclick="insertMergeField('Referring Physician'); closeDropdowns();">Referring Physician</div>
-                        <div class="te-dropdown-item" onclick="insertMergeField('Facility Name'); closeDropdowns();">Facility Name</div>
-                        <div class="te-dropdown-divider"></div>
-                        <div class="te-dropdown-item" onclick="insertMergeField('Prior Studies'); closeDropdowns();">Prior Studies</div>
-                        <div class="te-dropdown-item" onclick="insertMergeField('Indication'); closeDropdowns();">Indication</div>
-                    </div>
-                </div>
-                <button class="te-toolbar-item" onclick="openAutotextModal()">
-                    <span class="te-icon" style="color:#a5a5ff;">🔗</span> AutoText
-                </button>
-            </div>`;
+            html += `<div class="word-canvas">`;
+            html += `<div class="word-page" id="word-document">`;
             
-            // ═══════════════════════════════════════════════════════════
-            // EDITOR CANVAS
-            // ═══════════════════════════════════════════════════════════
-            html += `<div class="te-canvas">`;
-            html += `<div class="te-document">`;
+            // --- REPORT TITLE ---
+            html += `<div class="word-title">Frontier Radiology Report</div>`;
             
-            // --- REPORT HEADER ---
-            html += `<div class="te-report-header">Frontier Radiology Report</div>\n\n`;
+            // --- Build document content ---
+            const L = (tag, def) => labels[tag] || def;
+            const D = (tag, def) => labels[tag + '.desc'] || def;
             
-            // Helper for section headers with descriptor
-            const sectionHeader = (tag, defaultLabel, descriptor) => {
-                const label = labels[tag] || defaultLabel;
-                const desc = labels[tag + '.desc'] || descriptor;
-                return `<div class="te-section-header">
-                    <span class="te-heading te-heading-h1" onclick="editHeading('${tag}')">${label}</span>
-                    <span class="te-descriptor" onclick="editDescriptor('${tag}')" title="Click to edit descriptor">[${desc}]</span>
-                </div>`;
-            };
+            // DEMOGRAPHICS
+            html += `<p class="word-h1" onclick="editHeading('section.demographics')">${L('section.demographics', 'DEMOGRAPHICS')} <span class="word-tag">[${D('section.demographics', 'patient_info')}]</span></p>`;
+            html += `<p class="word-line"><span class="word-label" onclick="editHeading('field.facility')">${L('field.facility', 'Facility:')}</span> <span class="word-merge">Facility Name</span></p>`;
+            html += `<p class="word-line"><span class="word-label" onclick="editHeading('field.patient')">${L('field.patient', 'Patient:')}</span> <span class="word-merge">Patient Name</span>, <span class="word-merge">DOB/Age</span>, <span class="word-merge">Sex</span></p>`;
+            html += `<p class="word-line"><span class="word-label" onclick="editHeading('field.referring')">${L('field.referring', 'Referring:')}</span> <span class="word-merge">Referring Physician</span></p>`;
+            html += `<p class="word-line"><span class="word-label" onclick="editHeading('field.exam')">${L('field.exam', 'Exam:')}</span> ${tpl.primary_cpt} ${tpl.description}</p>`;
             
-            // Helper for field labels with descriptor
-            const fieldWithDesc = (tag, defaultLabel, descriptor) => {
-                const label = labels[tag] || defaultLabel;
-                const desc = labels[tag + '.desc'] || descriptor;
-                return `<span class="te-label-group"><span class="te-label" onclick="editHeading('${tag}')">${label}</span><span class="te-field-desc" onclick="editDescriptor('${tag}')" title="Click to edit">[${desc}]</span></span>`;
-            };
+            // CLINICAL INFORMATION
+            html += `<p class="word-h1" onclick="editHeading('section.clinical')">${L('section.clinical', 'CLINICAL INFORMATION')} <span class="word-tag">[${D('section.clinical', 'clinical_context')}]</span></p>`;
+            html += `<p class="word-line"><span class="word-label" onclick="editHeading('field.history')">${L('field.history', 'History:')}</span> <span class="word-merge">HPI</span> / <span class="word-merge">PMHx</span></p>`;
+            html += `<p class="word-line"><span class="word-label" onclick="editHeading('field.indication')">${L('field.indication', 'Indication:')}</span> <span class="word-merge">Indication</span></p>`;
             
-            // --- DEMOGRAPHICS ---
-            html += sectionHeader('section.demographics', 'DEMOGRAPHICS', 'patient_info');
-            html += `${fieldWithDesc('field.facility', 'Facility:', 'facility_name')} <span class="te-field te-field-merge">Facility Name</span>\n`;
-            html += `${fieldWithDesc('field.patient', 'Patient:', 'patient_demographics')} <span class="te-field te-field-merge">Patient Name</span>, <span class="te-field te-field-merge">DOB/Age</span>, <span class="te-field te-field-merge">Sex</span>\n`;
-            html += `${fieldWithDesc('field.referring', 'Referring:', 'referring_physician')} <span class="te-field te-field-merge">Referring Physician</span>\n`;
-            html += `${fieldWithDesc('field.exam', 'Exam:', 'procedure_code')} ${tpl.primary_cpt} ${tpl.description}\n\n`;
-            
-            // --- CLINICAL INFORMATION ---
-            html += sectionHeader('section.clinical', 'CLINICAL INFORMATION', 'clinical_context');
-            html += `${fieldWithDesc('field.history', 'History:', 'patient_history')} <span class="te-field te-field-merge">HPI</span> / <span class="te-field te-field-merge">PMHx</span>\n`;
-            html += `${fieldWithDesc('field.indication', 'Indication:', 'exam_indication')} <span class="te-field te-field-merge">Indication</span>\n\n`;
-            
-            // --- TECHNIQUE ---
+            // TECHNIQUE
             const tecId = `TEC-${currentTemplate.mod}-${currentTemplate.reg}`;
             const contrastId = `CONTRAST-${currentTemplate.mod}`;
-            const tecCount = templateMap._section_picklists?.[tecId]?.options?.length || 0;
-            const contrastCount = templateMap._section_picklists?.[contrastId]?.options?.length || 0;
+            html += `<p class="word-h1" onclick="editHeading('section.technique')">${L('section.technique', 'TECHNIQUE')} <span class="word-tag">[${D('section.technique', 'exam_technique')}]</span></p>`;
+            html += `<p class="word-line"><span class="word-label" onclick="editHeading('field.procedure')">${L('field.procedure', 'Procedure:')}</span> <span class="word-pick" onclick="editTechniquePicklist()">${tecId}</span></p>`;
+            html += `<p class="word-line"><span class="word-label" onclick="editHeading('field.contrast')">${L('field.contrast', 'Contrast:')}</span> <span class="word-pick" onclick="editContrastPicklist()">${contrastId}</span></p>`;
             
-            html += sectionHeader('section.technique', 'TECHNIQUE', 'exam_technique');
-            html += `${fieldWithDesc('field.procedure', 'Procedure:', 'modality_protocol')} <span class="te-picklist" onclick="editTechniquePicklist()"><span class="te-picklist-value">${tecId}</span></span>\n`;
-            html += `${fieldWithDesc('field.contrast', 'Contrast:', 'contrast_agent')} <span class="te-picklist" onclick="editContrastPicklist()"><span class="te-picklist-value">${contrastId}</span></span>\n\n`;
+            // COMPARISON
+            html += `<p class="word-h1" onclick="editHeading('section.comparison')">${L('section.comparison', 'COMPARISON')} <span class="word-tag">[${D('section.comparison', 'prior_studies')}]</span></p>`;
+            html += `<p class="word-line"><span class="word-merge">Prior Studies</span></p>`;
             
-            // --- COMPARISON ---
-            html += sectionHeader('section.comparison', 'COMPARISON', 'prior_studies');
-            html += `<span class="te-field te-field-merge">Prior Studies</span>\n\n`;
-            
-            // --- FINDINGS ---
+            // FINDINGS
             const qualityId = `QUALITY-${currentTemplate.mod}`;
-            const qualityCount = templateMap._section_picklists?.[qualityId]?.options?.length || 0;
-            
-            html += sectionHeader('section.findings', 'FINDINGS', 'anatomic_findings');
-            html += `${fieldWithDesc('field.quality', 'Quality:', 'image_quality')} <span class="te-picklist" onclick="editQualityPicklist()"><span class="te-picklist-value">${qualityId}</span></span>\n`;
+            html += `<p class="word-h1" onclick="editHeading('section.findings')">${L('section.findings', 'FINDINGS')} <span class="word-tag">[${D('section.findings', 'anatomic_findings')}]</span></p>`;
+            html += `<p class="word-line"><span class="word-label" onclick="editHeading('field.quality')">${L('field.quality', 'Quality:')}</span> <span class="word-pick" onclick="editQualityPicklist()">${qualityId}</span></p>`;
             
             // Component findings
             components.forEach((compId, idx) => {
@@ -2264,48 +2492,45 @@
                 const picklists = comp ? Object.keys(comp.picklists || {}) : [];
                 const displayName = comp?.display_name || compId;
                 
-                html += `<div class="te-finding-row" data-comp="${compId}">`;
-                html += `<span class="te-label te-finding-label" onclick="editHeading('finding.${compId}')">${displayName}:</span> `;
-                
+                let pickHtml = '';
                 if (picklists.length > 0) {
-                    picklists.forEach((pk, pkIdx) => {
+                    pickHtml = picklists.map(pk => {
                         const pkData = comp.picklists[pk];
                         const isSelected = currentComponent === compId && currentPicklist === pk;
-                        html += `<span class="te-picklist${isSelected ? ' active' : ''}" onclick="selectPicklist('${compId}', '${pk}')"><span class="te-picklist-value">${pkData.display_name || pk}</span></span>`;
-                        if (pkIdx < picklists.length - 1) html += ` `;
-                    });
+                        return `<span class="word-pick${isSelected ? ' active' : ''}" onclick="selectPicklist('${compId}', '${pk}')">${pkData.display_name || pk}</span>`;
+                    }).join(' ');
                 } else {
-                    html += `<span class="te-picklist" onclick="selectComponent('${compId}')"><span class="te-picklist-value">${compId}</span></span>`;
+                    pickHtml = `<span class="word-pick" onclick="selectComponent('${compId}')">${compId}</span>`;
                 }
                 
-                html += `<span class="te-finding-actions">`;
-                html += `<button class="te-action-btn" onclick="moveComponent(${idx}, -1)" title="Move Up">↑</button>`;
-                html += `<button class="te-action-btn" onclick="moveComponent(${idx}, 1)" title="Move Down">↓</button>`;
-                html += `<button class="te-action-btn te-action-danger" onclick="removeComponentFromTemplate('${compId}')" title="Remove">×</button>`;
-                html += `</span>`;
-                html += `</div>`;
+                html += `<p class="word-finding" data-comp="${compId}">
+                    <span class="word-label" onclick="editHeading('finding.${compId}')">${displayName}:</span> ${pickHtml}
+                    <span class="word-actions">
+                        <button onclick="moveComponent(${idx}, -1)" title="Move Up">↑</button>
+                        <button onclick="moveComponent(${idx}, 1)" title="Move Down">↓</button>
+                        <button onclick="removeComponentFromTemplate('${compId}')" title="Remove">×</button>
+                    </span>
+                </p>`;
             });
             
-            html += `<button class="te-add-component" onclick="openAddComponentModal()">+ Add Finding</button>\n\n`;
+            html += `<p class="word-add" onclick="openAddComponentModal()">+ Add Finding</p>`;
             
-            // --- IMPRESSION ---
+            // IMPRESSION
             const defaultImpression = tpl.impression?.default_text || 'Normal exam.';
-            html += sectionHeader('section.impression', 'IMPRESSION', 'clinical_impression');
-            html += `<div class="te-impression-area" contenteditable="true" onblur="updateImpressionFromDiv(this)">${defaultImpression}</div>`;
+            html += `<p class="word-h1" onclick="editHeading('section.impression')">${L('section.impression', 'IMPRESSION')} <span class="word-tag">[${D('section.impression', 'clinical_impression')}]</span></p>`;
+            html += `<p class="word-impression" contenteditable="true" onblur="updateImpressionFromDiv(this)">${defaultImpression}</p>`;
             
-            html += `</div></div>`; // Close te-document and te-canvas
+            html += `</div></div>`; // Close word-page and word-canvas
             
             // ═══════════════════════════════════════════════════════════
-            // FOOTER
+            // STATUS BAR
             // ═══════════════════════════════════════════════════════════
-            html += `<div class="te-footer">
-                <button class="te-footer-btn te-btn-success" onclick="saveAllChanges()">Save Changes</button>
-                <button class="te-footer-btn" onclick="renderTemplateStructure()">Reset</button>
-                <div class="te-footer-spacer"></div>
-                <button class="te-footer-btn te-btn-danger" onclick="if(confirm('Delete this template?')) deleteTemplate()">Delete</button>
+            html += `<div class="word-statusbar">
+                <span>${tpl.primary_cpt} - ${tpl.description}</span>
+                <span>${components.length} findings</span>
             </div>`;
             
-            html += `</div>`; // Close te-editor
+            html += `</div>`; // Close word-editor
             
             document.getElementById('template-structure').innerHTML = html;
         }

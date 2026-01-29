@@ -1493,54 +1493,85 @@
                 ${tpl.description}
             </div>`;
             
-            // EXAM line
-            html += `<div class="report-line">
-                <span class="report-header" contenteditable="true" data-field="exam" onblur="updateHeaderLabel(this, 'exam')">EXAM:</span>
-                <span class="report-content">
-                    <span class="report-merge-field">Procedures</span>
-                </span>
+            // ═══════════════════════════════════════════════════════════
+            // SECTION 1: DEMOGRAPHICS
+            // ═══════════════════════════════════════════════════════════
+            html += `<div class="report-section">
+                <div class="report-section-title" contenteditable="true" data-field="demographics_title" onblur="updateHeaderLabel(this, 'demographics_title')">DEMOGRAPHICS:</div>
+                
+                <div class="report-line">
+                    <span class="report-header" contenteditable="true" data-field="facility" onblur="updateHeaderLabel(this, 'facility')">Facility:</span>
+                    <span class="report-content"><span class="report-merge-field">Facility Name</span></span>
+                </div>
+                <div class="report-line">
+                    <span class="report-header" contenteditable="true" data-field="patient" onblur="updateHeaderLabel(this, 'patient')">Patient:</span>
+                    <span class="report-content">
+                        <span class="report-merge-field">Patient Name</span>, 
+                        <span class="report-merge-field">DOB/Age</span>, 
+                        <span class="report-merge-field">Sex</span>
+                    </span>
+                </div>
+                <div class="report-line">
+                    <span class="report-header" contenteditable="true" data-field="referring" onblur="updateHeaderLabel(this, 'referring')">Referring:</span>
+                    <span class="report-content"><span class="report-merge-field">Referring Physician</span></span>
+                </div>
+                <div class="report-line">
+                    <span class="report-header" contenteditable="true" data-field="exam" onblur="updateHeaderLabel(this, 'exam')">Exam:</span>
+                    <span class="report-content">
+                        <span class="report-merge-field">Exam Type</span> — 
+                        <span class="report-merge-field">Exam Date</span>
+                        <span class="report-merge-field">Exam Time</span>
+                    </span>
+                </div>
             </div>`;
             
-            // DEMOGRAPHICS line
-            html += `<div class="report-line">
-                <span class="report-header" contenteditable="true" data-field="demographics" onblur="updateHeaderLabel(this, 'demographics')">DEMOGRAPHICS:</span>
-                <span class="report-content">
-                    <span class="report-merge-field">Patient Name</span>, 
-                    <span class="report-merge-field">Patient Age</span> year old 
-                    <span class="report-merge-field">Patient Sex</span>
-                </span>
+            // ═══════════════════════════════════════════════════════════
+            // SECTION 2: CLINICAL INFORMATION
+            // ═══════════════════════════════════════════════════════════
+            html += `<div class="report-section">
+                <div class="report-section-title" contenteditable="true" data-field="clinical_title" onblur="updateHeaderLabel(this, 'clinical_title')">CLINICAL INFORMATION:</div>
+                
+                <div class="report-line">
+                    <span class="report-header" contenteditable="true" data-field="hpi" onblur="updateHeaderLabel(this, 'hpi')">History:</span>
+                    <span class="report-content"><span class="report-merge-field">HPI / PMHx</span></span>
+                </div>
+                <div class="report-line">
+                    <span class="report-header" contenteditable="true" data-field="indication" onblur="updateHeaderLabel(this, 'indication')">Indication:</span>
+                    <span class="report-content"><span class="report-merge-field">Indication</span></span>
+                </div>
+                <div class="report-line">
+                    <span class="report-header" contenteditable="true" data-field="clinical_question" onblur="updateHeaderLabel(this, 'clinical_question')">Clinical Question:</span>
+                    <span class="report-content"><span class="report-merge-field">Clinical Question</span></span>
+                </div>
             </div>`;
             
-            // CLINICAL HISTORY line
-            html += `<div class="report-line">
-                <span class="report-header" contenteditable="true" data-field="clinical_history" onblur="updateHeaderLabel(this, 'clinical_history')">CLINICAL HISTORY:</span>
-                <span class="report-content">
-                    <span class="report-merge-field">PMHx</span>
-                </span>
-            </div>`;
-            
-            // INDICATION line
-            html += `<div class="report-line">
-                <span class="report-header" contenteditable="true" data-field="indication" onblur="updateHeaderLabel(this, 'indication')">INDICATION:</span>
-                <span class="report-content">
-                    <span class="report-merge-field">Indication</span>
-                </span>
-            </div>`;
-            
-            // TECHNIQUE section
+            // ═══════════════════════════════════════════════════════════
+            // SECTION 3: TECHNIQUE (Procedures and Materials)
+            // ═══════════════════════════════════════════════════════════
             html += `<div class="report-section">
                 <div class="report-section-title" contenteditable="true" data-field="technique_title" onblur="updateHeaderLabel(this, 'technique_title')">TECHNIQUE:</div>
                 <div class="report-line" style="margin-left:0;">
                     <span class="report-content">
                         <span class="report-component" onclick="editTechniquePicklist()">
-                            <span class="report-component-label">Picklist:</span>
+                            <span class="report-component-label">Procedure:</span>
                             TEC-${currentTemplate.mod}-${currentTemplate.reg}
+                        </span>
+                    </span>
+                </div>
+                <div class="report-line">
+                    <span class="report-header" contenteditable="true" data-field="contrast" onblur="updateHeaderLabel(this, 'contrast')">Contrast:</span>
+                    <span class="report-content">
+                        <span class="report-component" onclick="editContrastPicklist()">
+                            <span class="report-component-label">Picklist:</span>
+                            CONTRAST-${currentTemplate.mod}
                         </span>
                     </span>
                 </div>
             </div>`;
             
-            // COMPARISON section
+            // ═══════════════════════════════════════════════════════════
+            // SECTION 4: COMPARISON
+            // ═══════════════════════════════════════════════════════════
             html += `<div class="report-section">
                 <div class="report-section-title" contenteditable="true" data-field="comparison_title" onblur="updateHeaderLabel(this, 'comparison_title')">COMPARISON:</div>
                 <div class="report-line" style="margin-left:0;">
@@ -1554,7 +1585,9 @@
                 </div>
             </div>`;
             
-            // FINDINGS section
+            // ═══════════════════════════════════════════════════════════
+            // SECTION 5: FINDINGS
+            // ═══════════════════════════════════════════════════════════
             html += `<div class="report-section">
                 <div class="report-section-title" contenteditable="true" data-field="findings_title" onblur="updateHeaderLabel(this, 'findings_title')">FINDINGS:</div>
                 <div class="report-findings">`;
@@ -1606,12 +1639,57 @@
             
             html += `</div></div>`;
             
-            // IMPRESSION section
+            // ═══════════════════════════════════════════════════════════
+            // SECTION 6: QUALITY / LIMITATIONS
+            // ═══════════════════════════════════════════════════════════
+            html += `<div class="report-section">
+                <div class="report-section-title" contenteditable="true" data-field="quality_title" onblur="updateHeaderLabel(this, 'quality_title')">QUALITY / LIMITATIONS:</div>
+                <div class="report-line" style="margin-left:0;">
+                    <span class="report-content">
+                        <span class="report-component" onclick="editQualityPicklist()">
+                            <span class="report-component-label">Picklist:</span>
+                            QUALITY-${currentTemplate.mod}
+                        </span>
+                    </span>
+                </div>
+            </div>`;
+            
+            // ═══════════════════════════════════════════════════════════
+            // SECTION 7: IMPRESSION (Conclusion/Diagnosis)
+            // ═══════════════════════════════════════════════════════════
             html += `<div class="report-impression">
                 <div class="report-section-title" contenteditable="true" data-field="impression_title" onblur="updateHeaderLabel(this, 'impression_title')">IMPRESSION:</div>
-                <div class="report-line" style="margin-left:0;">
-                    <span class="report-impression-text">Normal exam.</span>
-                    <span class="report-ai-badge">AI Generated</span>
+                
+                <div class="report-line">
+                    <span class="report-header" contenteditable="true" data-field="diagnosis" onblur="updateHeaderLabel(this, 'diagnosis')">Diagnosis:</span>
+                    <span class="report-content">
+                        <span class="report-impression-text">Normal exam.</span>
+                        <span class="report-ai-badge">AI Generated</span>
+                    </span>
+                </div>
+                <div class="report-line">
+                    <span class="report-header" contenteditable="true" data-field="differential" onblur="updateHeaderLabel(this, 'differential')">Differential:</span>
+                    <span class="report-content">
+                        <span class="report-component" onclick="editDifferentialPicklist()">
+                            <span class="report-component-label">Picklist:</span>
+                            DIFF-${currentTemplate.mod}-${currentTemplate.reg}
+                        </span>
+                    </span>
+                </div>
+                <div class="report-line">
+                    <span class="report-header" contenteditable="true" data-field="recommendations" onblur="updateHeaderLabel(this, 'recommendations')">Recommendations:</span>
+                    <span class="report-content">
+                        <span class="report-component" onclick="editRecommendationsPicklist()">
+                            <span class="report-component-label">Picklist:</span>
+                            REC-followup
+                        </span>
+                    </span>
+                </div>
+                <div class="report-line">
+                    <span class="report-header" contenteditable="true" data-field="adverse_events" onblur="updateHeaderLabel(this, 'adverse_events')">Adverse Events:</span>
+                    <span class="report-content">
+                        <span class="report-merge-field">Adverse Events</span>
+                    </span>
                 </div>
             </div>`;
             
@@ -1641,13 +1719,29 @@
             }
         }
         
-        // Placeholder functions for technique/comparison editing
+        // Placeholder functions for section picklist editing
         function editTechniquePicklist() {
             showToast('Technique picklist editor - coming soon', 'info');
         }
         
         function editComparisonPicklist() {
             showToast('Comparison picklist editor - coming soon', 'info');
+        }
+        
+        function editContrastPicklist() {
+            showToast('Contrast/Materials picklist editor - coming soon', 'info');
+        }
+        
+        function editQualityPicklist() {
+            showToast('Quality/Limitations picklist editor - coming soon', 'info');
+        }
+        
+        function editDifferentialPicklist() {
+            showToast('Differential diagnosis picklist editor - coming soon', 'info');
+        }
+        
+        function editRecommendationsPicklist() {
+            showToast('Recommendations picklist editor - coming soon', 'info');
         }
         
         function findComponent(compId) {

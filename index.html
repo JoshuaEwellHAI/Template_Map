@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template Map</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        :root {
+            --bg-primary: #000000;
+            --bg-secondary: #0a0a0a;
+            --bg-tertiary: #111111;
+            --bg-hover: #1a1a1a;
+            --border: #222222;
+            --border-subtle: #1a1a1a;
+            --text-primary: #e7e9ea;
+            --text-secondary: #71767b;
+            --text-muted: #536471;
+            --accent: #1d9bf0;
+            --accent-dim: rgba(29, 155, 240, 0.1);
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.4;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        /* Header */
+        .header {
+            border-bottom: 1px solid var(--border);
+            padding: 10px 16px;
+            background: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            gap: 16px;
+        }
+        
+        .header h1 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+            white-space: nowrap;
+        }
+        
+        .stats-bar {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex: 1;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+        }
+        
+        .stat-value {
+            font-weight: 600;
+            color: var(--accent);
+        }
+        
+        .stat-label {
+            color: var(--text-muted);
+        }
+        
+        .stat-divider {
+            width: 1px;
+            height: 16px;
+            background: var(--border);
+        }
+        
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .version-badge {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+        
+        .save-btn {
+            display: none;
+            align-items: center;
+            gap: 6px;
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .save-btn:hover { opacity: 0.9; }
+        
+        /* 3-Panel Layout */
+        .panels {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        .panel {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            min-width: 200px;
+        }
+        
+        .panel-header {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg-secondary);
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .panel-header .count {
+            background: var(--bg-tertiary);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+        
+        .panel-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px;
+        }
+        
+        /* Resizer */
+        .resizer {
+            width: 4px;
+            background: var(--border);
+            cursor: col-resize;
+            flex-shrink: 0;
+            transition: background 0.15s;
+        }
+        
+        .resizer:hover, .resizer.active {
+            background: var(--accent);
+        }
+        
+        /* Tree Items */
+        .tree-node {
+            margin-bottom: 4px;
+        }
+        
+        .tree-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        .tree-header:hover {
+            background: var(--bg-hover);
+        }
+        
+        .tree-toggle {
+            width: 16px;
+            height: 16px;
+            color: var(--text-muted);
+            transition: transform 0.15s;
+        }
+        
+        .tree-toggle svg {
+            width: 16px;
+            height: 16px;
+        }
+        
+        .tree-node.open > .tree-header .tree-toggle {
+            transform: rotate(90deg);
+        }
+        
+        .tree-children {
+            display: none;
+            margin-left: 16px;
+        }
+        
+        .tree-node.open > .tree-children {
+            display: block;
+        }
+        
+        .tree-title {
+            flex: 1;
+            font-weight: 500;
+        }
+        
+        .tree-count {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+        
+        /* Template/Component Items */
+        .item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-bottom: 2px;
+            border: 1px solid transparent;
+        }
+        
+        .item:hover {
+            background: var(--bg-hover);
+            border-color: var(--border-subtle);
+        }
+        
+        .item.selected {
+            background: var(--accent-dim);
+            border-color: var(--accent);
+        }
+        
+        .item-code {
+            font-family: "SF Mono", monospace;
+            font-size: 12px;
+            color: var(--accent);
+            font-weight: 600;
+        }
+        
+        .item-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .item-badge {
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: var(--bg-tertiary);
+            color: var(--text-muted);
+        }
+        
+        /* Component Card */
+        .comp-card {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px 12px;
+            margin-bottom: 6px;
+            cursor: pointer;
+        }
+        
+        .comp-card:hover {
+            border-color: var(--accent);
+        }
+        
+        .comp-card.selected {
+            border-color: var(--accent);
+            background: var(--accent-dim);
+        }
+        
+        .comp-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 4px;
+        }
+        
+        .comp-card-id {
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--accent);
+        }
+        
+        .comp-card-name {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .comp-card-meta {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+        
+        .remove-btn {
+            background: none;
+            border: none;
+            color: var(--danger);
+            cursor: pointer;
+            padding: 4px;
+            opacity: 0.6;
+            display: flex;
+            align-items: center;
+        }
+        
+        .remove-btn:hover { opacity: 1; }
+        
+        .add-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            width: 100%;
+            padding: 10px;
+            border: 1px dashed var(--border);
+            border-radius: 8px;
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+        
+        .add-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        
+        /* Detail Section */
+        .detail-section {
+            margin-bottom: 16px;
+        }
+        
+        .detail-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 6px;
+        }
+        
+        .detail-value {
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+        
+        /* Picklist */
+        .picklist {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+        
+        .picklist-header {
+            padding: 10px 12px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+        
+        .picklist-header:hover {
+            background: var(--bg-hover);
+        }
+        
+        .picklist-title {
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text-primary);
+        }
+        
+        .picklist-meta {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+        
+        .picklist-options {
+            display: none;
+            padding: 8px;
+        }
+        
+        .picklist.open .picklist-options {
+            display: block;
+        }
+        
+        .option {
+            padding: 6px 10px;
+            border-radius: 4px;
+            margin-bottom: 4px;
+            font-size: 12px;
+            border-left: 3px solid var(--text-muted);
+        }
+        
+        .option[data-state="normal"] { border-left-color: #34d399; }
+        .option[data-state="abnormal"] { border-left-color: #fbbf24; }
+        .option[data-state="critical"] { border-left-color: #fb7185; }
+        .option[data-state="chronic"] { border-left-color: #a78bfa; }
+        .option[data-state="absent"] { border-left-color: #6b7280; }
+        .option[data-state="surgical"] { border-left-color: #60a5fa; }
+        .option[data-state="benign"] { border-left-color: #2dd4bf; }
+        
+        .option-state {
+            font-weight: 500;
+            font-size: 10px;
+            text-transform: uppercase;
+            margin-right: 6px;
+        }
+        
+        /* Routes/Dependencies */
+        .route-badge {
+            display: inline-block;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin: 2px;
+            cursor: pointer;
+        }
+        
+        .route-badge:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        
+        /* Empty State */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: var(--text-muted);
+            font-size: 13px;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .empty-state svg {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 12px;
+            opacity: 0.3;
+        }
+        
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 200;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .modal-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 24px;
+            line-height: 1;
+        }
+        
+        .modal-filters {
+            padding: 12px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .modal-filters select, .modal-filters input {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+        
+        .modal-filters input {
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .modal-list {
+            flex: 1;
+            overflow-y: auto;
+        }
+        
+        .modal-item {
+            padding: 12px 20px;
+            border-bottom: 1px solid var(--border-subtle);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-item:hover {
+            background: var(--bg-hover);
+        }
+        
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 300;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #444; }
+        
+        /* Loading */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: var(--text-muted);
+        }
+        
+        /* View Toggle */
+        .view-toggle {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+        
+        .view-toggle button {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .view-toggle button:hover {
+            background: var(--bg-hover);
+            color: var(--text-secondary);
+        }
+        
+        .view-toggle button.active {
+            background: var(--accent-dim);
+            color: var(--accent);
+        }
+        
+        /* Table View */
+        .template-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+        
+        .template-table th {
+            text-align: left;
+            padding: 8px 6px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            position: sticky;
+            top: 0;
+            background: var(--bg-secondary);
+        }
+        
+        .template-table td {
+            padding: 6px;
+            border-bottom: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+        }
+        
+        .template-table tr {
+            cursor: pointer;
+        }
+        
+        .template-table tr:hover td {
+            background: var(--bg-hover);
+        }
+        
+        .template-table tr.selected td {
+            background: var(--accent-dim);
+        }
+        
+        .template-table .cpt {
+            font-family: "SF Mono", monospace;
+            color: var(--accent);
+            font-weight: 600;
+        }
+        
+        .template-table .modality {
+            color: var(--text-muted);
+            font-size: 11px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Template Map</h1>
+        <div class="stats-bar" id="stats-bar">
+            <span class="loading">Loading...</span>
+        </div>
+        <div class="header-actions">
+            <span class="version-badge" id="version">v?.?</span>
+            <button class="save-btn" id="save-btn" onclick="saveAllChanges()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/></svg>
+                Save
+            </button>
+        </div>
+    </header>
+    
+    <div class="panels">
+        <!-- Panel 1: Templates -->
+        <div class="panel" id="panel-templates" style="width:30%">
+            <div class="panel-header">
+                <span>Templates</span>
+                <div style="display:flex;align-items:center;gap:8px">
+                    <div class="view-toggle">
+                        <button id="view-tree" class="active" onclick="setView('tree')" title="Tree View">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+                        </button>
+                        <button id="view-table" onclick="setView('table')" title="Table View">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                        </button>
+                    </div>
+                    <span class="count" id="template-count">0</span>
+                </div>
+            </div>
+            <div class="panel-content" id="template-content">
+                <div class="loading">Loading templates...</div>
+            </div>
+        </div>
+        
+        <div class="resizer" id="resizer1"></div>
+        
+        <!-- Panel 2: Components -->
+        <div class="panel" id="panel-components" style="width:30%">
+            <div class="panel-header">
+                <span>Components</span>
+                <span class="count" id="component-count">0</span>
+            </div>
+            <div class="panel-content" id="component-list">
+                <div class="empty-state">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                    <div>Select a template to view its components</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="resizer" id="resizer2"></div>
+        
+        <!-- Panel 3: Details/Dependencies -->
+        <div class="panel" id="panel-details" style="flex:1">
+            <div class="panel-header">
+                <span>Details</span>
+                <span class="count" id="detail-count">—</span>
+            </div>
+            <div class="panel-content" id="detail-view">
+                <div class="empty-state">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <div>Select a component to view its details</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Component Modal -->
+    <div class="modal-overlay" id="add-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Add Component</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-filters">
+                <select id="filter-modality" onchange="renderModalList()">
+                    <option value="">All Modalities</option>
+                </select>
+                <input type="text" id="filter-search" placeholder="Search components..." oninput="renderModalList()">
+            </div>
+            <div class="modal-list" id="modal-list"></div>
+        </div>
+    </div>
+
+    <script>
+        let templateMap = null;
+        let componentMap = null;
+        let currentTemplate = null;
+        let currentComponent = null;
+        let hasChanges = false;
+        let templateFileHandle = null;
+        let componentFileHandle = null;
+        let autosaveTimeout = null;
+        let currentView = localStorage.getItem('templateView') || 'tree';
+        
+        const chevronSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>`;
+        
+        // Load data
+        async function loadData() {
+            try {
+                const [tplResp, compResp] = await Promise.all([
+                    fetch('template-map.json'),
+                    fetch('component-map.json')
+                ]);
+                templateMap = await tplResp.json();
+                componentMap = await compResp.json();
+                renderAll();
+            } catch (error) {
+                document.getElementById('template-tree').innerHTML = 
+                    '<div class="empty-state" style="color:#fb7185;">Error loading JSON<br><small>Run: python -m http.server 8080</small></div>';
+            }
+        }
+        
+        function renderAll() {
+            renderStats();
+            renderTemplates();
+            populateModalFilters();
+            updateViewButtons();
+        }
+        
+        function setView(view) {
+            currentView = view;
+            localStorage.setItem('templateView', view);
+            renderTemplates();
+            updateViewButtons();
+        }
+        
+        function updateViewButtons() {
+            document.getElementById('view-tree').classList.toggle('active', currentView === 'tree');
+            document.getElementById('view-table').classList.toggle('active', currentView === 'table');
+        }
+        
+        function renderTemplates() {
+            if (currentView === 'table') {
+                renderTemplateTable();
+            } else {
+                renderTemplateTree();
+            }
+        }
+        
+        function renderStats() {
+            const stats = calculateStats();
+            const meta = templateMap._metadata;
+            const compMeta = componentMap?._metadata;
+            
+            document.getElementById('version').textContent = `v${meta?.version || '?'}`;
+            
+            document.getElementById('stats-bar').innerHTML = `
+                <div class="stat"><span class="stat-value">${stats.modalities}</span><span class="stat-label">Modalities</span></div>
+                <div class="stat-divider"></div>
+                <div class="stat"><span class="stat-value">${stats.totalRegions}</span><span class="stat-label">Regions</span></div>
+                <div class="stat-divider"></div>
+                <div class="stat"><span class="stat-value">${stats.totalTemplates}</span><span class="stat-label">Templates</span></div>
+                <div class="stat-divider"></div>
+                <div class="stat"><span class="stat-value">${stats.totalCPT}</span><span class="stat-label">CPT Codes</span></div>
+                <div class="stat-divider"></div>
+                <div class="stat"><span class="stat-value">${stats.totalComponentTemplates}</span><span class="stat-label">Components</span></div>
+                <div class="stat-divider"></div>
+                <div class="stat"><span class="stat-value">${stats.totalPicklists}</span><span class="stat-label">Picklists</span></div>
+                <div class="stat-divider"></div>
+                <div class="stat"><span class="stat-value">${stats.totalOptions}</span><span class="stat-label">Options</span></div>
+                <div class="stat-divider"></div>
+                <div class="stat"><span class="stat-value">${stats.totalDependencies}</span><span class="stat-label">Dependencies</span></div>
+            `;
+            
+            document.getElementById('template-count').textContent = stats.totalTemplates;
+        }
+        
+        function calculateStats() {
+            let totalTemplates = 0, totalCPT = 0, totalRegions = 0;
+            let totalComponentTemplates = 0, totalPicklists = 0, totalOptions = 0, totalDependencies = 0;
+            const modalities = Object.keys(templateMap.modalities).length;
+            
+            for (const modKey in templateMap.modalities) {
+                const mod = templateMap.modalities[modKey];
+                for (const regKey in mod.regions) {
+                    totalRegions++;
+                    const region = mod.regions[regKey];
+                    for (const tplKey in region.templates) {
+                        totalTemplates++;
+                        const tpl = region.templates[tplKey];
+                        totalCPT += Object.keys(tpl.variants || {}).length;
+                        totalDependencies += (tpl.component_templates || []).length;
+                    }
+                }
+            }
+            
+            if (componentMap) {
+                for (const modKey in componentMap) {
+                    if (modKey.startsWith('_') || typeof componentMap[modKey] !== 'object') continue;
+                    for (const regKey in componentMap[modKey]) {
+                        if (regKey === 'display_name') continue;
+                        const region = componentMap[modKey][regKey];
+                        if (!region?.component_templates) continue;
+                        for (const compId in region.component_templates) {
+                            totalComponentTemplates++;
+                            const comp = region.component_templates[compId];
+                            for (const pkKey in comp.picklists || {}) {
+                                totalPicklists++;
+                                totalOptions += (comp.picklists[pkKey].options || []).length;
+                            }
+                        }
+                    }
+                }
+            }
+            
+            return { modalities, totalRegions, totalTemplates, totalCPT, totalComponentTemplates, totalPicklists, totalOptions, totalDependencies };
+        }
+        
+        function renderTemplateTree() {
+            let html = '';
+            
+            for (const modKey in templateMap.modalities) {
+                const mod = templateMap.modalities[modKey];
+                const tplCount = Object.values(mod.regions).reduce((sum, r) => sum + Object.keys(r.templates).length, 0);
+                
+                html += `<div class="tree-node" data-mod="${modKey}">
+                    <div class="tree-header" onclick="toggleNode(this.parentElement)">
+                        <span class="tree-toggle">${chevronSvg}</span>
+                        <span class="tree-title">${mod.display_name}</span>
+                        <span class="tree-count">${tplCount}</span>
+                    </div>
+                    <div class="tree-children">`;
+                
+                for (const regKey in mod.regions) {
+                    const region = mod.regions[regKey];
+                    const templates = region.templates;
+                    const count = Object.keys(templates).length;
+                    
+                    html += `<div class="tree-node" data-reg="${regKey}">
+                        <div class="tree-header" onclick="toggleNode(this.parentElement)">
+                            <span class="tree-toggle">${chevronSvg}</span>
+                            <span class="tree-title">${region.display_name}</span>
+                            <span class="tree-count">${count}</span>
+                        </div>
+                        <div class="tree-children">`;
+                    
+                    for (const tplKey in templates) {
+                        const tpl = templates[tplKey];
+                        const compCount = (tpl.component_templates || []).length;
+                        
+                        html += `<div class="item" data-tpl="${tplKey}" data-mod="${modKey}" data-reg="${regKey}" onclick="selectTemplate(this)">
+                            <span class="item-code">${tpl.primary_cpt}</span>
+                            <span class="item-desc">${tpl.description}</span>
+                            <span class="item-badge">${compCount}</span>
+                        </div>`;
+                    }
+                    
+                    html += '</div></div>';
+                }
+                
+                html += '</div></div>';
+            }
+            
+            document.getElementById('template-content').innerHTML = html;
+        }
+        
+        function renderTemplateTable() {
+            let html = `<table class="template-table">
+                <thead>
+                    <tr>
+                        <th>CPT</th>
+                        <th>Description</th>
+                        <th>Modality</th>
+                        <th>Comp</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+            
+            for (const modKey in templateMap.modalities) {
+                const mod = templateMap.modalities[modKey];
+                for (const regKey in mod.regions) {
+                    const region = mod.regions[regKey];
+                    for (const tplKey in region.templates) {
+                        const tpl = region.templates[tplKey];
+                        const compCount = (tpl.component_templates || []).length;
+                        const selected = currentTemplate?.tpl === tplKey ? 'selected' : '';
+                        
+                        html += `<tr class="${selected}" data-tpl="${tplKey}" data-mod="${modKey}" data-reg="${regKey}" onclick="selectTemplate(this)">
+                            <td class="cpt">${tpl.primary_cpt}</td>
+                            <td>${tpl.description}</td>
+                            <td class="modality">${mod.display_name}</td>
+                            <td>${compCount}</td>
+                        </tr>`;
+                    }
+                }
+            }
+            
+            html += '</tbody></table>';
+            document.getElementById('template-content').innerHTML = html;
+        }
+        
+        function toggleNode(node) {
+            node.classList.toggle('open');
+        }
+        
+        function selectTemplate(el) {
+            // Clear selection in both views
+            document.querySelectorAll('#template-content .item, #template-content tr').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+            
+            const { mod, reg, tpl } = el.dataset;
+            currentTemplate = { mod, reg, tpl };
+            currentComponent = null;
+            
+            renderComponents();
+            document.getElementById('detail-view').innerHTML = `
+                <div class="empty-state">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <div>Select a component to view its details</div>
+                </div>
+            `;
+            document.getElementById('detail-count').textContent = '—';
+        }
+        
+        function renderComponents() {
+            if (!currentTemplate) return;
+            
+            const tpl = templateMap.modalities[currentTemplate.mod].regions[currentTemplate.reg].templates[currentTemplate.tpl];
+            const components = tpl.component_templates || [];
+            
+            document.getElementById('component-count').textContent = components.length;
+            
+            let html = '';
+            
+            components.forEach(compId => {
+                const comp = findComponent(compId);
+                const pkCount = comp ? Object.keys(comp.picklists || {}).length : 0;
+                const optCount = comp ? Object.values(comp.picklists || {}).reduce((s, p) => s + (p.options?.length || 0), 0) : 0;
+                
+                html += `<div class="comp-card" data-comp="${compId}" onclick="selectComponent(this, '${compId}')">
+                    <div class="comp-card-header">
+                        <span class="comp-card-id">${compId}</span>
+                        <button class="remove-btn" onclick="event.stopPropagation(); removeComponent('${compId}')" title="Remove">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M6 18L18 6M6 6l12 12"/></svg>
+                        </button>
+                    </div>
+                    <div class="comp-card-name">${comp?.display_name || 'Unknown'}</div>
+                    <div class="comp-card-meta">${pkCount} picklists · ${optCount} options</div>
+                </div>`;
+            });
+            
+            html += `<button class="add-btn" onclick="openModal()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M12 5v14M5 12h14"/></svg>
+                Add Component
+            </button>`;
+            
+            document.getElementById('component-list').innerHTML = html;
+        }
+        
+        function selectComponent(el, compId) {
+            document.querySelectorAll('.comp-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            currentComponent = compId;
+            renderComponentDetails(compId);
+        }
+        
+        function renderComponentDetails(compId) {
+            const comp = findComponent(compId);
+            if (!comp) {
+                document.getElementById('detail-view').innerHTML = '<div class="empty-state">Component not found</div>';
+                return;
+            }
+            
+            const picklists = comp.picklists || {};
+            const pkCount = Object.keys(picklists).length;
+            const routes = comp.routes_to || [];
+            
+            document.getElementById('detail-count').textContent = `${pkCount} picklists`;
+            
+            let html = `
+                <div class="detail-section">
+                    <div class="detail-label">Component ID</div>
+                    <div class="detail-value" style="color:var(--accent);font-family:monospace">${compId}</div>
+                </div>
+                <div class="detail-section">
+                    <div class="detail-label">Display Name</div>
+                    <div class="detail-value">${comp.display_name}</div>
+                </div>
+                ${comp.description ? `<div class="detail-section">
+                    <div class="detail-label">Description</div>
+                    <div class="detail-value" style="color:var(--text-secondary);font-size:13px">${comp.description}</div>
+                </div>` : ''}
+                <div class="detail-section">
+                    <div class="detail-label">Used By (${routes.length} templates)</div>
+                    <div style="margin-top:4px">
+                        ${routes.map(r => `<span class="route-badge" onclick="navigateToTemplate('${r}')">${r}</span>`).join('')}
+                    </div>
+                </div>
+                <div class="detail-section">
+                    <div class="detail-label">Picklists (${pkCount})</div>
+                </div>
+            `;
+            
+            for (const pkKey in picklists) {
+                const pk = picklists[pkKey];
+                const options = pk.options || [];
+                
+                html += `<div class="picklist" onclick="this.classList.toggle('open')">
+                    <div class="picklist-header">
+                        <span class="picklist-title">${pk.display_name || pkKey}</span>
+                        <span class="picklist-meta">${options.length} options${pk.multiselect ? ' · multi' : ''}</span>
+                    </div>
+                    <div class="picklist-options">`;
+                
+                options.forEach(opt => {
+                    html += `<div class="option" data-state="${opt.state}">
+                        <span class="option-state" style="color:inherit">${opt.state}</span>
+                        ${opt.text}
+                    </div>`;
+                });
+                
+                html += '</div></div>';
+            }
+            
+            document.getElementById('detail-view').innerHTML = html;
+        }
+        
+        function findComponent(compId) {
+            for (const modKey in componentMap) {
+                if (modKey.startsWith('_')) continue;
+                const mod = componentMap[modKey];
+                if (typeof mod !== 'object') continue;
+                for (const regKey in mod) {
+                    if (regKey === 'display_name') continue;
+                    const region = mod[regKey];
+                    if (region?.component_templates?.[compId]) {
+                        return region.component_templates[compId];
+                    }
+                }
+            }
+            return null;
+        }
+        
+        function navigateToTemplate(tplKey) {
+            for (const modKey in templateMap.modalities) {
+                const mod = templateMap.modalities[modKey];
+                for (const regKey in mod.regions) {
+                    if (mod.regions[regKey].templates[tplKey]) {
+                        if (currentView === 'tree') {
+                            // Expand tree nodes
+                            const modNode = document.querySelector(`.tree-node[data-mod="${modKey}"]`);
+                            const regNode = modNode?.querySelector(`[data-reg="${regKey}"]`);
+                            if (modNode) modNode.classList.add('open');
+                            if (regNode) regNode.classList.add('open');
+                        }
+                        
+                        // Select template
+                        setTimeout(() => {
+                            const el = document.querySelector(`[data-tpl="${tplKey}"]`);
+                            if (el) {
+                                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                selectTemplate(el);
+                            }
+                        }, 100);
+                        return;
+                    }
+                }
+            }
+        }
+        
+        // Component management
+        function removeComponent(compId) {
+            if (!currentTemplate) return;
+            const tpl = templateMap.modalities[currentTemplate.mod].regions[currentTemplate.reg].templates[currentTemplate.tpl];
+            tpl.component_templates = (tpl.component_templates || []).filter(c => c !== compId);
+            
+            // Update routes_to
+            const comp = findComponent(compId);
+            if (comp?.routes_to) {
+                comp.routes_to = comp.routes_to.filter(r => r !== currentTemplate.tpl);
+            }
+            
+            markChanged();
+            renderComponents();
+            renderStats();
+        }
+        
+        function addComponent(compId) {
+            if (!currentTemplate) return;
+            const tpl = templateMap.modalities[currentTemplate.mod].regions[currentTemplate.reg].templates[currentTemplate.tpl];
+            if (!tpl.component_templates) tpl.component_templates = [];
+            if (!tpl.component_templates.includes(compId)) {
+                tpl.component_templates.push(compId);
+                
+                // Update routes_to
+                const comp = findComponent(compId);
+                if (comp) {
+                    if (!comp.routes_to) comp.routes_to = [];
+                    if (!comp.routes_to.includes(currentTemplate.tpl)) {
+                        comp.routes_to.push(currentTemplate.tpl);
+                    }
+                }
+                
+                markChanged();
+            }
+            closeModal();
+            renderComponents();
+            renderStats();
+        }
+        
+        // Modal
+        function openModal() {
+            document.getElementById('add-modal').style.display = 'flex';
+            renderModalList();
+        }
+        
+        function closeModal() {
+            document.getElementById('add-modal').style.display = 'none';
+        }
+        
+        function populateModalFilters() {
+            const modalities = new Set();
+            for (const modKey in componentMap) {
+                if (!modKey.startsWith('_') && componentMap[modKey]?.display_name) {
+                    modalities.add(modKey);
+                }
+            }
+            
+            const select = document.getElementById('filter-modality');
+            select.innerHTML = '<option value="">All Modalities</option>';
+            modalities.forEach(m => {
+                select.innerHTML += `<option value="${m}">${componentMap[m].display_name}</option>`;
+            });
+        }
+        
+        function renderModalList() {
+            const modalityFilter = document.getElementById('filter-modality').value;
+            const searchFilter = document.getElementById('filter-search').value.toLowerCase();
+            
+            const currentComps = currentTemplate 
+                ? (templateMap.modalities[currentTemplate.mod].regions[currentTemplate.reg].templates[currentTemplate.tpl].component_templates || [])
+                : [];
+            
+            let html = '';
+            
+            for (const modKey in componentMap) {
+                if (modKey.startsWith('_')) continue;
+                if (modalityFilter && modKey !== modalityFilter) continue;
+                
+                const mod = componentMap[modKey];
+                if (typeof mod !== 'object') continue;
+                
+                for (const regKey in mod) {
+                    if (regKey === 'display_name') continue;
+                    const region = mod[regKey];
+                    if (!region?.component_templates) continue;
+                    
+                    for (const compId in region.component_templates) {
+                        if (currentComps.includes(compId)) continue;
+                        
+                        const comp = region.component_templates[compId];
+                        const searchText = `${compId} ${comp.display_name} ${comp.description || ''}`.toLowerCase();
+                        if (searchFilter && !searchText.includes(searchFilter)) continue;
+                        
+                        const pkCount = Object.keys(comp.picklists || {}).length;
+                        
+                        html += `<div class="modal-item" onclick="addComponent('${compId}')">
+                            <div>
+                                <div style="font-weight:600;color:var(--accent)">${compId}</div>
+                                <div style="font-size:12px;color:var(--text-secondary)">${comp.display_name}</div>
+                                <div style="font-size:11px;color:var(--text-muted)">${mod.display_name} · ${pkCount} picklists</div>
+                            </div>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--accent)"><path d="M12 5v14M5 12h14"/></svg>
+                        </div>`;
+                    }
+                }
+            }
+            
+            if (!html) {
+                html = '<div style="padding:24px;text-align:center;color:var(--text-muted)">No matching components</div>';
+            }
+            
+            document.getElementById('modal-list').innerHTML = html;
+        }
+        
+        // Autosave
+        function markChanged() {
+            hasChanges = true;
+            document.getElementById('save-btn').style.display = 'flex';
+            
+            // Debounced autosave
+            clearTimeout(autosaveTimeout);
+            autosaveTimeout = setTimeout(() => {
+                saveAllChanges();
+            }, 2000);
+        }
+        
+        async function saveAllChanges() {
+            const btn = document.getElementById('save-btn');
+            btn.textContent = 'Saving...';
+            
+            try {
+                if ('showDirectoryPicker' in window && !templateFileHandle) {
+                    const dirHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
+                    templateFileHandle = await dirHandle.getFileHandle('template-map.json', { create: true });
+                    componentFileHandle = await dirHandle.getFileHandle('component-map.json', { create: true });
+                }
+                
+                if (templateFileHandle && componentFileHandle) {
+                    const tplW = await templateFileHandle.createWritable();
+                    await tplW.write(JSON.stringify(templateMap, null, 2));
+                    await tplW.close();
+                    
+                    const compW = await componentFileHandle.createWritable();
+                    await compW.write(JSON.stringify(componentMap, null, 2));
+                    await compW.close();
+                    
+                    hasChanges = false;
+                    btn.style.display = 'none';
+                    showToast('Saved', 'success');
+                } else {
+                    // Fallback: download
+                    downloadJSON(templateMap, 'template-map.json');
+                    setTimeout(() => downloadJSON(componentMap, 'component-map.json'), 300);
+                    hasChanges = false;
+                    btn.style.display = 'none';
+                    showToast('Downloaded files', 'info');
+                }
+            } catch (e) {
+                if (e.name !== 'AbortError') {
+                    showToast('Save failed', 'error');
+                }
+            }
+            
+            btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/></svg> Save`;
+        }
+        
+        function downloadJSON(data, filename) {
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = filename;
+            a.click();
+        }
+        
+        function showToast(msg, type = 'info') {
+            const colors = { success: '#22c55e', error: '#ef4444', info: '#3b82f6' };
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.style.background = colors[type];
+            toast.style.color = 'white';
+            toast.textContent = msg;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2500);
+        }
+        
+        // Resizable panels
+        function initResizers() {
+            const resizer1 = document.getElementById('resizer1');
+            const resizer2 = document.getElementById('resizer2');
+            const panel1 = document.getElementById('panel-templates');
+            const panel2 = document.getElementById('panel-components');
+            
+            let isResizing = false;
+            let currentResizer = null;
+            
+            function startResize(e, resizer) {
+                isResizing = true;
+                currentResizer = resizer;
+                resizer.classList.add('active');
+                document.body.style.cursor = 'col-resize';
+                document.body.style.userSelect = 'none';
+            }
+            
+            function stopResize() {
+                isResizing = false;
+                if (currentResizer) currentResizer.classList.remove('active');
+                currentResizer = null;
+                document.body.style.cursor = '';
+                document.body.style.userSelect = '';
+                
+                // Save panel sizes
+                localStorage.setItem('panelSizes', JSON.stringify({
+                    panel1: panel1.style.width,
+                    panel2: panel2.style.width
+                }));
+            }
+            
+            function resize(e) {
+                if (!isResizing) return;
+                
+                const container = document.querySelector('.panels');
+                const rect = container.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                
+                if (currentResizer === resizer1) {
+                    const width = Math.max(200, Math.min(x, rect.width - 400));
+                    panel1.style.width = width + 'px';
+                } else if (currentResizer === resizer2) {
+                    const panel1Width = panel1.offsetWidth;
+                    const width = Math.max(200, Math.min(x - panel1Width - 4, rect.width - panel1Width - 200));
+                    panel2.style.width = width + 'px';
+                }
+            }
+            
+            resizer1.addEventListener('mousedown', e => startResize(e, resizer1));
+            resizer2.addEventListener('mousedown', e => startResize(e, resizer2));
+            document.addEventListener('mousemove', resize);
+            document.addEventListener('mouseup', stopResize);
+            
+            // Restore panel sizes
+            const saved = localStorage.getItem('panelSizes');
+            if (saved) {
+                const sizes = JSON.parse(saved);
+                if (sizes.panel1) panel1.style.width = sizes.panel1;
+                if (sizes.panel2) panel2.style.width = sizes.panel2;
+            }
+        }
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', e => {
+            if ((e.metaKey || e.ctrlKey) && e.key === 's') {
+                e.preventDefault();
+                if (hasChanges) saveAllChanges();
+            }
+        });
+        
+        window.addEventListener('beforeunload', e => {
+            if (hasChanges) {
+                e.preventDefault();
+                e.returnValue = 'Unsaved changes';
+            }
+        });
+        
+        // Init
+        initResizers();
+        loadData();
+    </script>
+</body>
+</html>

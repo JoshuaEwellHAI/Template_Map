@@ -745,6 +745,102 @@
             flex: 1;
         }
         
+        /* RTF Toolbar */
+        .te-rtf-toolbar {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            padding: 4px 12px;
+            background: #21262d;
+            border-bottom: 1px solid #30363d;
+        }
+        
+        .te-toolbar-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 5px 8px;
+            background: transparent;
+            border: none;
+            border-radius: 4px;
+            color: #8b949e;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        
+        .te-toolbar-item:hover {
+            background: #1f2328;
+            color: #e6edf3;
+        }
+        
+        .te-icon {
+            font-size: 13px;
+        }
+        
+        .te-caret {
+            font-size: 10px;
+            color: #6e7681;
+        }
+        
+        .te-toolbar-sep {
+            width: 1px;
+            height: 18px;
+            background: #30363d;
+            margin: 0 4px;
+        }
+        
+        /* Dropdown menus */
+        .te-dropdown {
+            position: relative;
+        }
+        
+        .te-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            min-width: 160px;
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            z-index: 100;
+            padding: 4px 0;
+        }
+        
+        .te-dropdown.open .te-dropdown-menu {
+            display: block;
+        }
+        
+        .te-dropdown-item {
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 12px;
+            color: #e6edf3;
+        }
+        
+        .te-dropdown-item:hover {
+            background: #1f2328;
+        }
+        
+        .te-dropdown-divider {
+            height: 1px;
+            background: #30363d;
+            margin: 4px 0;
+        }
+        
+        /* Report Header */
+        .te-report-header {
+            text-align: center;
+            font-size: 16px;
+            font-weight: 700;
+            color: #58a6ff;
+            padding: 8px 0 12px;
+            border-bottom: 2px solid #30363d;
+            margin-bottom: 16px;
+            letter-spacing: 0.03em;
+        }
+        
         /* Legacy text-* classes kept for compatibility */
         .text-label {
             color: var(--text-secondary);
@@ -1968,15 +2064,55 @@
             </div>`;
             
             // ═══════════════════════════════════════════════════════════
-            // INSERT TOOLBAR
+            // RTF TOOLBAR (Template Builder style)
             // ═══════════════════════════════════════════════════════════
-            html += `<div class="te-insert-bar">
-                <span class="te-insert-label">Insert:</span>
-                <button class="te-insert-btn" onclick="openAddComponentModal()">
-                    <span style="color:#3fb950;">▤</span> Component
+            html += `<div class="te-rtf-toolbar">
+                <div class="te-dropdown" id="textDD">
+                    <button class="te-toolbar-item" onclick="toggleDropdown('textDD')">
+                        <span class="te-icon">☐</span> Text <span class="te-caret">▾</span>
+                    </button>
+                    <div class="te-dropdown-menu">
+                        <div class="te-dropdown-item" onclick="insertTextField('text')">Text Field</div>
+                        <div class="te-dropdown-item" onclick="insertTextField('size')">Size (mm/cm)</div>
+                        <div class="te-dropdown-item" onclick="insertTextField('location')">Location</div>
+                        <div class="te-dropdown-item" onclick="insertTextField('laterality')">Laterality</div>
+                    </div>
+                </div>
+                <div class="te-dropdown" id="pickDD">
+                    <button class="te-toolbar-item" onclick="toggleDropdown('pickDD')">
+                        <span class="te-icon" style="color:#3fb950;">▤</span> Pick <span class="te-caret">▾</span>
+                    </button>
+                    <div class="te-dropdown-menu">
+                        <div class="te-dropdown-item" onclick="openAddComponentModal(); closeDropdowns();">Add Component</div>
+                        <div class="te-dropdown-divider"></div>
+                        <div class="te-dropdown-item" onclick="insertPicklist('normal_abnormal'); closeDropdowns();">Normal/Abnormal</div>
+                        <div class="te-dropdown-item" onclick="insertPicklist('impression'); closeDropdowns();">Impression</div>
+                    </div>
+                </div>
+                <span class="te-toolbar-sep"></span>
+                <button class="te-toolbar-item" onclick="insertHeadingH1()" title="Insert Header">H1</button>
+                <button class="te-toolbar-item" onclick="insertHeadingH2()" title="Insert Subheader">H2</button>
+                <span class="te-toolbar-sep"></span>
+                <div class="te-dropdown" id="mergeDD">
+                    <button class="te-toolbar-item" onclick="toggleDropdown('mergeDD')">
+                        <span class="te-icon" style="color:#d29922;">⚡</span> Merge <span class="te-caret">▾</span>
+                    </button>
+                    <div class="te-dropdown-menu">
+                        <div class="te-dropdown-item" onclick="insertMergeField('Patient Name'); closeDropdowns();">Patient Name</div>
+                        <div class="te-dropdown-item" onclick="insertMergeField('DOB/Age'); closeDropdowns();">DOB/Age</div>
+                        <div class="te-dropdown-item" onclick="insertMergeField('Sex'); closeDropdowns();">Sex</div>
+                        <div class="te-dropdown-item" onclick="insertMergeField('MRN'); closeDropdowns();">MRN</div>
+                        <div class="te-dropdown-divider"></div>
+                        <div class="te-dropdown-item" onclick="insertMergeField('Referring Physician'); closeDropdowns();">Referring Physician</div>
+                        <div class="te-dropdown-item" onclick="insertMergeField('Facility Name'); closeDropdowns();">Facility Name</div>
+                        <div class="te-dropdown-divider"></div>
+                        <div class="te-dropdown-item" onclick="insertMergeField('Prior Studies'); closeDropdowns();">Prior Studies</div>
+                        <div class="te-dropdown-item" onclick="insertMergeField('Indication'); closeDropdowns();">Indication</div>
+                    </div>
+                </div>
+                <button class="te-toolbar-item" onclick="openAutotextModal()">
+                    <span class="te-icon" style="color:#a5a5ff;">🔗</span> AutoText
                 </button>
-                <span class="te-insert-sep"></span>
-                <span class="te-insert-hint">Click any <span style="color:#d29922;">merge field</span> or <span style="color:#3fb950;">picklist</span> to edit</span>
             </div>`;
             
             // ═══════════════════════════════════════════════════════════
@@ -1984,6 +2120,9 @@
             // ═══════════════════════════════════════════════════════════
             html += `<div class="te-canvas">`;
             html += `<div class="te-document">`;
+            
+            // --- REPORT HEADER ---
+            html += `<div class="te-report-header">Frontier Radiology Report</div>\n\n`;
             
             // --- DEMOGRAPHICS ---
             html += `<span class="te-heading te-heading-h1" onclick="editHeading('section.demographics')">${labels['section.demographics'] || 'DEMOGRAPHICS'}</span>\n`;
@@ -2086,11 +2225,77 @@
         }
         
         function editHeading(tag) {
-            const newValue = prompt('Edit label:', tag);
-            if (newValue !== null) {
+            const labels = templateMap.modalities[currentTemplate.mod].regions[currentTemplate.reg].templates[currentTemplate.tpl].custom_labels || {};
+            const currentValue = labels[tag] || tag.split('.').pop();
+            const newValue = prompt('Edit label:', currentValue);
+            if (newValue !== null && newValue.trim()) {
                 updateSectionLabel(tag, newValue);
                 renderTemplateStructure();
             }
+        }
+        
+        // ═══════════════════════════════════════════════════════════
+        // RTF TOOLBAR FUNCTIONS
+        // ═══════════════════════════════════════════════════════════
+        
+        function toggleDropdown(id) {
+            const dropdown = document.getElementById(id);
+            const wasOpen = dropdown.classList.contains('open');
+            closeDropdowns();
+            if (!wasOpen) {
+                dropdown.classList.add('open');
+            }
+        }
+        
+        function closeDropdowns() {
+            document.querySelectorAll('.te-dropdown.open').forEach(el => el.classList.remove('open'));
+        }
+        
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.te-dropdown')) {
+                closeDropdowns();
+            }
+        });
+        
+        function insertTextField(type) {
+            closeDropdowns();
+            showToast(`Text field "${type}" - add to your component picklist`, 'info');
+        }
+        
+        function insertPicklist(type) {
+            closeDropdowns();
+            if (type === 'normal_abnormal') {
+                showToast('Normal/Abnormal picklist - add via component editor', 'info');
+            } else {
+                showToast(`Picklist "${type}" - add via component editor`, 'info');
+            }
+        }
+        
+        function insertHeadingH1() {
+            closeDropdowns();
+            const name = prompt('Enter section header name:');
+            if (name && currentTemplate) {
+                showToast(`Header "${name}" - add to custom_labels`, 'info');
+            }
+        }
+        
+        function insertHeadingH2() {
+            closeDropdowns();
+            const name = prompt('Enter subheader name:');
+            if (name) {
+                showToast(`Subheader "${name}" - add to custom_labels`, 'info');
+            }
+        }
+        
+        function insertMergeField(fieldName) {
+            closeDropdowns();
+            showToast(`Merge field "${fieldName}" inserted`, 'info');
+        }
+        
+        function openAutotextModal() {
+            closeDropdowns();
+            showToast('AutoText feature - coming soon', 'info');
         }
         
         // Move component up/down in findings

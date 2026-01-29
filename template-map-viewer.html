@@ -166,6 +166,12 @@
             padding: 8px;
         }
         
+        /* Document panel has different background */
+        #panel-structure .panel-content {
+            background: #2a2a2a;
+            padding: 0;
+        }
+        
         .resizer {
             width: 4px;
             background: var(--border);
@@ -262,187 +268,305 @@
             color: var(--text-muted);
         }
         
-        /* Template Editor Sections */
-        .template-section {
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            margin-bottom: 8px;
-            overflow: hidden;
+        /* ========================================
+           REPORT DOCUMENT EDITOR STYLES
+           PowerScribe-like text editor appearance
+           ======================================== */
+        
+        /* Document container - looks like a paper document */
+        .report-document {
+            background: #ffffff;
+            color: #1a1a1a;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            margin: 8px;
+            padding: 32px 40px;
+            min-height: calc(100% - 16px);
+            font-family: "Times New Roman", Times, Georgia, serif;
+            font-size: 14px;
+            line-height: 1.6;
         }
         
-        .template-section.collapsed .section-content { display: none; }
-        .template-section.collapsed .section-toggle { transform: rotate(0deg); }
-        
-        .section-header {
+        /* Report line - each row in the report */
+        .report-line {
             display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 12px;
-            background: var(--bg-secondary);
-            cursor: pointer;
-            border-bottom: 1px solid var(--border);
+            align-items: flex-start;
+            margin-bottom: 4px;
+            min-height: 24px;
         }
         
-        .section-header:hover { background: var(--bg-hover); }
+        .report-line:hover {
+            background: rgba(29, 155, 240, 0.05);
+            margin-left: -8px;
+            margin-right: -8px;
+            padding-left: 8px;
+            padding-right: 8px;
+            border-radius: 2px;
+        }
         
-        .section-icon { font-size: 14px; }
-        
-        .section-title {
-            font-weight: 600;
-            font-size: 12px;
-            color: var(--text-primary);
+        /* Editable header label */
+        .report-header {
+            font-weight: 700;
+            color: #000;
+            min-width: 160px;
+            flex-shrink: 0;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            font-size: 13px;
+            letter-spacing: 0.02em;
+            padding: 2px 0;
+            cursor: text;
+            border-bottom: 1px solid transparent;
+        }
+        
+        .report-header:hover {
+            border-bottom: 1px dashed #999;
+        }
+        
+        .report-header:focus {
+            outline: none;
+            border-bottom: 1px solid var(--accent);
+            background: rgba(29, 155, 240, 0.1);
+        }
+        
+        /* Section divider */
+        .report-section {
+            margin-top: 16px;
+            margin-bottom: 8px;
+        }
+        
+        .report-section:first-child {
+            margin-top: 0;
+        }
+        
+        .report-section-title {
+            font-weight: 700;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            color: #000;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 4px;
+            margin-bottom: 8px;
+            cursor: text;
+        }
+        
+        .report-section-title:hover {
+            border-bottom: 1px solid var(--accent);
+        }
+        
+        .report-section-title:focus {
+            outline: none;
+            background: rgba(29, 155, 240, 0.1);
+        }
+        
+        /* Merge field in document */
+        .report-merge-field {
+            display: inline;
+            color: #6366f1;
+            font-family: inherit;
+            font-style: italic;
+            background: rgba(99, 102, 241, 0.1);
+            padding: 0 4px;
+            border-radius: 2px;
+            cursor: default;
+        }
+        
+        .report-merge-field::before {
+            content: "[";
+            color: #a5a5a5;
+        }
+        
+        .report-merge-field::after {
+            content: "]";
+            color: #a5a5a5;
+        }
+        
+        /* Report content area */
+        .report-content {
             flex: 1;
+            color: #333;
         }
         
-        .section-badge {
-            font-size: 10px;
-            padding: 2px 8px;
-            border-radius: 10px;
-            background: var(--accent-dim);
-            color: var(--accent);
+        /* Subheader within findings */
+        .report-subheader {
+            font-weight: 600;
+            color: #000;
+            display: inline;
+            cursor: text;
+            border-bottom: 1px solid transparent;
         }
         
-        .section-toggle {
+        .report-subheader:hover {
+            border-bottom: 1px dashed #999;
+        }
+        
+        .report-subheader:focus {
+            outline: none;
+            border-bottom: 1px solid var(--accent);
+            background: rgba(29, 155, 240, 0.1);
+        }
+        
+        /* Component/Picklist inline element */
+        .report-component {
+            display: inline;
+            color: #059669;
+            background: rgba(5, 150, 105, 0.08);
+            padding: 1px 6px;
+            border-radius: 3px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.15s;
+        }
+        
+        .report-component:hover {
+            background: rgba(5, 150, 105, 0.15);
+            border-color: rgba(5, 150, 105, 0.3);
+        }
+        
+        .report-component.selected {
+            background: rgba(29, 155, 240, 0.15);
+            border-color: var(--accent);
+            color: #0284c7;
+        }
+        
+        .report-component-label {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            opacity: 0.7;
+            margin-right: 4px;
+        }
+        
+        /* Findings area with indented components */
+        .report-findings {
+            margin-left: 0;
+        }
+        
+        .report-finding-row {
+            display: flex;
+            align-items: flex-start;
+            padding: 4px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .report-finding-row:last-child {
+            border-bottom: none;
+        }
+        
+        .report-finding-row:hover {
+            background: rgba(29, 155, 240, 0.03);
+            margin-left: -8px;
+            margin-right: -8px;
+            padding-left: 8px;
+            padding-right: 8px;
+        }
+        
+        .report-finding-label {
+            font-weight: 600;
+            color: #000;
+            min-width: 180px;
+            flex-shrink: 0;
+            padding-right: 12px;
+            cursor: text;
+        }
+        
+        .report-finding-label:hover {
+            text-decoration: underline;
+            text-decoration-style: dashed;
+            text-underline-offset: 2px;
+        }
+        
+        .report-finding-label:focus {
+            outline: none;
+            background: rgba(29, 155, 240, 0.1);
+        }
+        
+        .report-finding-value {
+            flex: 1;
+            color: #333;
+        }
+        
+        /* Remove button for components */
+        .report-remove-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             width: 16px;
             height: 16px;
-            color: var(--text-muted);
-            transform: rotate(90deg);
-            transition: transform 0.15s;
+            background: none;
+            border: none;
+            color: #dc2626;
+            cursor: pointer;
+            opacity: 0;
+            margin-left: 4px;
+            padding: 0;
+            transition: opacity 0.15s;
         }
         
-        .section-toggle svg { width: 16px; height: 16px; }
-        .section-content { padding: 12px; }
+        .report-finding-row:hover .report-remove-btn {
+            opacity: 0.6;
+        }
         
-        /* Merge Field Display */
-        .merge-field {
+        .report-remove-btn:hover {
+            opacity: 1 !important;
+        }
+        
+        /* Impression section */
+        .report-impression {
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid #ccc;
+        }
+        
+        .report-impression-text {
+            color: #333;
+            font-style: italic;
+        }
+        
+        .report-ai-badge {
+            display: inline-block;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: rgba(99, 102, 241, 0.1);
+            color: #6366f1;
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin-left: 8px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-style: normal;
+        }
+        
+        /* Add component button in document */
+        .report-add-btn {
             display: inline-flex;
             align-items: center;
             gap: 4px;
-            background: var(--purple);
-            background: rgba(167, 139, 250, 0.2);
-            color: var(--purple);
-            padding: 4px 10px;
+            padding: 4px 12px;
+            margin-top: 8px;
+            border: 1px dashed #ccc;
             border-radius: 4px;
+            background: #fafafa;
+            color: #666;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             font-size: 12px;
-            font-family: "SF Mono", monospace;
-            border: 1px dashed rgba(167, 139, 250, 0.4);
-        }
-        
-        .merge-field::before {
-            content: "{{";
-            opacity: 0.6;
-        }
-        
-        .merge-field::after {
-            content: "}}";
-            opacity: 0.6;
-        }
-        
-        /* Field Row */
-        .field-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 8px 0;
-            border-bottom: 1px solid var(--border-subtle);
-        }
-        
-        .field-row:last-child { border-bottom: none; }
-        
-        .field-label {
-            font-weight: 600;
-            font-size: 12px;
-            color: var(--text-secondary);
-            min-width: 120px;
-        }
-        
-        .field-value {
-            flex: 1;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-        
-        /* Component Card in Findings */
-        .finding-component {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            margin-bottom: 8px;
-            overflow: hidden;
-        }
-        
-        .finding-component:hover { border-color: var(--accent); }
-        .finding-component.selected { border-color: var(--accent); background: var(--accent-dim); }
-        
-        .component-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 12px;
             cursor: pointer;
         }
         
-        .component-order {
-            width: 24px;
-            height: 24px;
-            background: var(--accent);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 11px;
-            font-weight: 600;
+        .report-add-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(29, 155, 240, 0.05);
         }
         
-        .component-name {
-            font-weight: 600;
-            font-size: 13px;
-            color: var(--text-primary);
-            flex: 1;
+        .report-add-btn svg {
+            width: 12px;
+            height: 12px;
         }
         
-        .component-id {
-            font-family: "SF Mono", monospace;
-            font-size: 11px;
-            color: var(--text-muted);
-        }
-        
-        .component-picklist-count {
-            font-size: 10px;
-            padding: 2px 8px;
-            border-radius: 10px;
-            background: var(--bg-tertiary);
-            color: var(--text-muted);
-        }
-        
-        .component-remove {
-            background: none;
-            border: none;
-            color: var(--danger);
-            cursor: pointer;
-            padding: 4px;
-            opacity: 0.6;
-            display: flex;
-        }
-        
-        .component-remove:hover { opacity: 1; }
-        
-        /* Picklist in Component */
-        .picklist-list {
-            padding: 8px 12px;
-            border-top: 1px solid var(--border);
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-        
+        /* Picklist tag in component */
         .picklist-tag {
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 4px;
             background: var(--success);
@@ -466,26 +590,22 @@
             font-size: 10px;
         }
         
-        /* Add Button */
-        .add-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            width: 100%;
-            padding: 10px;
-            border: 1px dashed var(--border);
-            border-radius: 8px;
-            background: transparent;
-            color: var(--text-muted);
-            cursor: pointer;
-            font-size: 12px;
-            margin-top: 8px;
+        /* Template title at top of document */
+        .report-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #000;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
         
-        .add-btn:hover {
-            border-color: var(--accent);
+        .report-cpt {
+            font-family: "SF Mono", monospace;
             color: var(--accent);
+            font-size: 14px;
+            margin-right: 8px;
         }
         
         /* Right Panel - Detail Editor */
@@ -806,10 +926,13 @@
             font-style: italic;
         }
 
-        /* Findings header */
-        .findings-section .section-header { border-left: 3px solid var(--accent); }
-        .impression-section .section-header { border-left: 3px solid var(--success); }
-        .technique-section .section-header { border-left: 3px solid var(--warning); }
+        /* Empty state for document */
+        #panel-structure .empty-state {
+            background: var(--bg-tertiary);
+            height: 100%;
+            margin: 0;
+            border-radius: 0;
+        }
     </style>
 </head>
 <body>
@@ -1159,131 +1282,170 @@
             const tpl = templateMap.modalities[currentTemplate.mod].regions[currentTemplate.reg].templates[currentTemplate.tpl];
             const components = tpl.component_templates || [];
             
-            let html = '';
+            // Build document-style report editor
+            let html = `<div class="report-document">`;
             
-            // HEADER Section
-            html += `<div class="template-section">
-                <div class="section-header" onclick="this.parentElement.classList.toggle('collapsed')">
-                    <span class="section-icon">📋</span>
-                    <span class="section-title">Header</span>
-                    <span class="section-badge">Merge Fields</span>
-                    <span class="section-toggle">${chevronSvg}</span>
-                </div>
-                <div class="section-content">
-                    <div class="field-row">
-                        <span class="field-label">EXAM:</span>
-                        <span class="field-value"><span class="merge-field">Procedures</span></span>
-                    </div>
-                    <div class="field-row">
-                        <span class="field-label">DEMOGRAPHICS:</span>
-                        <span class="field-value">
-                            <span class="merge-field">Patient Name</span>
-                            <span class="merge-field">Patient Age</span>
-                            <span class="merge-field">Patient Sex</span>
+            // Document title
+            html += `<div class="report-title">
+                <span class="report-cpt">${tpl.primary_cpt}</span>
+                ${tpl.description}
+            </div>`;
+            
+            // EXAM line
+            html += `<div class="report-line">
+                <span class="report-header" contenteditable="true" data-field="exam" onblur="updateHeaderLabel(this, 'exam')">EXAM:</span>
+                <span class="report-content">
+                    <span class="report-merge-field">Procedures</span>
+                </span>
+            </div>`;
+            
+            // DEMOGRAPHICS line
+            html += `<div class="report-line">
+                <span class="report-header" contenteditable="true" data-field="demographics" onblur="updateHeaderLabel(this, 'demographics')">DEMOGRAPHICS:</span>
+                <span class="report-content">
+                    <span class="report-merge-field">Patient Name</span>, 
+                    <span class="report-merge-field">Patient Age</span> year old 
+                    <span class="report-merge-field">Patient Sex</span>
+                </span>
+            </div>`;
+            
+            // CLINICAL HISTORY line
+            html += `<div class="report-line">
+                <span class="report-header" contenteditable="true" data-field="clinical_history" onblur="updateHeaderLabel(this, 'clinical_history')">CLINICAL HISTORY:</span>
+                <span class="report-content">
+                    <span class="report-merge-field">PMHx</span>
+                </span>
+            </div>`;
+            
+            // INDICATION line
+            html += `<div class="report-line">
+                <span class="report-header" contenteditable="true" data-field="indication" onblur="updateHeaderLabel(this, 'indication')">INDICATION:</span>
+                <span class="report-content">
+                    <span class="report-merge-field">Indication</span>
+                </span>
+            </div>`;
+            
+            // TECHNIQUE section
+            html += `<div class="report-section">
+                <div class="report-section-title" contenteditable="true" data-field="technique_title" onblur="updateHeaderLabel(this, 'technique_title')">TECHNIQUE:</div>
+                <div class="report-line" style="margin-left:0;">
+                    <span class="report-content">
+                        <span class="report-component" onclick="editTechniquePicklist()">
+                            <span class="report-component-label">Picklist:</span>
+                            TEC-${currentTemplate.mod}-${currentTemplate.reg}
                         </span>
-                    </div>
-                    <div class="field-row">
-                        <span class="field-label">CLINICAL HISTORY:</span>
-                        <span class="field-value"><span class="merge-field">PMHx</span></span>
-                    </div>
-                    <div class="field-row">
-                        <span class="field-label">INDICATION:</span>
-                        <span class="field-value"><span class="merge-field">Indication</span></span>
-                    </div>
+                    </span>
                 </div>
             </div>`;
             
-            // TECHNIQUE Section
-            html += `<div class="template-section technique-section">
-                <div class="section-header" onclick="this.parentElement.classList.toggle('collapsed')">
-                    <span class="section-icon">⚙️</span>
-                    <span class="section-title">Technique</span>
-                    <span class="section-badge">Picklist</span>
-                    <span class="section-toggle">${chevronSvg}</span>
-                </div>
-                <div class="section-content">
-                    <div class="picklist-tag" onclick="editTechniquePicklist()">
-                        TEC-${currentTemplate.mod}-${currentTemplate.reg}
-                        <span class="opt-count">Edit</span>
-                    </div>
-                </div>
-            </div>`;
-            
-            // COMPARISON Section
-            html += `<div class="template-section">
-                <div class="section-header" onclick="this.parentElement.classList.toggle('collapsed')">
-                    <span class="section-icon">🔄</span>
-                    <span class="section-title">Comparison</span>
-                    <span class="section-badge">Hybrid</span>
-                    <span class="section-toggle">${chevronSvg}</span>
-                </div>
-                <div class="section-content">
-                    <div class="field-row">
-                        <span class="field-value">
-                            <span class="merge-field">Prior Studies</span>
-                            <span class="picklist-tag">COMP-standard</span>
+            // COMPARISON section
+            html += `<div class="report-section">
+                <div class="report-section-title" contenteditable="true" data-field="comparison_title" onblur="updateHeaderLabel(this, 'comparison_title')">COMPARISON:</div>
+                <div class="report-line" style="margin-left:0;">
+                    <span class="report-content">
+                        <span class="report-merge-field">Prior Studies</span>
+                        <span class="report-component" onclick="editComparisonPicklist()">
+                            <span class="report-component-label">Picklist:</span>
+                            COMP-standard
                         </span>
-                    </div>
+                    </span>
                 </div>
             </div>`;
             
-            // FINDINGS Section
-            html += `<div class="template-section findings-section">
-                <div class="section-header" onclick="this.parentElement.classList.toggle('collapsed')">
-                    <span class="section-icon">🔍</span>
-                    <span class="section-title">Findings</span>
-                    <span class="section-badge">${components.length} Components</span>
-                    <span class="section-toggle">${chevronSvg}</span>
-                </div>
-                <div class="section-content">`;
+            // FINDINGS section
+            html += `<div class="report-section">
+                <div class="report-section-title" contenteditable="true" data-field="findings_title" onblur="updateHeaderLabel(this, 'findings_title')">FINDINGS:</div>
+                <div class="report-findings">`;
             
-            components.forEach((compId, idx) => {
-                const comp = findComponent(compId);
-                const picklists = comp ? Object.keys(comp.picklists || {}) : [];
-                
-                html += `<div class="finding-component${currentComponent === compId ? ' selected' : ''}" data-comp="${compId}">
-                    <div class="component-header" onclick="selectComponent('${compId}')">
-                        <span class="component-order">${idx + 1}</span>
-                        <span class="component-name">${comp?.display_name || compId}</span>
-                        <span class="component-id">${compId}</span>
-                        <span class="component-picklist-count">${picklists.length} picklists</span>
-                        <button class="component-remove" onclick="event.stopPropagation(); removeComponentFromTemplate('${compId}')" title="Remove">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M6 18L18 6M6 6l12 12"/></svg>
-                        </button>
-                    </div>
-                    ${picklists.length > 0 ? `<div class="picklist-list">
-                        ${picklists.map(pk => {
-                            const opts = comp.picklists[pk].options?.length || 0;
-                            return `<span class="picklist-tag" onclick="event.stopPropagation(); selectPicklist('${compId}', '${pk}')">${comp.picklists[pk].display_name || pk} <span class="opt-count">${opts}</span></span>`;
-                        }).join('')}
-                    </div>` : ''}
+            if (components.length === 0) {
+                html += `<div class="report-line" style="color:#666;font-style:italic;">
+                    No finding components added yet. Click below to add components.
                 </div>`;
-            });
+            } else {
+                components.forEach((compId, idx) => {
+                    const comp = findComponent(compId);
+                    const picklists = comp ? Object.keys(comp.picklists || {}) : [];
+                    const displayName = comp?.display_name || compId;
+                    
+                    html += `<div class="report-finding-row" data-comp="${compId}">
+                        <span class="report-finding-label" contenteditable="true" data-comp="${compId}" onblur="updateFindingLabel(this, '${compId}')">${displayName}:</span>
+                        <span class="report-finding-value">`;
+                    
+                    if (picklists.length > 0) {
+                        picklists.forEach((pk, pkIdx) => {
+                            const pkData = comp.picklists[pk];
+                            const optCount = pkData.options?.length || 0;
+                            const isSelected = currentComponent === compId;
+                            html += `<span class="report-component${isSelected ? ' selected' : ''}" onclick="selectPicklist('${compId}', '${pk}')">
+                                <span class="report-component-label">Picklist:</span>
+                                ${pkData.display_name || pk} (${optCount})
+                            </span>`;
+                            if (pkIdx < picklists.length - 1) html += ' ';
+                        });
+                    } else {
+                        html += `<span class="report-component" onclick="selectComponent('${compId}')">
+                            <span class="report-component-label">Component:</span>
+                            ${compId}
+                        </span>`;
+                    }
+                    
+                    html += `<button class="report-remove-btn" onclick="removeComponentFromTemplate('${compId}')" title="Remove component">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"/></svg>
+                        </button>
+                    </span>
+                    </div>`;
+                });
+            }
             
-            html += `<button class="add-btn" onclick="openAddComponentModal()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M12 5v14M5 12h14"/></svg>
-                Add Component
+            html += `<button class="report-add-btn" onclick="openAddComponentModal()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                Add Finding Component
             </button>`;
             
-            html += '</div></div>';
+            html += `</div></div>`;
             
-            // IMPRESSION Section
-            html += `<div class="template-section impression-section">
-                <div class="section-header" onclick="this.parentElement.classList.toggle('collapsed')">
-                    <span class="section-icon">📝</span>
-                    <span class="section-title">Impression</span>
-                    <span class="section-badge">AI Generated</span>
-                    <span class="section-toggle">${chevronSvg}</span>
-                </div>
-                <div class="section-content">
-                    <div class="impression-field">
-                        <div class="impression-label">Default Text <span class="impression-source">AI Populated</span></div>
-                        <div class="impression-default">Normal exam.</div>
-                    </div>
+            // IMPRESSION section
+            html += `<div class="report-impression">
+                <div class="report-section-title" contenteditable="true" data-field="impression_title" onblur="updateHeaderLabel(this, 'impression_title')">IMPRESSION:</div>
+                <div class="report-line" style="margin-left:0;">
+                    <span class="report-impression-text">Normal exam.</span>
+                    <span class="report-ai-badge">AI Generated</span>
                 </div>
             </div>`;
             
+            html += `</div>`; // Close report-document
+            
             document.getElementById('template-structure').innerHTML = html;
+        }
+        
+        // Update header/subheader labels
+        function updateHeaderLabel(el, field) {
+            const newValue = el.textContent.trim();
+            // Store custom header labels in template metadata
+            if (!currentTemplate) return;
+            const tpl = templateMap.modalities[currentTemplate.mod].regions[currentTemplate.reg].templates[currentTemplate.tpl];
+            if (!tpl.custom_labels) tpl.custom_labels = {};
+            tpl.custom_labels[field] = newValue;
+            markChanged();
+        }
+        
+        // Update finding subheader label
+        function updateFindingLabel(el, compId) {
+            const newValue = el.textContent.trim().replace(/:$/, '');
+            const loc = findComponentLocation(compId);
+            if (loc) {
+                componentMap[loc.modKey][loc.regKey].component_templates[compId].display_name = newValue;
+                markChanged();
+            }
+        }
+        
+        // Placeholder functions for technique/comparison editing
+        function editTechniquePicklist() {
+            showToast('Technique picklist editor - coming soon', 'info');
+        }
+        
+        function editComparisonPicklist() {
+            showToast('Comparison picklist editor - coming soon', 'info');
         }
         
         function findComponent(compId) {

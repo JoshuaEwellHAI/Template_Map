@@ -1,0 +1,2134 @@
+{
+  "_metadata": {
+    "version": "4.4.0",
+    "description": "Curated radiology template map for teleradiology after-hours/overflow coverage",
+    "last_updated": "2026-01-28",
+    "design_philosophy": "One template per study type with CPT variants mapped. Templates use nested components for shared content.",
+    "exclusions": [
+      "IR procedures",
+      "Biopsies/FNA",
+      "Mammography/Breast MRI",
+      "Prostate imaging",
+      "Most Nuclear Medicine"
+    ],
+    "inclusions_note": "Breast US (ER), VQ scans, HIDA scans included for ER coverage",
+    "billing_note": "Primary CPT is the most common; variants map to same template with technique differences noted",
+    "bladder_note": "Bladder is included in: US Renal (76770/76775) and US Pelvis (76856/76857). Dedicated bladder-only code 51798 (PVR) is a urology procedure code, not a radiology imaging code.",
+    "component_integration": {
+      "description": "Templates contain structural text (e.g., 'FINDINGS:'). Components are reusable content that plugs into templates.",
+      "component_map_file": "component-map.json",
+      "relationship": "Components define routes_to arrays specifying which templates they can be used in. This allows one component edit to propagate to all templates.",
+      "template_structure": "Templates define the report shell (headers, section labels). Components provide the actual sentence content."
+    }
+  },
+  "modalities": {
+    "xray": {
+      "display_name": "X-Ray / Radiography",
+      "regions": {
+        "chest": {
+          "display_name": "Chest",
+          "templates": {
+            "xr-chest-portable": {
+              "primary_cpt": "71045",
+              "description": "XR Chest, single view (portable/AP)",
+              "template_file": "templates/xray/chest/xr-chest-1view.json",
+              "variants": {
+                "71045": {
+                  "description": "Single view",
+                  "technique_note": "AP or PA single view, often portable"
+                }
+              },
+              "common_use": "ICU, ER portable, post-procedure",
+              "component_templates": [
+                "CR-devices",
+                "CR-lungsandpleura",
+                "CR-heartmediastinum",
+                "CR-bones"
+              ]
+            },
+            "xr-chest-2view": {
+              "primary_cpt": "71046",
+              "description": "XR Chest, 2 views (PA and lateral)",
+              "template_file": "templates/xray/chest/xr-chest-2view.json",
+              "variants": {
+                "71046": {
+                  "description": "2 views (PA/lateral)",
+                  "technique_note": "Standard outpatient chest"
+                }
+              },
+              "common_use": "Most common chest radiograph",
+              "component_templates": [
+                "CR-lungsandpleura",
+                "CR-heartmediastinum",
+                "CR-bones"
+              ]
+            },
+            "xr-chest-3plus": {
+              "primary_cpt": "71047",
+              "description": "XR Chest, 3+ views",
+              "template_file": "templates/xray/chest/xr-chest-multiview.json",
+              "variants": {
+                "71047": {
+                  "description": "3 views",
+                  "technique_note": "PA, lateral, and additional (oblique/lordotic)"
+                },
+                "71048": {
+                  "description": "4+ views",
+                  "technique_note": "Complete series with multiple projections"
+                }
+              },
+              "common_use": "Detailed chest evaluation, rib detail",
+              "component_templates": [
+                "CR-lungsandpleura",
+                "CR-heartmediastinum",
+                "CR-bones"
+              ]
+            },
+            "xr-ribs": {
+              "primary_cpt": "71101",
+              "description": "XR Ribs with chest",
+              "template_file": "templates/xray/chest/xr-ribs.json",
+              "variants": {
+                "71100": {
+                  "description": "Ribs unilateral, 2 views",
+                  "technique_note": "No chest included"
+                },
+                "71101": {
+                  "description": "Ribs unilateral with PA chest",
+                  "technique_note": "Min 3 views"
+                },
+                "71110": {
+                  "description": "Ribs bilateral, 3 views",
+                  "technique_note": "No chest included"
+                },
+                "71111": {
+                  "description": "Ribs bilateral with PA chest",
+                  "technique_note": "Min 4 views"
+                }
+              },
+              "common_use": "Trauma rib evaluation",
+              "component_templates": [
+                "CR-lungsandpleura",
+                "CR-heartmediastinum",
+                "CR-bones"
+              ]
+            }
+          }
+        },
+        "abdomen": {
+          "display_name": "Abdomen",
+          "templates": {
+            "xr-abdomen": {
+              "primary_cpt": "74018",
+              "description": "XR Abdomen",
+              "template_file": "templates/xray/abdomen/xr-abdomen.json",
+              "variants": {
+                "74018": {
+                  "description": "1 view (KUB)",
+                  "technique_note": "Single supine view"
+                },
+                "74019": {
+                  "description": "2 views",
+                  "technique_note": "Supine and upright/decubitus"
+                },
+                "74021": {
+                  "description": "3+ views",
+                  "technique_note": "Supine, upright, decubitus"
+                }
+              },
+              "common_use": "Bowel obstruction, constipation, foreign body",
+              "component_templates": [
+                "AR-bowelgas",
+                "AR-solidorgans",
+                "AR-bones"
+              ]
+            },
+            "xr-acute-abdomen": {
+              "primary_cpt": "74022",
+              "description": "XR Acute abdomen series",
+              "template_file": "templates/xray/abdomen/xr-acute-abdomen.json",
+              "variants": {
+                "74022": {
+                  "description": "Complete acute series",
+                  "technique_note": "Supine, upright, +/- chest for free air"
+                }
+              },
+              "common_use": "Acute surgical abdomen workup",
+              "component_templates": [
+                "AR-bowelgas",
+                "AR-solidorgans",
+                "AR-bones"
+              ]
+            }
+          }
+        },
+        "spine_cervical": {
+          "display_name": "Cervical Spine",
+          "templates": {
+            "xr-cspine": {
+              "primary_cpt": "72050",
+              "description": "XR Cervical spine",
+              "template_file": "templates/xray/spine/xr-cspine.json",
+              "variants": {
+                "72040": {
+                  "description": "2 views (AP/lateral)",
+                  "technique_note": "Limited, non-trauma"
+                },
+                "72050": {
+                  "description": "Min 4 views",
+                  "technique_note": "AP, lateral, obliques, odontoid"
+                },
+                "72052": {
+                  "description": "Complete with flexion/extension",
+                  "technique_note": "Includes dynamic views"
+                }
+              },
+              "common_use": "Trauma, degenerative evaluation",
+              "component_templates": [
+                "XR-cspine"
+              ]
+            }
+          }
+        },
+        "spine_thoracic": {
+          "display_name": "Thoracic Spine",
+          "templates": {
+            "xr-tspine": {
+              "primary_cpt": "72070",
+              "description": "XR Thoracic spine",
+              "template_file": "templates/xray/spine/xr-tspine.json",
+              "variants": {
+                "72070": {
+                  "description": "2 views (AP/lateral)",
+                  "technique_note": "Standard views"
+                },
+                "72072": {
+                  "description": "With swimmer's view",
+                  "technique_note": "For upper T-spine visualization"
+                },
+                "72074": {
+                  "description": "Complete with obliques",
+                  "technique_note": "Min 4 views"
+                }
+              },
+              "common_use": "Back pain, compression fracture",
+              "component_templates": [
+                "XR-tspine"
+              ]
+            }
+          }
+        },
+        "spine_lumbar": {
+          "display_name": "Lumbar Spine",
+          "templates": {
+            "xr-lspine": {
+              "primary_cpt": "72100",
+              "description": "XR Lumbar spine",
+              "template_file": "templates/xray/spine/xr-lspine.json",
+              "variants": {
+                "72100": {
+                  "description": "2 views (AP/lateral)",
+                  "technique_note": "Standard views"
+                },
+                "72110": {
+                  "description": "Complete with obliques",
+                  "technique_note": "For pars evaluation"
+                },
+                "72114": {
+                  "description": "Complete with bending",
+                  "technique_note": "For instability evaluation"
+                },
+                "72120": {
+                  "description": "Bending views only",
+                  "technique_note": "Add-on for dynamics"
+                }
+              },
+              "common_use": "Low back pain, spondylolisthesis",
+              "component_templates": [
+                "XR-lspine"
+              ]
+            }
+          }
+        },
+        "spine_other": {
+          "display_name": "Spine - Other",
+          "templates": {
+            "xr-sacrum-coccyx": {
+              "primary_cpt": "72220",
+              "description": "XR Sacrum and coccyx",
+              "template_file": "templates/xray/spine/xr-sacrum-coccyx.json",
+              "variants": {
+                "72220": {
+                  "description": "Min 2 views",
+                  "technique_note": "Lateral and AP"
+                }
+              },
+              "common_use": "Coccyx trauma, sacral fracture",
+              "component_templates": [
+                "XR-lspine"
+              ]
+            },
+            "xr-scoliosis": {
+              "primary_cpt": "72082",
+              "description": "XR Scoliosis series",
+              "template_file": "templates/xray/spine/xr-scoliosis.json",
+              "variants": {
+                "72081": {
+                  "description": "1 view",
+                  "technique_note": "Single standing AP"
+                },
+                "72082": {
+                  "description": "2-3 views",
+                  "technique_note": "Standing AP +/- lateral"
+                },
+                "72083": {
+                  "description": "4-5 views",
+                  "technique_note": "Full scoliosis series"
+                },
+                "72084": {
+                  "description": "6+ views",
+                  "technique_note": "Comprehensive with bending"
+                }
+              },
+              "common_use": "Scoliosis evaluation and follow-up",
+              "component_templates": [
+                "XR-tspine",
+                "XR-lspine"
+              ]
+            }
+          }
+        },
+        "pelvis_hip": {
+          "display_name": "Pelvis & Hip",
+          "templates": {
+            "xr-pelvis": {
+              "primary_cpt": "72170",
+              "description": "XR Pelvis",
+              "template_file": "templates/xray/pelvis/xr-pelvis.json",
+              "variants": {
+                "72170": {
+                  "description": "AP only",
+                  "technique_note": "Single view"
+                },
+                "72190": {
+                  "description": "Complete (min 3 views)",
+                  "technique_note": "AP, obliques"
+                }
+              },
+              "common_use": "Trauma, hip pain screening",
+              "component_templates": [
+                "XR-hip-pelvis"
+              ]
+            },
+            "xr-hip": {
+              "primary_cpt": "73502",
+              "description": "XR Hip",
+              "template_file": "templates/xray/pelvis/xr-hip.json",
+              "variants": {
+                "73501": {
+                  "description": "Hip with pelvis, 1 view",
+                  "technique_note": "AP pelvis for hip"
+                },
+                "73502": {
+                  "description": "Hip with pelvis, 2-3 views",
+                  "technique_note": "AP and frog lateral"
+                },
+                "73503": {
+                  "description": "Hip with pelvis, 4+ views",
+                  "technique_note": "Complete hip series"
+                }
+              },
+              "common_use": "Hip fracture, AVN, arthritis",
+              "component_templates": [
+                "XR-hip-pelvis"
+              ]
+            },
+            "xr-si-joints": {
+              "primary_cpt": "72202",
+              "description": "XR Sacroiliac joints",
+              "template_file": "templates/xray/pelvis/xr-si-joints.json",
+              "variants": {
+                "72200": {
+                  "description": "Less than 3 views",
+                  "technique_note": "Limited"
+                },
+                "72202": {
+                  "description": "3+ views",
+                  "technique_note": "Complete with obliques"
+                }
+              },
+              "common_use": "Sacroiliitis, ankylosing spondylitis",
+              "component_templates": [
+                "XR-hip-pelvis"
+              ]
+            }
+          }
+        },
+        "shoulder": {
+          "display_name": "Shoulder",
+          "templates": {
+            "xr-shoulder": {
+              "primary_cpt": "73030",
+              "description": "XR Shoulder",
+              "template_file": "templates/xray/upper_ext/xr-shoulder.json",
+              "variants": {
+                "73020": {
+                  "description": "1 view",
+                  "technique_note": "Single AP or Y-view"
+                },
+                "73030": {
+                  "description": "Min 2 views",
+                  "technique_note": "AP internal/external rotation"
+                }
+              },
+              "common_use": "Trauma, rotator cuff, dislocation",
+              "component_templates": [
+                "XR-shoulder"
+              ]
+            },
+            "xr-clavicle": {
+              "primary_cpt": "73000",
+              "description": "XR Clavicle",
+              "template_file": "templates/xray/upper_ext/xr-clavicle.json",
+              "variants": {
+                "73000": {
+                  "description": "Complete",
+                  "technique_note": "AP and angled views"
+                }
+              },
+              "common_use": "Clavicle fracture",
+              "component_templates": [
+                "XR-shoulder"
+              ]
+            },
+            "xr-ac-joints": {
+              "primary_cpt": "73050",
+              "description": "XR AC joints",
+              "template_file": "templates/xray/upper_ext/xr-ac-joints.json",
+              "variants": {
+                "73050": {
+                  "description": "Bilateral with/without weights",
+                  "technique_note": "For AC separation"
+                }
+              },
+              "common_use": "AC joint separation",
+              "component_templates": [
+                "XR-shoulder"
+              ]
+            }
+          }
+        },
+        "upper_extremity": {
+          "display_name": "Upper Extremity",
+          "templates": {
+            "xr-humerus": {
+              "primary_cpt": "73060",
+              "description": "XR Humerus",
+              "template_file": "templates/xray/upper_ext/xr-humerus.json",
+              "variants": {
+                "73060": {
+                  "description": "Min 2 views",
+                  "technique_note": "AP and lateral"
+                }
+              },
+              "common_use": "Humerus fracture",
+              "component_templates": [
+                "XR-shoulder",
+                "XR-elbow"
+              ]
+            },
+            "xr-elbow": {
+              "primary_cpt": "73080",
+              "description": "XR Elbow",
+              "template_file": "templates/xray/upper_ext/xr-elbow.json",
+              "variants": {
+                "73070": {
+                  "description": "2 views (AP/lateral)",
+                  "technique_note": "Limited"
+                },
+                "73080": {
+                  "description": "Min 3 views",
+                  "technique_note": "AP, lateral, oblique"
+                }
+              },
+              "common_use": "Elbow fracture, effusion",
+              "component_templates": [
+                "XR-elbow"
+              ]
+            },
+            "xr-forearm": {
+              "primary_cpt": "73090",
+              "description": "XR Forearm",
+              "template_file": "templates/xray/upper_ext/xr-forearm.json",
+              "variants": {
+                "73090": {
+                  "description": "AP and lateral",
+                  "technique_note": "Include both joints"
+                }
+              },
+              "common_use": "Radius/ulna fracture",
+              "component_templates": [
+                "XR-elbow",
+                "XR-wrist-hand"
+              ]
+            },
+            "xr-wrist": {
+              "primary_cpt": "73110",
+              "description": "XR Wrist",
+              "template_file": "templates/xray/upper_ext/xr-wrist.json",
+              "variants": {
+                "73100": {
+                  "description": "2 views (AP/lateral)",
+                  "technique_note": "Limited"
+                },
+                "73110": {
+                  "description": "Min 3 views",
+                  "technique_note": "PA, lateral, oblique"
+                }
+              },
+              "common_use": "Wrist fracture, scaphoid",
+              "component_templates": [
+                "XR-wrist-hand"
+              ]
+            },
+            "xr-hand": {
+              "primary_cpt": "73130",
+              "description": "XR Hand",
+              "template_file": "templates/xray/upper_ext/xr-hand.json",
+              "variants": {
+                "73120": {
+                  "description": "2 views",
+                  "technique_note": "PA and oblique"
+                },
+                "73130": {
+                  "description": "Min 3 views",
+                  "technique_note": "PA, lateral, oblique"
+                }
+              },
+              "common_use": "Hand fracture, arthritis",
+              "component_templates": [
+                "XR-wrist-hand"
+              ]
+            },
+            "xr-finger": {
+              "primary_cpt": "73140",
+              "description": "XR Finger(s)",
+              "template_file": "templates/xray/upper_ext/xr-finger.json",
+              "variants": {
+                "73140": {
+                  "description": "Min 2 views",
+                  "technique_note": "AP and lateral"
+                }
+              },
+              "common_use": "Finger fracture, dislocation",
+              "component_templates": [
+                "XR-wrist-hand"
+              ]
+            }
+          }
+        },
+        "lower_extremity": {
+          "display_name": "Lower Extremity",
+          "templates": {
+            "xr-femur": {
+              "primary_cpt": "73552",
+              "description": "XR Femur",
+              "template_file": "templates/xray/lower_ext/xr-femur.json",
+              "variants": {
+                "73551": {
+                  "description": "1 view",
+                  "technique_note": "AP only"
+                },
+                "73552": {
+                  "description": "Min 2 views",
+                  "technique_note": "AP and lateral"
+                }
+              },
+              "common_use": "Femur fracture",
+              "component_templates": [
+                "XR-hip-pelvis",
+                "XR-knee"
+              ]
+            },
+            "xr-knee": {
+              "primary_cpt": "73562",
+              "description": "XR Knee",
+              "template_file": "templates/xray/lower_ext/xr-knee.json",
+              "variants": {
+                "73560": {
+                  "description": "2 views (AP/lateral)",
+                  "technique_note": "Limited"
+                },
+                "73562": {
+                  "description": "Min 3 views",
+                  "technique_note": "AP, lateral, oblique"
+                },
+                "73564": {
+                  "description": "Complete with tunnel/patellar",
+                  "technique_note": "Full series"
+                },
+                "73565": {
+                  "description": "Both knees standing AP",
+                  "technique_note": "Weight-bearing comparison"
+                }
+              },
+              "common_use": "Knee trauma, arthritis",
+              "component_templates": [
+                "XR-knee"
+              ]
+            },
+            "xr-tibia-fibula": {
+              "primary_cpt": "73590",
+              "description": "XR Tibia/Fibula",
+              "template_file": "templates/xray/lower_ext/xr-tibia-fibula.json",
+              "variants": {
+                "73590": {
+                  "description": "AP and lateral",
+                  "technique_note": "Include both joints"
+                }
+              },
+              "common_use": "Tibia/fibula fracture",
+              "component_templates": [
+                "XR-knee",
+                "XR-ankle-foot"
+              ]
+            },
+            "xr-ankle": {
+              "primary_cpt": "73610",
+              "description": "XR Ankle",
+              "template_file": "templates/xray/lower_ext/xr-ankle.json",
+              "variants": {
+                "73600": {
+                  "description": "2 views (AP/lateral)",
+                  "technique_note": "Limited"
+                },
+                "73610": {
+                  "description": "Min 3 views",
+                  "technique_note": "AP, lateral, mortise"
+                }
+              },
+              "common_use": "Ankle fracture, sprain",
+              "component_templates": [
+                "XR-ankle-foot"
+              ]
+            },
+            "xr-foot": {
+              "primary_cpt": "73630",
+              "description": "XR Foot",
+              "template_file": "templates/xray/lower_ext/xr-foot.json",
+              "variants": {
+                "73620": {
+                  "description": "2 views (AP/lateral)",
+                  "technique_note": "Limited"
+                },
+                "73630": {
+                  "description": "Min 3 views",
+                  "technique_note": "AP, lateral, oblique"
+                }
+              },
+              "common_use": "Foot fracture, Lisfranc",
+              "component_templates": [
+                "XR-ankle-foot"
+              ]
+            },
+            "xr-calcaneus": {
+              "primary_cpt": "73650",
+              "description": "XR Calcaneus",
+              "template_file": "templates/xray/lower_ext/xr-calcaneus.json",
+              "variants": {
+                "73650": {
+                  "description": "Min 2 views",
+                  "technique_note": "Axial and lateral"
+                }
+              },
+              "common_use": "Calcaneus fracture",
+              "component_templates": [
+                "XR-ankle-foot"
+              ]
+            },
+            "xr-toes": {
+              "primary_cpt": "73660",
+              "description": "XR Toe(s)",
+              "template_file": "templates/xray/lower_ext/xr-toes.json",
+              "variants": {
+                "73660": {
+                  "description": "Min 2 views",
+                  "technique_note": "AP and oblique"
+                }
+              },
+              "common_use": "Toe fracture",
+              "component_templates": [
+                "XR-ankle-foot"
+              ]
+            }
+          }
+        },
+        "head_face": {
+          "display_name": "Head & Face",
+          "templates": {
+            "xr-facial-bones": {
+              "primary_cpt": "70150",
+              "description": "XR Facial bones",
+              "template_file": "templates/xray/head/xr-facial-bones.json",
+              "variants": {
+                "70140": {
+                  "description": "Less than 3 views",
+                  "technique_note": "Limited"
+                },
+                "70150": {
+                  "description": "Min 3 views",
+                  "technique_note": "Waters, Caldwell, lateral"
+                }
+              },
+              "common_use": "Facial trauma",
+              "component_templates": [
+                "XR-facial"
+              ]
+            },
+            "xr-nasal-bones": {
+              "primary_cpt": "70160",
+              "description": "XR Nasal bones",
+              "template_file": "templates/xray/head/xr-nasal-bones.json",
+              "variants": {
+                "70160": {
+                  "description": "Min 3 views",
+                  "technique_note": "Lateral and Waters"
+                }
+              },
+              "common_use": "Nasal fracture",
+              "component_templates": [
+                "XR-facial"
+              ]
+            },
+            "xr-sinuses": {
+              "primary_cpt": "70220",
+              "description": "XR Sinuses",
+              "template_file": "templates/xray/head/xr-sinuses.json",
+              "variants": {
+                "70210": {
+                  "description": "Less than 3 views",
+                  "technique_note": "Limited"
+                },
+                "70220": {
+                  "description": "Min 3 views",
+                  "technique_note": "Waters, Caldwell, lateral"
+                }
+              },
+              "common_use": "Sinusitis (limited utility - CT preferred)",
+              "component_templates": [
+                "XR-facial"
+              ]
+            },
+            "xr-mandible": {
+              "primary_cpt": "70110",
+              "description": "XR Mandible",
+              "template_file": "templates/xray/head/xr-mandible.json",
+              "variants": {
+                "70100": {
+                  "description": "Less than 4 views",
+                  "technique_note": "Partial"
+                },
+                "70110": {
+                  "description": "Min 4 views",
+                  "technique_note": "Complete"
+                }
+              },
+              "common_use": "Mandible fracture",
+              "component_templates": [
+                "XR-facial"
+              ]
+            },
+            "xr-orbits": {
+              "primary_cpt": "70200",
+              "description": "XR Orbits",
+              "template_file": "templates/xray/head/xr-orbits.json",
+              "variants": {
+                "70200": {
+                  "description": "Min 4 views",
+                  "technique_note": "Complete orbital series"
+                }
+              },
+              "common_use": "Orbital trauma, foreign body",
+              "component_templates": [
+                "XR-facial"
+              ]
+            }
+          }
+        },
+        "soft_tissue": {
+          "display_name": "Soft Tissue",
+          "templates": {
+            "xr-neck-soft-tissue": {
+              "primary_cpt": "70360",
+              "description": "XR Neck soft tissue",
+              "template_file": "templates/xray/neck/xr-neck-soft-tissue.json",
+              "variants": {
+                "70360": {
+                  "description": "Soft tissue neck",
+                  "technique_note": "Lateral for airway"
+                }
+              },
+              "common_use": "Croup, epiglottitis, foreign body",
+              "component_templates": [
+                "XR-airway"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "ct": {
+      "display_name": "Computed Tomography",
+      "regions": {
+        "head": {
+          "display_name": "Head / Brain",
+          "templates": {
+            "ct-head": {
+              "primary_cpt": "70450",
+              "description": "CT Head/Brain",
+              "template_file": "templates/ct/head/ct-head.json",
+              "variants": {
+                "70450": {
+                  "description": "Without contrast",
+                  "technique_note": "Standard non-contrast head CT"
+                },
+                "70460": {
+                  "description": "With contrast",
+                  "technique_note": "Post-contrast only"
+                },
+                "70470": {
+                  "description": "Without then with contrast",
+                  "technique_note": "Pre and post contrast"
+                }
+              },
+              "common_use": "Stroke, trauma, headache, altered mental status",
+              "component_templates": [
+                "CT-brainparenchyma",
+                "CT-ventricles",
+                "CT-calvarium"
+              ]
+            },
+            "ct-orbits-face": {
+              "primary_cpt": "70480",
+              "description": "CT Orbits/Face",
+              "template_file": "templates/ct/head/ct-orbits-face.json",
+              "variants": {
+                "70480": {
+                  "description": "Without contrast",
+                  "technique_note": "Thin cuts through orbits/sinuses"
+                },
+                "70481": {
+                  "description": "With contrast",
+                  "technique_note": "Post-contrast only"
+                },
+                "70482": {
+                  "description": "Without then with contrast",
+                  "technique_note": "Pre and post contrast"
+                }
+              },
+              "common_use": "Orbital trauma, sinusitis, facial fracture",
+              "component_templates": [
+                "CT-face-sinuses",
+                "CT-calvarium"
+              ]
+            },
+            "ct-maxillofacial": {
+              "primary_cpt": "70486",
+              "description": "CT Maxillofacial/Sinuses",
+              "template_file": "templates/ct/head/ct-maxillofacial.json",
+              "variants": {
+                "70486": {
+                  "description": "Without contrast",
+                  "technique_note": "Standard sinus CT"
+                },
+                "70487": {
+                  "description": "With contrast",
+                  "technique_note": "Post-contrast only"
+                },
+                "70488": {
+                  "description": "Without then with contrast",
+                  "technique_note": "Pre and post contrast"
+                }
+              },
+              "common_use": "Sinusitis, facial trauma",
+              "component_templates": [
+                "CT-face-sinuses"
+              ]
+            },
+            "cta-head": {
+              "primary_cpt": "70496",
+              "description": "CTA Head",
+              "template_file": "templates/ct/head/cta-head.json",
+              "variants": {
+                "70496": {
+                  "description": "CTA Head",
+                  "technique_note": "Intracranial vessels"
+                }
+              },
+              "common_use": "Stroke, aneurysm, AVM",
+              "component_templates": [
+                "CT-brainparenchyma",
+                "CT-ventricles"
+              ]
+            }
+          }
+        },
+        "neck": {
+          "display_name": "Neck",
+          "templates": {
+            "ct-neck": {
+              "primary_cpt": "70491",
+              "description": "CT Soft tissue neck",
+              "template_file": "templates/ct/neck/ct-neck.json",
+              "variants": {
+                "70490": {
+                  "description": "Without contrast",
+                  "technique_note": "Non-contrast neck"
+                },
+                "70491": {
+                  "description": "With contrast",
+                  "technique_note": "Standard with IV contrast"
+                },
+                "70492": {
+                  "description": "Without then with contrast",
+                  "technique_note": "Pre and post contrast"
+                }
+              },
+              "common_use": "Abscess, lymphadenopathy, mass",
+              "component_templates": [
+                "CT-neck"
+              ]
+            },
+            "cta-neck": {
+              "primary_cpt": "70498",
+              "description": "CTA Neck",
+              "template_file": "templates/ct/neck/cta-neck.json",
+              "variants": {
+                "70498": {
+                  "description": "CTA Neck",
+                  "technique_note": "Carotid and vertebral arteries"
+                }
+              },
+              "common_use": "Carotid stenosis, dissection, stroke workup",
+              "component_templates": [
+                "CT-neck"
+              ]
+            }
+          }
+        },
+        "chest": {
+          "display_name": "Chest",
+          "templates": {
+            "ct-chest": {
+              "primary_cpt": "71250",
+              "description": "CT Chest/Thorax",
+              "template_file": "templates/ct/chest/ct-chest.json",
+              "variants": {
+                "71250": {
+                  "description": "Without contrast",
+                  "technique_note": "Standard non-contrast chest"
+                },
+                "71260": {
+                  "description": "With contrast",
+                  "technique_note": "Post-contrast only"
+                },
+                "71270": {
+                  "description": "Without then with contrast",
+                  "technique_note": "Pre and post contrast"
+                }
+              },
+              "common_use": "Lung nodule, infection, ILD, cancer staging",
+              "component_templates": [
+                "CT-lungs",
+                "CT-pleura",
+                "CT-heartmediastinum",
+                "CT-devices"
+              ]
+            },
+            "cta-chest": {
+              "primary_cpt": "71275",
+              "description": "CTA Chest (PE protocol)",
+              "template_file": "templates/ct/chest/cta-chest.json",
+              "variants": {
+                "71275": {
+                  "description": "CTA Chest",
+                  "technique_note": "Pulmonary arteries for PE"
+                }
+              },
+              "common_use": "Pulmonary embolism, aortic pathology",
+              "component_templates": [
+                "CT-pulmonaryarteries",
+                "CT-lungs",
+                "CT-heartmediastinum",
+                "CT-devices"
+              ]
+            },
+            "ct-chest-ldct": {
+              "primary_cpt": "71271",
+              "description": "Low-dose CT Chest (Lung cancer screening)",
+              "template_file": "templates/ct/chest/ct-chest-ldct.json",
+              "variants": {
+                "71271": {
+                  "description": "LDCT lung screening",
+                  "technique_note": "Low-dose non-contrast, Lung-RADS reporting"
+                }
+              },
+              "common_use": "Lung cancer screening in high-risk patients",
+              "component_templates": [
+                "CT-lungs"
+              ]
+            }
+          }
+        },
+        "cardiac": {
+          "display_name": "Cardiac",
+          "templates": {
+            "ct-calcium-score": {
+              "primary_cpt": "75571",
+              "description": "CT Cardiac Calcium Scoring",
+              "template_file": "templates/ct/cardiac/ct-calcium-score.json",
+              "variants": {
+                "75571": {
+                  "description": "Calcium scoring only",
+                  "technique_note": "Non-contrast, gated acquisition"
+                },
+                "75572": {
+                  "description": "CTA coronary without contrast",
+                  "technique_note": "Including calcium score"
+                },
+                "75574": {
+                  "description": "CTA coronary with contrast and 3D",
+                  "technique_note": "Complete coronary CTA"
+                }
+              },
+              "common_use": "CAD risk stratification, coronary artery assessment",
+              "component_templates": [
+                "CT-heartmediastinum"
+              ]
+            }
+          }
+        },
+        "spine": {
+          "display_name": "Spine",
+          "templates": {
+            "ct-cspine": {
+              "primary_cpt": "72125",
+              "description": "CT Cervical spine",
+              "template_file": "templates/ct/spine/ct-cspine.json",
+              "variants": {
+                "72125": {
+                  "description": "Without contrast",
+                  "technique_note": "Standard trauma protocol"
+                },
+                "72126": {
+                  "description": "With contrast",
+                  "technique_note": "Post-contrast only"
+                },
+                "72127": {
+                  "description": "Without then with contrast",
+                  "technique_note": "Pre and post contrast"
+                }
+              },
+              "common_use": "Trauma, fracture, degenerative disease",
+              "component_templates": [
+                "CT-cspine"
+              ]
+            },
+            "ct-tspine": {
+              "primary_cpt": "72128",
+              "description": "CT Thoracic spine",
+              "template_file": "templates/ct/spine/ct-tspine.json",
+              "variants": {
+                "72128": {
+                  "description": "Without contrast",
+                  "technique_note": "Standard"
+                },
+                "72129": {
+                  "description": "With contrast",
+                  "technique_note": "Post-contrast only"
+                },
+                "72130": {
+                  "description": "Without then with contrast",
+                  "technique_note": "Pre and post contrast"
+                }
+              },
+              "common_use": "Trauma, compression fracture",
+              "component_templates": [
+                "CT-calvarium"
+              ]
+            },
+            "ct-lspine": {
+              "primary_cpt": "72131",
+              "description": "CT Lumbar spine",
+              "template_file": "templates/ct/spine/ct-lspine.json",
+              "variants": {
+                "72131": {
+                  "description": "Without contrast",
+                  "technique_note": "Standard"
+                },
+                "72132": {
+                  "description": "With contrast",
+                  "technique_note": "Post-contrast only"
+                },
+                "72133": {
+                  "description": "Without then with contrast",
+                  "technique_note": "Pre and post contrast"
+                }
+              },
+              "common_use": "Trauma, disc disease, stenosis",
+              "component_templates": [
+                "AR-bones"
+              ]
+            }
+          }
+        },
+        "abdomen_pelvis": {
+          "display_name": "Abdomen & Pelvis",
+          "templates": {
+            "ct-abdomen-pelvis": {
+              "primary_cpt": "74177",
+              "description": "CT Abdomen and Pelvis",
+              "template_file": "templates/ct/abdomen_pelvis/ct-abdomen-pelvis.json",
+              "variants": {
+                "74176": {
+                  "description": "Without contrast",
+                  "technique_note": "Non-contrast (renal stone, hemorrhage)"
+                },
+                "74177": {
+                  "description": "With contrast",
+                  "technique_note": "Standard portal venous phase"
+                },
+                "74178": {
+                  "description": "Without then with contrast",
+                  "technique_note": "Pre and post contrast"
+                }
+              },
+              "common_use": "Abdominal pain, appendicitis, diverticulitis, cancer",
+              "component_templates": [
+                "CT-liver",
+                "CT-gallbladder",
+                "CT-pancreas",
+                "CT-spleen",
+                "CT-kidneys",
+                "CT-bowel",
+                "CT-peritoneum",
+                "CT-pelvis",
+                "CT-devices"
+              ]
+            },
+            "cta-runoff": {
+              "primary_cpt": "73706",
+              "description": "CTA Lower Extremity Runoff",
+              "template_file": "templates/ct/vascular/cta-runoff.json",
+              "variants": {
+                "73706": {
+                  "description": "CTA Lower extremity",
+                  "technique_note": "Arterial runoff"
+                }
+              },
+              "common_use": "Peripheral vascular disease, trauma",
+              "component_templates": [
+                "CT-lower-extremity"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "mri": {
+      "display_name": "MRI",
+      "regions": {
+        "brain": {
+          "display_name": "Brain",
+          "templates": {
+            "mri-brain": {
+              "primary_cpt": "70551",
+              "description": "MRI Brain",
+              "template_file": "templates/mri/brain/mri-brain.json",
+              "variants": {
+                "70551": {
+                  "description": "Without contrast",
+                  "technique_note": "Standard brain MRI"
+                },
+                "70552": {
+                  "description": "With contrast",
+                  "technique_note": "Post-contrast only"
+                },
+                "70553": {
+                  "description": "Without then with contrast",
+                  "technique_note": "Pre and post contrast"
+                }
+              },
+              "common_use": "Stroke, tumor, MS, infection",
+              "component_templates": [
+                "CT-brainparenchyma",
+                "CT-ventricles"
+              ]
+            },
+            "mra-head": {
+              "primary_cpt": "70544",
+              "description": "MRA Head",
+              "template_file": "templates/mri/brain/mra-head.json",
+              "variants": {
+                "70544": {
+                  "description": "Without contrast",
+                  "technique_note": "TOF MRA"
+                },
+                "70545": {
+                  "description": "With contrast",
+                  "technique_note": "CE-MRA"
+                },
+                "70546": {
+                  "description": "Without then with contrast",
+                  "technique_note": "TOF and CE-MRA"
+                }
+              },
+              "common_use": "Aneurysm, AVM, stroke",
+              "component_templates": [
+                "CT-brainparenchyma"
+              ]
+            }
+          }
+        },
+        "neck_face": {
+          "display_name": "Neck & Face",
+          "templates": {
+            "mri-orbits-face-neck": {
+              "primary_cpt": "70540",
+              "description": "MRI Orbit/Face/Neck",
+              "template_file": "templates/mri/face_neck/mri-orbits-face-neck.json",
+              "variants": {
+                "70540": {
+                  "description": "Without contrast",
+                  "technique_note": "Orbits, face, or neck"
+                },
+                "70542": {
+                  "description": "With contrast",
+                  "technique_note": "Post-contrast only"
+                },
+                "70543": {
+                  "description": "Without then with contrast",
+                  "technique_note": "Pre and post contrast"
+                }
+              },
+              "common_use": "Orbital mass, neck mass, cranial nerves"
+            },
+            "mra-neck": {
+              "primary_cpt": "70547",
+              "description": "MRA Neck",
+              "template_file": "templates/mri/face_neck/mra-neck.json",
+              "variants": {
+                "70547": {
+                  "description": "Without contrast",
+                  "technique_note": "TOF MRA"
+                },
+                "70548": {
+                  "description": "With contrast",
+                  "technique_note": "CE-MRA"
+                },
+                "70549": {
+                  "description": "Without then with contrast",
+                  "technique_note": "TOF and CE-MRA"
+                }
+              },
+              "common_use": "Carotid stenosis, dissection",
+              "component_templates": []
+            }
+          }
+        },
+        "spine": {
+          "display_name": "Spine",
+          "templates": {
+            "mri-cspine": {
+              "primary_cpt": "72141",
+              "description": "MRI Cervical spine",
+              "template_file": "templates/mri/spine/mri-cspine.json",
+              "variants": {
+                "72141": {
+                  "description": "Without contrast",
+                  "technique_note": "Standard C-spine"
+                },
+                "72142": {
+                  "description": "With contrast",
+                  "technique_note": "Post-contrast only"
+                },
+                "72156": {
+                  "description": "Without then with contrast",
+                  "technique_note": "Pre and post contrast"
+                }
+              },
+              "common_use": "Disc herniation, cord compression, myelopathy",
+              "component_templates": [
+                "MR-spine-cervical"
+              ]
+            },
+            "mri-tspine": {
+              "primary_cpt": "72146",
+              "description": "MRI Thoracic spine",
+              "template_file": "templates/mri/spine/mri-tspine.json",
+              "variants": {
+                "72146": {
+                  "description": "Without contrast",
+                  "technique_note": "Standard T-spine"
+                },
+                "72147": {
+                  "description": "With contrast",
+                  "technique_note": "Post-contrast only"
+                },
+                "72157": {
+                  "description": "Without then with contrast",
+                  "technique_note": "Pre and post contrast"
+                }
+              },
+              "common_use": "Cord compression, tumor, infection",
+              "component_templates": [
+                "MR-spine-lumbar"
+              ]
+            },
+            "mri-lspine": {
+              "primary_cpt": "72148",
+              "description": "MRI Lumbar spine",
+              "template_file": "templates/mri/spine/mri-lspine.json",
+              "variants": {
+                "72148": {
+                  "description": "Without contrast",
+                  "technique_note": "Standard L-spine"
+                },
+                "72149": {
+                  "description": "With contrast",
+                  "technique_note": "Post-contrast only"
+                },
+                "72158": {
+                  "description": "Without then with contrast",
+                  "technique_note": "Pre and post contrast"
+                }
+              },
+              "common_use": "Disc herniation, stenosis, radiculopathy",
+              "component_templates": [
+                "MR-spine-lumbar"
+              ]
+            }
+          }
+        },
+        "abdomen": {
+          "display_name": "Abdomen",
+          "templates": {
+            "mri-abdomen": {
+              "primary_cpt": "74183",
+              "description": "MRI Abdomen (MRCP, liver)",
+              "template_file": "templates/mri/abdomen/mri-abdomen.json",
+              "variants": {
+                "74181": {
+                  "description": "Without contrast",
+                  "technique_note": "MRCP or non-contrast liver"
+                },
+                "74182": {
+                  "description": "With contrast",
+                  "technique_note": "Dynamic liver MRI"
+                },
+                "74183": {
+                  "description": "Without then with contrast",
+                  "technique_note": "Complete liver protocol"
+                }
+              },
+              "common_use": "Liver lesion, MRCP for biliary, pancreas",
+              "component_templates": [
+                "CT-liver",
+                "CT-pancreas",
+                "CT-spleen",
+                "CT-kidneys"
+              ]
+            }
+          }
+        },
+        "pelvis": {
+          "display_name": "Pelvis",
+          "templates": {
+            "mri-pelvis": {
+              "primary_cpt": "72197",
+              "description": "MRI Pelvis (non-prostate)",
+              "template_file": "templates/mri/pelvis/mri-pelvis.json",
+              "variants": {
+                "72195": {
+                  "description": "Without contrast",
+                  "technique_note": "Non-contrast pelvis"
+                },
+                "72196": {
+                  "description": "With contrast",
+                  "technique_note": "Post-contrast only"
+                },
+                "72197": {
+                  "description": "Without then with contrast",
+                  "technique_note": "Complete pelvis protocol"
+                }
+              },
+              "common_use": "Pelvic mass, uterine pathology, rectal cancer staging",
+              "component_templates": []
+            }
+          }
+        },
+        "extremity": {
+          "display_name": "Extremity",
+          "templates": {
+            "mri-shoulder": {
+              "primary_cpt": "73221",
+              "description": "MRI Shoulder (joint)",
+              "template_file": "templates/mri/upper_ext/mri-shoulder.json",
+              "variants": {
+                "73221": {
+                  "description": "Without contrast",
+                  "technique_note": "Standard shoulder MRI"
+                },
+                "73222": {
+                  "description": "With contrast",
+                  "technique_note": "Direct MR arthrogram"
+                },
+                "73223": {
+                  "description": "Without then with contrast",
+                  "technique_note": "Indirect arthrogram"
+                }
+              },
+              "common_use": "Rotator cuff, labral tear",
+              "component_templates": [
+                "MR-shoulder"
+              ]
+            },
+            "mri-elbow-wrist-hand": {
+              "primary_cpt": "73221",
+              "description": "MRI Upper extremity joint",
+              "template_file": "templates/mri/upper_ext/mri-upper-joint.json",
+              "variants": {
+                "73221": {
+                  "description": "Without contrast",
+                  "technique_note": "Any upper extremity joint"
+                },
+                "73222": {
+                  "description": "With contrast",
+                  "technique_note": "Arthrogram"
+                },
+                "73223": {
+                  "description": "Without then with contrast",
+                  "technique_note": "Pre and post contrast"
+                }
+              },
+              "common_use": "Ligament injury, occult fracture"
+            },
+            "mri-hip-knee-ankle": {
+              "primary_cpt": "73721",
+              "description": "MRI Lower extremity joint",
+              "template_file": "templates/mri/lower_ext/mri-lower-joint.json",
+              "variants": {
+                "73721": {
+                  "description": "Without contrast",
+                  "technique_note": "Any lower extremity joint"
+                },
+                "73722": {
+                  "description": "With contrast",
+                  "technique_note": "Arthrogram"
+                },
+                "73723": {
+                  "description": "Without then with contrast",
+                  "technique_note": "Pre and post contrast"
+                }
+              },
+              "common_use": "Meniscus, ACL, labral tear, AVN"
+            },
+            "mri-extremity-non-joint": {
+              "primary_cpt": "73718",
+              "description": "MRI Extremity (soft tissue, non-joint)",
+              "template_file": "templates/mri/extremity/mri-extremity-soft-tissue.json",
+              "variants": {
+                "73218": {
+                  "description": "Upper ext without contrast",
+                  "technique_note": "Arm/forearm soft tissue"
+                },
+                "73219": {
+                  "description": "Upper ext with contrast",
+                  "technique_note": "Post-contrast only"
+                },
+                "73220": {
+                  "description": "Upper ext without then with",
+                  "technique_note": "Pre and post contrast"
+                },
+                "73718": {
+                  "description": "Lower ext without contrast",
+                  "technique_note": "Thigh/leg soft tissue"
+                },
+                "73719": {
+                  "description": "Lower ext with contrast",
+                  "technique_note": "Post-contrast only"
+                },
+                "73720": {
+                  "description": "Lower ext without then with",
+                  "technique_note": "Pre and post contrast"
+                }
+              },
+              "common_use": "Soft tissue mass, osteomyelitis"
+            }
+          }
+        }
+      }
+    },
+    "ultrasound": {
+      "display_name": "Ultrasound",
+      "regions": {
+        "abdomen": {
+          "display_name": "Abdomen",
+          "templates": {
+            "us-abdomen": {
+              "primary_cpt": "76700",
+              "description": "US Abdomen",
+              "template_file": "templates/ultrasound/abdomen/us-abdomen.json",
+              "variants": {
+                "76700": {
+                  "description": "Complete",
+                  "technique_note": "Liver, GB, pancreas, spleen, kidneys, aorta"
+                },
+                "76705": {
+                  "description": "Limited",
+                  "technique_note": "Single organ or quadrant (e.g., RUQ only)"
+                }
+              },
+              "common_use": "RUQ pain, cholecystitis, liver evaluation",
+              "component_templates": [
+                "US-liver",
+                "US-gallbladder",
+                "US-kidneys"
+              ]
+            },
+            "us-aorta-aaa": {
+              "primary_cpt": "76706",
+              "description": "US Abdominal Aorta (AAA screening)",
+              "template_file": "templates/ultrasound/abdomen/us-aorta.json",
+              "variants": {
+                "76706": {
+                  "description": "Aorta screening",
+                  "technique_note": "For AAA in eligible patients"
+                }
+              },
+              "common_use": "AAA screening in high-risk males 65-75"
+            }
+          }
+        },
+        "chest": {
+          "display_name": "Chest",
+          "templates": {
+            "us-chest": {
+              "primary_cpt": "76604",
+              "description": "US Chest",
+              "template_file": "templates/ultrasound/chest/us-chest.json",
+              "variants": {
+                "76604": {
+                  "description": "Chest/pleural",
+                  "technique_note": "B-scan, pleural space, mediastinum"
+                }
+              },
+              "common_use": "Pleural effusion, thoracentesis guidance"
+            }
+          }
+        },
+        "renal": {
+          "display_name": "Renal / Retroperitoneal",
+          "templates": {
+            "us-renal": {
+              "primary_cpt": "76770",
+              "description": "US Renal/Retroperitoneal",
+              "template_file": "templates/ultrasound/renal/us-renal.json",
+              "variants": {
+                "76770": {
+                  "description": "Complete",
+                  "technique_note": "Kidneys, bladder, aorta"
+                },
+                "76775": {
+                  "description": "Limited",
+                  "technique_note": "Kidneys only or focused"
+                }
+              },
+              "common_use": "Hydronephrosis, renal mass, renal failure",
+              "component_templates": [
+                "US-kidneys"
+              ]
+            }
+          }
+        },
+        "pelvis": {
+          "display_name": "Pelvis",
+          "templates": {
+            "us-pelvis": {
+              "primary_cpt": "76856",
+              "description": "US Pelvis",
+              "template_file": "templates/ultrasound/pelvis/us-pelvis.json",
+              "variants": {
+                "76856": {
+                  "description": "Complete transabdominal",
+                  "technique_note": "Uterus, ovaries, bladder"
+                },
+                "76857": {
+                  "description": "Limited",
+                  "technique_note": "Focused evaluation"
+                },
+                "76830": {
+                  "description": "Transvaginal",
+                  "technique_note": "Endovaginal approach"
+                }
+              },
+              "common_use": "Pelvic pain, ovarian cyst, fibroids"
+            }
+          }
+        },
+        "obstetric": {
+          "display_name": "Obstetric",
+          "templates": {
+            "us-ob": {
+              "primary_cpt": "76805",
+              "description": "US Obstetric",
+              "template_file": "templates/ultrasound/obstetric/us-ob.json",
+              "variants": {
+                "76801": {
+                  "description": "First trimester single",
+                  "technique_note": "Viability, dating"
+                },
+                "76805": {
+                  "description": "Complete second/third",
+                  "technique_note": "Full fetal anatomic survey"
+                },
+                "76811": {
+                  "description": "Detailed anatomy",
+                  "technique_note": "High-risk detailed evaluation"
+                },
+                "76815": {
+                  "description": "Limited",
+                  "technique_note": "Fetal heart, position, size only"
+                },
+                "76816": {
+                  "description": "Follow-up",
+                  "technique_note": "Repeat/growth scan"
+                },
+                "76817": {
+                  "description": "Transvaginal OB",
+                  "technique_note": "Early pregnancy, cervix"
+                }
+              },
+              "common_use": "Pregnancy dating, anatomy, growth"
+            },
+            "us-biophysical-profile": {
+              "primary_cpt": "76818",
+              "description": "Biophysical profile (BPP)",
+              "template_file": "templates/ultrasound/obstetric/us-bpp.json",
+              "variants": {
+                "76818": {
+                  "description": "Full BPP",
+                  "technique_note": "AFI, movement, tone, breathing, NST"
+                },
+                "76819": {
+                  "description": "BPP without NST",
+                  "technique_note": "Modified BPP"
+                }
+              },
+              "common_use": "Fetal well-being assessment"
+            }
+          }
+        },
+        "scrotum": {
+          "display_name": "Scrotum",
+          "templates": {
+            "us-scrotum": {
+              "primary_cpt": "76870",
+              "description": "US Scrotum",
+              "template_file": "templates/ultrasound/scrotum/us-scrotum.json",
+              "variants": {
+                "76870": {
+                  "description": "Complete with Doppler",
+                  "technique_note": "Both testes, epididymis, Doppler"
+                }
+              },
+              "common_use": "Testicular pain, torsion, mass",
+              "component_templates": [
+                "US-kidneys"
+              ]
+            }
+          }
+        },
+        "thyroid": {
+          "display_name": "Thyroid / Neck",
+          "templates": {
+            "us-thyroid": {
+              "primary_cpt": "76536",
+              "description": "US Thyroid/Neck soft tissue",
+              "template_file": "templates/ultrasound/thyroid/us-thyroid.json",
+              "variants": {
+                "76536": {
+                  "description": "Complete",
+                  "technique_note": "Thyroid, parathyroid, lymph nodes"
+                }
+              },
+              "common_use": "Thyroid nodule, goiter, parathyroid",
+              "component_templates": [
+                "US-thyroid"
+              ]
+            }
+          }
+        },
+        "breast": {
+          "display_name": "Breast (ER)",
+          "templates": {
+            "us-breast": {
+              "primary_cpt": "76641",
+              "description": "US Breast",
+              "template_file": "templates/ultrasound/breast/us-breast.json",
+              "variants": {
+                "76641": {
+                  "description": "Complete unilateral",
+                  "technique_note": "Whole breast and axilla"
+                },
+                "76642": {
+                  "description": "Limited",
+                  "technique_note": "Targeted/focal evaluation"
+                }
+              },
+              "common_use": "Breast mass, abscess, ER evaluation"
+            }
+          }
+        },
+        "extremity": {
+          "display_name": "Extremity (soft tissue)",
+          "templates": {
+            "us-extremity": {
+              "primary_cpt": "76881",
+              "description": "US Extremity (non-vascular)",
+              "template_file": "templates/ultrasound/extremity/us-extremity.json",
+              "variants": {
+                "76881": {
+                  "description": "Complete",
+                  "technique_note": "Full joint or region evaluation"
+                },
+                "76882": {
+                  "description": "Limited",
+                  "technique_note": "Targeted/focal"
+                }
+              },
+              "common_use": "Soft tissue mass, joint effusion, foreign body"
+            }
+          }
+        },
+        "pediatric": {
+          "display_name": "Pediatric",
+          "templates": {
+            "us-infant-hips": {
+              "primary_cpt": "76885",
+              "description": "US Infant hips",
+              "template_file": "templates/ultrasound/pediatric/us-infant-hips.json",
+              "variants": {
+                "76885": {
+                  "description": "Dynamic",
+                  "technique_note": "With stress maneuvers"
+                },
+                "76886": {
+                  "description": "Static",
+                  "technique_note": "Limited/screening"
+                }
+              },
+              "common_use": "DDH screening"
+            },
+            "us-pylorus": {
+              "primary_cpt": "76705",
+              "description": "US Pylorus",
+              "template_file": "templates/ultrasound/pediatric/us-pylorus.json",
+              "variants": {
+                "76705": {
+                  "description": "Limited abdomen for pylorus",
+                  "technique_note": "Targeted pyloric measurement"
+                }
+              },
+              "common_use": "Pyloric stenosis"
+            }
+          }
+        },
+        "vascular": {
+          "display_name": "Vascular Duplex",
+          "templates": {
+            "us-carotid-duplex": {
+              "primary_cpt": "93880",
+              "description": "Carotid Duplex",
+              "template_file": "templates/ultrasound/vascular/us-carotid-duplex.json",
+              "variants": {
+                "93880": {
+                  "description": "Complete bilateral",
+                  "technique_note": "B-mode, Doppler, spectral analysis"
+                },
+                "93882": {
+                  "description": "Limited unilateral",
+                  "technique_note": "One side or limited evaluation"
+                }
+              },
+              "common_use": "Stroke workup, carotid stenosis screening"
+            },
+            "us-venous-lower-extremity": {
+              "primary_cpt": "93970",
+              "description": "Venous Duplex Lower Extremity (DVT)",
+              "template_file": "templates/ultrasound/vascular/us-venous-le.json",
+              "variants": {
+                "93970": {
+                  "description": "Complete bilateral",
+                  "technique_note": "Both legs, compression + Doppler"
+                },
+                "93971": {
+                  "description": "Unilateral or limited",
+                  "technique_note": "Single leg or focused"
+                }
+              },
+              "common_use": "DVT evaluation, leg swelling"
+            },
+            "us-venous-upper-extremity": {
+              "primary_cpt": "93970",
+              "description": "Venous Duplex Upper Extremity",
+              "template_file": "templates/ultrasound/vascular/us-venous-ue.json",
+              "variants": {
+                "93970": {
+                  "description": "Complete bilateral",
+                  "technique_note": "Both arms, compression + Doppler"
+                },
+                "93971": {
+                  "description": "Unilateral or limited",
+                  "technique_note": "Single arm or focused"
+                }
+              },
+              "common_use": "Upper extremity DVT, PICC line evaluation"
+            },
+            "us-arterial-lower-extremity": {
+              "primary_cpt": "93925",
+              "description": "Arterial Duplex Lower Extremity",
+              "template_file": "templates/ultrasound/vascular/us-arterial-le.json",
+              "variants": {
+                "93925": {
+                  "description": "Complete bilateral",
+                  "technique_note": "Both legs, arterial waveforms"
+                },
+                "93926": {
+                  "description": "Unilateral or limited",
+                  "technique_note": "Single leg or focused"
+                }
+              },
+              "common_use": "PAD, claudication, arterial insufficiency"
+            },
+            "us-arterial-upper-extremity": {
+              "primary_cpt": "93930",
+              "description": "Arterial Duplex Upper Extremity",
+              "template_file": "templates/ultrasound/vascular/us-arterial-ue.json",
+              "variants": {
+                "93930": {
+                  "description": "Complete bilateral",
+                  "technique_note": "Both arms, arterial waveforms"
+                },
+                "93931": {
+                  "description": "Unilateral or limited",
+                  "technique_note": "Single arm or focused"
+                }
+              },
+              "common_use": "Upper extremity arterial disease, thoracic outlet"
+            },
+            "us-abdominal-aorta-duplex": {
+              "primary_cpt": "93978",
+              "description": "Duplex Abdominal Aorta/IVC",
+              "template_file": "templates/ultrasound/vascular/us-aorta-duplex.json",
+              "variants": {
+                "93978": {
+                  "description": "Complete",
+                  "technique_note": "Aorta, IVC, iliacs with Doppler"
+                },
+                "93979": {
+                  "description": "Limited",
+                  "technique_note": "Focused evaluation"
+                }
+              },
+              "common_use": "AAA follow-up, IVC evaluation"
+            },
+            "us-renal-artery-duplex": {
+              "primary_cpt": "93975",
+              "description": "Duplex Renal Arteries",
+              "template_file": "templates/ultrasound/vascular/us-renal-artery.json",
+              "variants": {
+                "93975": {
+                  "description": "Complete bilateral",
+                  "technique_note": "Both renal arteries with Doppler"
+                },
+                "93976": {
+                  "description": "Limited",
+                  "technique_note": "Unilateral or focused"
+                }
+              },
+              "common_use": "Renal artery stenosis, renovascular hypertension"
+            },
+            "us-mesenteric-duplex": {
+              "primary_cpt": "93978",
+              "description": "Duplex Mesenteric Vessels",
+              "template_file": "templates/ultrasound/vascular/us-mesenteric.json",
+              "variants": {
+                "93978": {
+                  "description": "Mesenteric duplex",
+                  "technique_note": "Celiac, SMA, IMA with Doppler"
+                }
+              },
+              "common_use": "Mesenteric ischemia, postprandial pain"
+            }
+          }
+        }
+      }
+    },
+    "fluoroscopy": {
+      "display_name": "Fluoroscopy / GI",
+      "regions": {
+        "swallow": {
+          "display_name": "Swallow Studies",
+          "templates": {
+            "fluoro-esophagram": {
+              "primary_cpt": "74220",
+              "description": "Esophagram / Barium swallow",
+              "template_file": "templates/fluoroscopy/upper_gi/esophagram.json",
+              "variants": {
+                "74220": {
+                  "description": "Esophagram",
+                  "technique_note": "Barium or water-soluble contrast"
+                },
+                "74230": {
+                  "description": "Modified barium swallow",
+                  "technique_note": "With SLP, multiple consistencies"
+                }
+              },
+              "common_use": "Dysphagia, stricture, leak, aspiration"
+            }
+          }
+        },
+        "upper_gi": {
+          "display_name": "Upper GI",
+          "templates": {
+            "fluoro-ugi": {
+              "primary_cpt": "74240",
+              "description": "Upper GI series",
+              "template_file": "templates/fluoroscopy/upper_gi/ugi.json",
+              "variants": {
+                "74240": {
+                  "description": "UGI without KUB",
+                  "technique_note": "Esophagus, stomach, duodenum"
+                },
+                "74241": {
+                  "description": "UGI with KUB",
+                  "technique_note": "Includes scout film"
+                },
+                "74245": {
+                  "description": "UGI with SBFT",
+                  "technique_note": "Includes small bowel follow-through"
+                },
+                "74250": {
+                  "description": "SBFT only",
+                  "technique_note": "Small bowel series"
+                }
+              },
+              "common_use": "Obstruction, ulcer, hernia"
+            }
+          }
+        },
+        "lower_gi": {
+          "display_name": "Lower GI",
+          "templates": {
+            "fluoro-enema": {
+              "primary_cpt": "74270",
+              "description": "Barium/Contrast enema",
+              "template_file": "templates/fluoroscopy/lower_gi/enema.json",
+              "variants": {
+                "74270": {
+                  "description": "Single contrast enema",
+                  "technique_note": "Barium or water-soluble"
+                },
+                "74280": {
+                  "description": "Air contrast enema",
+                  "technique_note": "Double contrast technique"
+                }
+              },
+              "common_use": "Obstruction, volvulus, diverticulitis, leak"
+            }
+          }
+        },
+        "genitourinary": {
+          "display_name": "Genitourinary",
+          "templates": {
+            "fluoro-vcug": {
+              "primary_cpt": "74455",
+              "description": "VCUG (Voiding cystourethrogram)",
+              "template_file": "templates/fluoroscopy/gu/vcug.json",
+              "variants": {
+                "74430": {
+                  "description": "Cystogram",
+                  "technique_note": "Static bladder only"
+                },
+                "74450": {
+                  "description": "Retrograde urethrogram",
+                  "technique_note": "Urethra only"
+                },
+                "74455": {
+                  "description": "VCUG",
+                  "technique_note": "Voiding study for reflux"
+                }
+              },
+              "common_use": "VUR, UTI workup, urethral stricture"
+            }
+          }
+        }
+      }
+    },
+    "dexa": {
+      "display_name": "DEXA / Bone Density",
+      "regions": {
+        "bone_density": {
+          "display_name": "Bone Densitometry",
+          "templates": {
+            "dexa-spine-hip": {
+              "primary_cpt": "77080",
+              "description": "DEXA Bone Density (Spine and/or Hip)",
+              "template_file": "templates/dexa/dexa-axial.json",
+              "variants": {
+                "77080": {
+                  "description": "Axial (spine/hip)",
+                  "technique_note": "DXA spine and/or femur"
+                },
+                "77081": {
+                  "description": "Appendicular",
+                  "technique_note": "DXA forearm or calcaneus"
+                },
+                "77085": {
+                  "description": "Axial with VFA",
+                  "technique_note": "DXA spine/hip + vertebral fracture assessment"
+                },
+                "77086": {
+                  "description": "VFA only",
+                  "technique_note": "Vertebral fracture assessment alone"
+                }
+              },
+              "common_use": "Osteoporosis screening, fracture risk assessment"
+            }
+          }
+        }
+      }
+    },
+    "nuclear_medicine": {
+      "display_name": "Nuclear Medicine (ER)",
+      "regions": {
+        "pulmonary": {
+          "display_name": "Pulmonary",
+          "templates": {
+            "nm-vq-scan": {
+              "primary_cpt": "78582",
+              "description": "VQ Scan (Ventilation-Perfusion)",
+              "template_file": "templates/nuclear/pulmonary/vq-scan.json",
+              "variants": {
+                "78580": {
+                  "description": "Perfusion only, particulate",
+                  "technique_note": "Q scan only (MAA)"
+                },
+                "78582": {
+                  "description": "V/Q combined",
+                  "technique_note": "Aerosol/gas ventilation + perfusion"
+                },
+                "78584": {
+                  "description": "V/Q single breath",
+                  "technique_note": "Single breath Xenon + perfusion"
+                },
+                "78585": {
+                  "description": "V/Q with washout",
+                  "technique_note": "Xenon with washout + perfusion"
+                },
+                "78586": {
+                  "description": "Ventilation only, aerosol single",
+                  "technique_note": "V scan only"
+                },
+                "78587": {
+                  "description": "Ventilation only, aerosol multiple",
+                  "technique_note": "Multiple projections"
+                },
+                "78588": {
+                  "description": "Ventilation gaseous single",
+                  "technique_note": "Xenon single breath"
+                },
+                "78591": {
+                  "description": "Ventilation gaseous multiple",
+                  "technique_note": "Xenon multiple"
+                },
+                "78594": {
+                  "description": "V/Q SPECT quantitative",
+                  "technique_note": "SPECT with quantification"
+                },
+                "78597": {
+                  "description": "Perfusion quantitative",
+                  "technique_note": "For lung surgery planning"
+                },
+                "78598": {
+                  "description": "V/Q quantitative",
+                  "technique_note": "Quantitative for surgery"
+                }
+              },
+              "common_use": "PE evaluation, especially in contrast allergy or pregnancy"
+            }
+          }
+        },
+        "hepatobiliary": {
+          "display_name": "Hepatobiliary",
+          "templates": {
+            "nm-hida": {
+              "primary_cpt": "78226",
+              "description": "HIDA Scan (Hepatobiliary)",
+              "template_file": "templates/nuclear/hepatobiliary/hida.json",
+              "variants": {
+                "78226": {
+                  "description": "HIDA scan",
+                  "technique_note": "Standard hepatobiliary imaging"
+                },
+                "78227": {
+                  "description": "HIDA with CCK",
+                  "technique_note": "With pharmacologic intervention for EF"
+                }
+              },
+              "common_use": "Acute cholecystitis, biliary dyskinesia",
+              "component_templates": [
+                "NM-hida"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "_summary": {
+    "total_templates": 76,
+    "total_cpt_variants": 210,
+    "modalities": [
+      "X-Ray",
+      "CT",
+      "MRI",
+      "Ultrasound",
+      "Vascular Duplex",
+      "Fluoroscopy",
+      "DEXA",
+      "Nuclear Medicine (ER only)"
+    ],
+    "design_notes": [
+      "Each template represents a study type that shares findings components",
+      "CPT variants under each template differ only in technique (views, contrast)",
+      "Templates use nested components: HEADER > TECHNIQUE > FINDINGS (subcomponents) > IMPRESSION",
+      "Variant technique differences are noted for billing accuracy",
+      "Focused on teleradiology after-hours/overflow: excludes IR, biopsy, mammography, prostate"
+    ],
+    "additions_v3.1": [
+      "Added: Low-dose CT chest lung cancer screening (71271)",
+      "Added: CT Cardiac calcium scoring (75571, 75572, 75574)",
+      "Added: DEXA bone density (77080, 77081, 77085, 77086)",
+      "Added: Vascular duplex - Carotid (93880, 93882)",
+      "Added: Vascular duplex - Venous LE/UE DVT (93970, 93971)",
+      "Added: Vascular duplex - Arterial LE/UE (93925, 93926, 93930, 93931)",
+      "Added: Vascular duplex - Abdominal aorta/IVC (93978, 93979)",
+      "Added: Vascular duplex - Renal arteries (93975, 93976)",
+      "Added: Vascular duplex - Mesenteric (93978)",
+      "Added: US Chest/pleural (76604)",
+      "Added: US Aorta AAA screening (76706)"
+    ]
+  }
+}

@@ -1,0 +1,228 @@
+{
+  "$schema": "../../schema/template.schema.json",
+  "template_id": "76700-us-abdomen-complete",
+  "cpt_code": "76700",
+  "procedure_name": "ULTRASOUND ABDOMEN COMPLETE",
+  "modality": "US",
+  "body_region": "abdomen",
+  "contrast": "na",
+  
+  "description": "Complete abdominal ultrasound",
+  
+  "variants": [
+    {
+      "variant_id": "routine",
+      "name": "Routine",
+      "context": "routine",
+      "is_default": true
+    },
+    {
+      "variant_id": "with-doppler",
+      "name": "With Doppler",
+      "context": "with_doppler",
+      "add_on_cpt": "93975"
+    }
+  ],
+  
+  "legacy_template_names": [
+    "US ABDOMEN COMPLETE",
+    "US ABDOMEN with Doppler"
+  ],
+  
+  "structure": {
+    "header": {
+      "component_ref": "HDR.us.abdomen",
+      "sections": [
+        {
+          "name": "EXAM",
+          "content": "Complete abdominal ultrasound"
+        },
+        {
+          "name": "DATE",
+          "merge_field": "Exam Complete Time"
+        },
+        {
+          "name": "INDICATION",
+          "merge_field": "Indication"
+        },
+        {
+          "name": "COMPARISON",
+          "merge_field": "Comparison"
+        }
+      ]
+    },
+    
+    "technique": {
+      "component_ref": "TEC.us.abdomen.complete",
+      "default_text": "Real-time grayscale and color Doppler ultrasound of the abdomen was performed."
+    },
+    
+    "findings": {
+      "component_ref": "FND.us.abdomen",
+      "subcomponents": [
+        {
+          "order": 1,
+          "component_ref": "SUB.us.abd.liver",
+          "header": "LIVER:",
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.liver.size_us"},
+              {"ref": "ATM.liver.echotexture"},
+              {"ref": "ATM.liver.lesions_us"},
+              {"ref": "ATM.liver.hepatic_veins"}
+            ],
+            "normal_text": "Liver is normal in size and echotexture. No focal hepatic lesion. Hepatic veins are patent."
+          }
+        },
+        {
+          "order": 2,
+          "component_ref": "SUB.us.abd.gallbladder",
+          "header": "GALLBLADDER:",
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.gb.wall_us"},
+              {"ref": "ATM.gb.stones_us"},
+              {"ref": "ATM.gb.sludge"},
+              {"ref": "ATM.gb.polyps"},
+              {"ref": "ATM.gb.murphy_sign"}
+            ],
+            "normal_text": "Gallbladder is normal in appearance. No cholelithiasis or gallbladder wall thickening. Negative sonographic Murphy's sign."
+          }
+        },
+        {
+          "order": 3,
+          "component_ref": "SUB.us.abd.bile_ducts",
+          "header": "BILE DUCTS:",
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.cbd.diameter_us"},
+              {"ref": "ATM.ihd.dilation_us"}
+            ],
+            "normal_text": "Common bile duct measures ___ mm. No intrahepatic biliary ductal dilation."
+          }
+        },
+        {
+          "order": 4,
+          "component_ref": "SUB.us.abd.pancreas",
+          "header": "PANCREAS:",
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.pancreas.visualization_us"},
+              {"ref": "ATM.pancreas.echotexture"}
+            ],
+            "normal_text": "Pancreas is normal in appearance when visualized. Portions obscured by overlying bowel gas."
+          }
+        },
+        {
+          "order": 5,
+          "component_ref": "SUB.us.abd.spleen",
+          "header": "SPLEEN:",
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.spleen.size_us"},
+              {"ref": "ATM.spleen.echotexture"}
+            ],
+            "normal_text": "Spleen measures ___ cm and is normal in echotexture."
+          }
+        },
+        {
+          "order": 6,
+          "component_ref": "SUB.us.abd.kidneys",
+          "header": "KIDNEYS:",
+          "required": true,
+          "content": {
+            "subsections": [
+              {
+                "name": "Right Kidney",
+                "atomic_elements": [
+                  {"ref": "ATM.kidney.right.size"},
+                  {"ref": "ATM.kidney.right.echogenicity"},
+                  {"ref": "ATM.kidney.right.cysts"},
+                  {"ref": "ATM.kidney.right.hydronephrosis"},
+                  {"ref": "ATM.kidney.right.stones"}
+                ]
+              },
+              {
+                "name": "Left Kidney",
+                "atomic_elements": [
+                  {"ref": "ATM.kidney.left.size"},
+                  {"ref": "ATM.kidney.left.echogenicity"},
+                  {"ref": "ATM.kidney.left.cysts"},
+                  {"ref": "ATM.kidney.left.hydronephrosis"},
+                  {"ref": "ATM.kidney.left.stones"}
+                ]
+              }
+            ],
+            "normal_text": "Right kidney measures ___ cm. Left kidney measures ___ cm. Kidneys are normal in size and echogenicity. No hydronephrosis or nephrolithiasis."
+          }
+        },
+        {
+          "order": 7,
+          "component_ref": "SUB.us.abd.aorta",
+          "header": "AORTA:",
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.aorta.diameter_us"}
+            ],
+            "normal_text": "Aorta is normal in caliber measuring ___ cm."
+          }
+        },
+        {
+          "order": 8,
+          "component_ref": "SUB.us.abd.ivc",
+          "header": "IVC:",
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.ivc.caliber_us"}
+            ],
+            "normal_text": "IVC is normal in caliber with appropriate respiratory variation."
+          }
+        },
+        {
+          "order": 9,
+          "component_ref": "SUB.us.abd.other",
+          "header": "OTHER:",
+          "required": false,
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.ascites"},
+              {"ref": "ATM.lymphadenopathy"}
+            ],
+            "normal_text": "No ascites. No obvious lymphadenopathy."
+          }
+        }
+      ]
+    },
+    
+    "impression": {
+      "component_ref": "IMP.us.abdomen",
+      "options": [
+        {
+          "type": "normal",
+          "text": "Normal abdominal ultrasound."
+        },
+        {
+          "type": "structured",
+          "numbered_findings": true
+        }
+      ]
+    }
+  },
+  
+  "normal_template": {
+    "findings": "Liver is normal in size and echotexture. No focal hepatic lesion. Gallbladder is normal. No cholelithiasis or gallbladder wall thickening. Common bile duct is normal in caliber. Pancreas is unremarkable when visualized. Spleen is normal in size. Right and left kidneys are normal in size and echogenicity. No hydronephrosis or nephrolithiasis. Aorta is normal in caliber. No ascites.",
+    "impression": "Normal abdominal ultrasound."
+  },
+  
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2026-01-28"
+  }
+}

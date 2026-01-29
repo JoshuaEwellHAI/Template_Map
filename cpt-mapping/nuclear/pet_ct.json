@@ -1,0 +1,212 @@
+{
+  "$schema": "../schema/cpt-mapping.schema.json",
+  "modality": "PET",
+  "body_region": "various",
+  "category": "PET/CT",
+  "description": "All PET/CT CPT codes and their component mappings",
+  
+  "_note_on_variants": "variant_id values are INTERNAL identifiers only - they are NOT CPT modifiers. Real CMS modifiers (e.g., -26, -TC, -LT, -RT) would be specified in a separate 'modifiers' field if needed.",
+  
+  "cpt_codes": [
+    {
+      "cpt_code": "78814",
+      "procedure_name": "PET/CT BRAIN",
+      "contrast": "na",
+      "variants": [
+        {
+          "variant_id": "amyloid_neuraceq",
+          "protocol": "amyloid",
+          "tracer": "Neuraceq F-18",
+          "template_name": "BRAIN (Beta-Amyloid Neuraceq F-18)"
+        },
+        {
+          "variant_id": "amyloid_amyvid",
+          "protocol": "amyloid",
+          "tracer": "Amyvid F-18",
+          "template_name": "BRAIN (Amyvid F-18)"
+        }
+      ],
+      "components": {
+        "header": "HDR.pet.brain.amyloid",
+        "technique": "TEC.pet.brain.amyloid",
+        "findings": [
+          "SUB.pet.brain.amyloid_uptake",
+          "SUB.pet.brain.regional_analysis"
+        ],
+        "impression": "IMP.pet.brain.amyloid"
+      }
+    },
+    {
+      "cpt_code": "78608",
+      "procedure_name": "PET BRAIN FDG",
+      "contrast": "na",
+      "variants": [
+        {
+          "variant_id": "fdg",
+          "tracer": "FDG F-18",
+          "template_name": "BRAIN FDG 18"
+        },
+        {
+          "variant_id": "dotatate_neuroendocrine",
+          "protocol": "neuroendocrine",
+          "tracer": "Cu64 Dotatate",
+          "template_name": "BRAIN DOTATATE (Cu64) Neuroendocrine"
+        }
+      ],
+      "components": {
+        "header": "HDR.pet.brain",
+        "technique": "TEC.pet.brain.fdg",
+        "findings": [
+          "SUB.pet.brain.metabolism",
+          "SUB.pet.brain.regional_analysis"
+        ],
+        "impression": "IMP.pet.brain"
+      }
+    },
+    {
+      "cpt_code": "78815",
+      "procedure_name": "PET/CT SKULL BASE to MID THIGH",
+      "contrast": "na",
+      "variants": [
+        {
+          "variant_id": "fdg_oncology",
+          "tracer": "FDG F-18",
+          "template_name": "SKULL BASE to MID THIGH"
+        },
+        {
+          "variant_id": "neuroendocrine_dotatate",
+          "protocol": "neuroendocrine",
+          "tracer": "Cu64 Dotatate",
+          "template_name": "NEUROENDOCRINE SKULL BASE to MID THIGH (CU64 Dotatate)"
+        },
+        {
+          "variant_id": "prostate_axumin",
+          "protocol": "prostate",
+          "tracer": "Axumin",
+          "template_name": "PROSTATE (Axumin)"
+        },
+        {
+          "variant_id": "prostate_psma_f18",
+          "protocol": "prostate",
+          "tracer": "PSMA F-18",
+          "template_name": "PSMA (Prostate F-18)"
+        },
+        {
+          "variant_id": "prostate_psma_ga68",
+          "protocol": "prostate",
+          "tracer": "Ga-68 PSMA",
+          "template_name": "GA-68 PSMA (Prostate Gallium Illuccix)"
+        },
+        {
+          "variant_id": "breast_cerianna",
+          "protocol": "breast",
+          "tracer": "Cerianna F-18",
+          "template_name": "BREAST CA (Cerianna F-18)"
+        }
+      ],
+      "components": {
+        "header": "HDR.pet.body",
+        "technique": "TEC.pet.body.fdg",
+        "findings": [
+          "SUB.pet.body.head_neck",
+          "SUB.pet.body.chest",
+          "SUB.pet.body.abdomen_pelvis",
+          "SUB.pet.body.lymph_nodes",
+          "SUB.pet.body.skeleton",
+          "SUB.ct.correlate"
+        ],
+        "impression": "IMP.pet.oncology"
+      }
+    },
+    {
+      "cpt_code": "78816",
+      "procedure_name": "PET/CT WHOLE BODY",
+      "contrast": "na",
+      "variants": [
+        {
+          "variant_id": "melanoma",
+          "protocol": "melanoma",
+          "template_name": "WHOLE BODY (Melanoma)"
+        },
+        {
+          "variant_id": "myeloma",
+          "protocol": "myeloma",
+          "template_name": "WHOLE BODY (Multiple Myeloma)"
+        }
+      ],
+      "components": {
+        "header": "HDR.pet.whole_body",
+        "technique": "TEC.pet.whole_body",
+        "findings": [
+          "SUB.pet.body.head_neck",
+          "SUB.pet.body.chest",
+          "SUB.pet.body.abdomen_pelvis",
+          "SUB.pet.body.lymph_nodes",
+          "SUB.pet.body.skeleton_complete",
+          "SUB.pet.body.extremities",
+          "SUB.ct.correlate"
+        ],
+        "impression": "IMP.pet.oncology"
+      }
+    }
+  ],
+  
+  "tracers": {
+    "FDG_F18": {
+      "name": "FDG F-18",
+      "full_name": "18F-Fluorodeoxyglucose",
+      "mechanism": "Glucose metabolism",
+      "applications": ["Oncology", "Infection", "Inflammation", "Brain metabolism"]
+    },
+    "PSMA": {
+      "name": "PSMA",
+      "variants": ["F-18 PSMA", "Ga-68 PSMA (Illuccix)", "POSLUMA", "PYLARIFY"],
+      "mechanism": "Prostate-specific membrane antigen binding",
+      "applications": ["Prostate cancer staging", "Recurrence detection"]
+    },
+    "DOTATATE": {
+      "name": "Dotatate",
+      "variants": ["Cu-64 Dotatate", "Ga-68 Dotatate"],
+      "mechanism": "Somatostatin receptor binding",
+      "applications": ["Neuroendocrine tumors"]
+    },
+    "AMYLOID": {
+      "name": "Amyloid tracers",
+      "variants": ["Amyvid F-18", "Neuraceq F-18"],
+      "mechanism": "Beta-amyloid plaque binding",
+      "applications": ["Alzheimer's disease evaluation"]
+    },
+    "AXUMIN": {
+      "name": "Axumin F-18",
+      "full_name": "18F-Fluciclovine",
+      "mechanism": "Amino acid transport",
+      "applications": ["Prostate cancer recurrence"]
+    },
+    "CERIANNA": {
+      "name": "Cerianna F-18",
+      "full_name": "18F-Fluoroestradiol",
+      "mechanism": "Estrogen receptor binding",
+      "applications": ["ER-positive breast cancer"]
+    }
+  },
+  
+  "shared_components": {
+    "findings_subcomponents": [
+      {
+        "component_id": "SUB.pet.body.lymph_nodes",
+        "name": "Lymph Nodes",
+        "atomic_elements": ["ATM.pet.ln_cervical", "ATM.pet.ln_axillary", "ATM.pet.ln_mediastinal", "ATM.pet.ln_abdominal", "ATM.pet.ln_pelvic", "ATM.pet.suv"]
+      },
+      {
+        "component_id": "SUB.pet.body.skeleton",
+        "name": "Skeleton",
+        "atomic_elements": ["ATM.pet.bone_uptake", "ATM.pet.bone_location", "ATM.pet.suv"]
+      },
+      {
+        "component_id": "SUB.pet.brain.amyloid_uptake",
+        "name": "Amyloid Uptake",
+        "atomic_elements": ["ATM.pet.amyloid_positive", "ATM.pet.amyloid_regional"]
+      }
+    ]
+  }
+}

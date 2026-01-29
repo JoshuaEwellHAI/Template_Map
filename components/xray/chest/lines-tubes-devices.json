@@ -1,0 +1,233 @@
+{
+  "$schema": "../../../schema/component-schema.json",
+  "component_id": "CMP.xray.chest.lines-tubes-devices",
+  "component_type": "finding",
+  "name": "Lines, Tubes, and Devices",
+  "description": "Support devices and their positioning on chest radiograph",
+  
+  "applies_to": ["XR"],
+  "body_region": "chest",
+  "section": "FINDINGS",
+  "subsection": "Support Devices",
+  
+  "used_by_cpt": ["71045", "71046", "71047", "71048"],
+  
+  "context_priority": {
+    "icu": "high",
+    "inpatient": "medium",
+    "outpatient": "low"
+  },
+  
+  "devices": [
+    {
+      "device_id": "ett",
+      "name": "Endotracheal Tube",
+      "abbreviation": "ETT",
+      "fields": [
+        {
+          "field_id": "ett_present",
+          "label": "ETT Present",
+          "type": "boolean"
+        },
+        {
+          "field_id": "ett_position",
+          "label": "Position",
+          "type": "picklist",
+          "show_if": "ett_present == true",
+          "options": [
+            {"value": "appropriate", "label": "Appropriate position", "output_text": "Endotracheal tube tip is appropriately positioned approximately {distance} above the carina."},
+            {"value": "high", "label": "High", "output_text": "Endotracheal tube tip is high, approximately {distance} above the carina. Consider advancing."},
+            {"value": "low", "label": "Low/near carina", "output_text": "Endotracheal tube tip is low, at or near the carina. Consider withdrawing."},
+            {"value": "right_mainstem", "label": "Right mainstem", "output_text": "Endotracheal tube tip is in the right mainstem bronchus. Requires repositioning."}
+          ]
+        },
+        {
+          "field_id": "ett_distance",
+          "label": "Distance from Carina",
+          "type": "text",
+          "show_if": "ett_present == true",
+          "placeholder": "e.g., 4 cm"
+        }
+      ],
+      "normal_position": "3-5 cm above carina with neck in neutral position"
+    },
+    {
+      "device_id": "ngt",
+      "name": "Nasogastric/Orogastric Tube",
+      "abbreviation": "NGT/OGT",
+      "fields": [
+        {
+          "field_id": "ngt_present",
+          "label": "NGT/OGT Present",
+          "type": "boolean"
+        },
+        {
+          "field_id": "ngt_type",
+          "label": "Type",
+          "type": "picklist",
+          "show_if": "ngt_present == true",
+          "options": [
+            {"value": "ngt", "label": "Nasogastric tube"},
+            {"value": "ogt", "label": "Orogastric tube"},
+            {"value": "dobhoff", "label": "Dobhoff/feeding tube"},
+            {"value": "peg", "label": "PEG tube"}
+          ]
+        },
+        {
+          "field_id": "ngt_position",
+          "label": "Position",
+          "type": "picklist",
+          "show_if": "ngt_present == true",
+          "options": [
+            {"value": "appropriate", "label": "Appropriate", "output_text": "{ngt_type} tip is appropriately positioned in the stomach."},
+            {"value": "esophagus", "label": "In esophagus", "output_text": "{ngt_type} tip appears to be in the esophagus. Recommend advancement."},
+            {"value": "duodenum", "label": "In duodenum", "output_text": "{ngt_type} tip extends into the duodenum."},
+            {"value": "coiled", "label": "Coiled", "output_text": "{ngt_type} is coiled in the stomach/esophagus."}
+          ]
+        }
+      ]
+    },
+    {
+      "device_id": "cvl",
+      "name": "Central Venous Line",
+      "abbreviation": "CVL",
+      "fields": [
+        {
+          "field_id": "cvl_present",
+          "label": "CVL Present",
+          "type": "boolean"
+        },
+        {
+          "field_id": "cvl_type",
+          "label": "Type",
+          "type": "picklist",
+          "show_if": "cvl_present == true",
+          "options": [
+            {"value": "right_ij", "label": "Right internal jugular"},
+            {"value": "left_ij", "label": "Left internal jugular"},
+            {"value": "right_subclavian", "label": "Right subclavian"},
+            {"value": "left_subclavian", "label": "Left subclavian"},
+            {"value": "picc_right", "label": "Right PICC"},
+            {"value": "picc_left", "label": "Left PICC"},
+            {"value": "port", "label": "Implanted port"}
+          ]
+        },
+        {
+          "field_id": "cvl_position",
+          "label": "Position",
+          "type": "picklist",
+          "show_if": "cvl_present == true",
+          "options": [
+            {"value": "appropriate", "label": "Appropriate", "output_text": "{cvl_type} central venous catheter tip is appropriately positioned in the {tip_location}."},
+            {"value": "high", "label": "High", "output_text": "{cvl_type} central venous catheter tip is high in the {tip_location}."},
+            {"value": "low", "label": "Low/in RA", "output_text": "{cvl_type} central venous catheter tip is low, projecting over the right atrium."}
+          ]
+        },
+        {
+          "field_id": "cvl_tip_location",
+          "label": "Tip Location",
+          "type": "picklist",
+          "show_if": "cvl_present == true",
+          "options": [
+            {"value": "cavo_atrial", "label": "Cavoatrial junction"},
+            {"value": "lower_svc", "label": "Lower SVC"},
+            {"value": "upper_svc", "label": "Upper SVC"},
+            {"value": "right_atrium", "label": "Right atrium"},
+            {"value": "brachiocephalic", "label": "Brachiocephalic vein"}
+          ]
+        }
+      ],
+      "normal_position": "Cavoatrial junction or lower SVC"
+    },
+    {
+      "device_id": "chest_tube",
+      "name": "Chest Tube",
+      "fields": [
+        {
+          "field_id": "chest_tube_present",
+          "label": "Chest Tube Present",
+          "type": "boolean"
+        },
+        {
+          "field_id": "chest_tube_side",
+          "label": "Side",
+          "type": "picklist",
+          "show_if": "chest_tube_present == true",
+          "options": [
+            {"value": "right", "label": "Right"},
+            {"value": "left", "label": "Left"},
+            {"value": "bilateral", "label": "Bilateral"}
+          ]
+        },
+        {
+          "field_id": "chest_tube_position",
+          "label": "Position",
+          "type": "picklist",
+          "show_if": "chest_tube_present == true",
+          "options": [
+            {"value": "appropriate", "label": "Appropriate", "output_text": "{side} chest tube is appropriately positioned."},
+            {"value": "malpositioned", "label": "Malpositioned", "output_text": "{side} chest tube appears malpositioned."}
+          ]
+        }
+      ]
+    },
+    {
+      "device_id": "pacemaker",
+      "name": "Pacemaker/ICD",
+      "fields": [
+        {
+          "field_id": "pacer_present",
+          "label": "Pacemaker/ICD Present",
+          "type": "boolean"
+        },
+        {
+          "field_id": "pacer_type",
+          "label": "Type",
+          "type": "picklist",
+          "show_if": "pacer_present == true",
+          "options": [
+            {"value": "single_lead", "label": "Single-lead pacemaker"},
+            {"value": "dual_chamber", "label": "Dual-chamber pacemaker"},
+            {"value": "biventricular", "label": "Biventricular pacemaker/CRT"},
+            {"value": "icd", "label": "ICD"},
+            {"value": "biventricular_icd", "label": "Biventricular ICD"},
+            {"value": "leadless", "label": "Leadless pacemaker"}
+          ]
+        },
+        {
+          "field_id": "pacer_leads",
+          "label": "Leads",
+          "type": "picklist",
+          "show_if": "pacer_present == true",
+          "allow_multiple": true,
+          "options": [
+            {"value": "ra", "label": "Right atrial lead"},
+            {"value": "rv", "label": "Right ventricular lead"},
+            {"value": "lv", "label": "Left ventricular/coronary sinus lead"}
+          ]
+        },
+        {
+          "field_id": "lead_position",
+          "label": "Lead Position",
+          "type": "picklist",
+          "show_if": "pacer_present == true",
+          "options": [
+            {"value": "appropriate", "label": "Appropriate", "output_text": "{pacer_type} with leads in appropriate position."},
+            {"value": "unchanged", "label": "Unchanged", "output_text": "{pacer_type} with leads in unchanged position."}
+          ]
+        }
+      ]
+    }
+  ],
+  
+  "output_order": ["ett", "ngt", "cvl", "chest_tube", "pacemaker"],
+  
+  "comparison_template": "Compared to prior, {device} is {change}.",
+  
+  "no_devices_text": "No support devices are present.",
+  
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2026-01-28"
+  }
+}

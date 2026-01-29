@@ -1,0 +1,451 @@
+{
+  "$schema": "../schema/cpt-mapping.schema.json",
+  "modality": "CT",
+  "body_region": "abdomen",
+  "category": "CT Abdomen and Pelvis",
+  "description": "All CT abdomen/pelvis CPT codes and their component mappings",
+  
+  "_note_on_variants": "variant_id values are INTERNAL identifiers only - they are NOT CPT modifiers. Real CMS modifiers (e.g., -26, -TC, -LT, -RT) would be specified in a separate 'modifiers' field if needed.",
+  
+  "cpt_codes": [
+    {
+      "cpt_code": "74150",
+      "procedure_name": "CT ABDOMEN w/o contrast",
+      "contrast": "without",
+      "variants": [
+        {
+          "variant_id": "female",
+          "gender": "female",
+          "template_name": "abd CT abd without female (CT3002)"
+        },
+        {
+          "variant_id": "male",
+          "gender": "male",
+          "template_name": "abd CT abd without male (CT3002)"
+        }
+      ],
+      "components": {
+        "header": "HDR.ct.abdomen",
+        "technique": "TEC.ct.abd.without",
+        "findings": [
+          "SUB.ct.abd.liver",
+          "SUB.ct.abd.gallbladder_biliary",
+          "SUB.ct.abd.pancreas",
+          "SUB.ct.abd.spleen",
+          "SUB.ct.abd.adrenals",
+          "SUB.ct.abd.kidneys",
+          "SUB.ct.abd.gi_tract",
+          "SUB.ct.abd.mesentery",
+          "SUB.ct.abd.retroperitoneum",
+          "SUB.ct.abd.vasculature",
+          "SUB.ct.abd.bones"
+        ],
+        "impression": "IMP.ct.abd.standard"
+      }
+    },
+    {
+      "cpt_code": "74160",
+      "procedure_name": "CT ABDOMEN w/ contrast",
+      "contrast": "with",
+      "variants": [
+        {
+          "variant_id": "female",
+          "gender": "female",
+          "template_name": "abd CT abd with female (CT3001)"
+        },
+        {
+          "variant_id": "male",
+          "gender": "male",
+          "template_name": "abd CT abd with male (CT3001)"
+        }
+      ],
+      "components": {
+        "header": "HDR.ct.abdomen",
+        "technique": "TEC.ct.abd.with",
+        "findings": [
+          "SUB.ct.abd.liver",
+          "SUB.ct.abd.gallbladder_biliary",
+          "SUB.ct.abd.pancreas",
+          "SUB.ct.abd.spleen",
+          "SUB.ct.abd.adrenals",
+          "SUB.ct.abd.kidneys",
+          "SUB.ct.abd.gi_tract",
+          "SUB.ct.abd.mesentery",
+          "SUB.ct.abd.retroperitoneum",
+          "SUB.ct.abd.vasculature",
+          "SUB.ct.abd.bones"
+        ],
+        "impression": "IMP.ct.abd.standard"
+      }
+    },
+    {
+      "cpt_code": "74170",
+      "procedure_name": "CT ABDOMEN w/ & w/o contrast",
+      "contrast": "with_without",
+      "variants": [
+        {
+          "variant_id": "female",
+          "gender": "female",
+          "template_name": "abd CT abd without with female (CT3003)"
+        },
+        {
+          "variant_id": "male",
+          "gender": "male",
+          "template_name": "abd CT abd without with male (CT3003)"
+        }
+      ],
+      "components": {
+        "header": "HDR.ct.abdomen",
+        "technique": "TEC.ct.abd.with_without",
+        "findings": [
+          "SUB.ct.abd.liver",
+          "SUB.ct.abd.gallbladder_biliary",
+          "SUB.ct.abd.pancreas",
+          "SUB.ct.abd.spleen",
+          "SUB.ct.abd.adrenals",
+          "SUB.ct.abd.kidneys",
+          "SUB.ct.abd.gi_tract",
+          "SUB.ct.abd.mesentery",
+          "SUB.ct.abd.retroperitoneum",
+          "SUB.ct.abd.vasculature",
+          "SUB.ct.abd.bones"
+        ],
+        "impression": "IMP.ct.abd.standard"
+      }
+    },
+    {
+      "cpt_code": "74176",
+      "procedure_name": "CT ABDOMEN & PELVIS w/o contrast",
+      "contrast": "without",
+      "variants": [
+        {
+          "variant_id": "female",
+          "gender": "female",
+          "template_name": "abd CT abd/pel without female (CT3042)"
+        },
+        {
+          "variant_id": "male",
+          "gender": "male",
+          "template_name": "abd CT abd/pel without male (CT3042)"
+        },
+        {
+          "variant_id": "renal_stone_protocol",
+          "context": "renal_stone",
+          "template_name": "abd CT abd/pel without renal stone f/u free text"
+        }
+      ],
+      "components": {
+        "header": "HDR.ct.abdomen_pelvis",
+        "technique": "TEC.ct.abd_pel.without",
+        "findings": [
+          "SUB.ct.abd.liver",
+          "SUB.ct.abd.gallbladder_biliary",
+          "SUB.ct.abd.pancreas",
+          "SUB.ct.abd.spleen",
+          "SUB.ct.abd.adrenals",
+          "SUB.ct.abd.kidneys_ureters",
+          "SUB.ct.abd.gi_tract",
+          "SUB.ct.pel.bladder",
+          "SUB.ct.pel.reproductive_female|SUB.ct.pel.reproductive_male",
+          "SUB.ct.abd.mesentery",
+          "SUB.ct.abd.retroperitoneum",
+          "SUB.ct.abd.vasculature",
+          "SUB.ct.abd_pel.bones"
+        ],
+        "impression": "IMP.ct.abd_pel.standard"
+      }
+    },
+    {
+      "cpt_code": "74177",
+      "procedure_name": "CT ABDOMEN & PELVIS w/ contrast",
+      "contrast": "with",
+      "variants": [
+        {
+          "variant_id": "female",
+          "gender": "female",
+          "template_name": "abd CT abd/pel with female (CT3043)"
+        },
+        {
+          "variant_id": "male",
+          "gender": "male",
+          "template_name": "abd CT abd/pel with male (CT3043)"
+        },
+        {
+          "variant_id": "emergency",
+          "context": "emergency",
+          "template_name": "abd CT abd/pel with emergency"
+        }
+      ],
+      "components": {
+        "header": "HDR.ct.abdomen_pelvis",
+        "technique": "TEC.ct.abd_pel.with",
+        "findings": [
+          "SUB.ct.abd.liver",
+          "SUB.ct.abd.gallbladder_biliary",
+          "SUB.ct.abd.pancreas",
+          "SUB.ct.abd.spleen",
+          "SUB.ct.abd.adrenals",
+          "SUB.ct.abd.kidneys_ureters",
+          "SUB.ct.abd.gi_tract",
+          "SUB.ct.pel.bladder",
+          "SUB.ct.pel.reproductive_female|SUB.ct.pel.reproductive_male",
+          "SUB.ct.abd.mesentery",
+          "SUB.ct.abd.retroperitoneum",
+          "SUB.ct.abd.vasculature",
+          "SUB.ct.abd_pel.bones"
+        ],
+        "impression": "IMP.ct.abd_pel.standard"
+      }
+    },
+    {
+      "cpt_code": "74178",
+      "procedure_name": "CT ABDOMEN & PELVIS w/ & w/o contrast (Urogram/Kidney Protocol)",
+      "contrast": "with_without",
+      "protocol": "multiphase",
+      "variants": [
+        {
+          "variant_id": "female",
+          "gender": "female",
+          "template_name": "abd CT abd/pel without with female (CT3046)"
+        },
+        {
+          "variant_id": "male",
+          "gender": "male",
+          "template_name": "abd CT abd/pel without with male (CT3046)"
+        },
+        {
+          "variant_id": "ct_urogram",
+          "protocol": "ct_urogram",
+          "template_name": "CT UROGRAM w/ & w/o contrast"
+        },
+        {
+          "variant_id": "pancreas_protocol",
+          "protocol": "pancreas",
+          "template_name": "CT PANC PELVIS w/ & w/o contrast"
+        },
+        {
+          "variant_id": "liver_protocol",
+          "protocol": "liver",
+          "template_name": "CT LIVER PELVIS w/ & w/o contrast"
+        }
+      ],
+      "components": {
+        "header": "HDR.ct.abdomen_pelvis",
+        "technique": "TEC.ct.abd_pel.multiphase",
+        "findings": [
+          "SUB.ct.abd.liver",
+          "SUB.ct.abd.gallbladder_biliary",
+          "SUB.ct.abd.pancreas",
+          "SUB.ct.abd.spleen",
+          "SUB.ct.abd.adrenals",
+          "SUB.ct.abd.kidneys_ureters",
+          "SUB.ct.abd.gi_tract",
+          "SUB.ct.pel.bladder",
+          "SUB.ct.pel.reproductive_female|SUB.ct.pel.reproductive_male",
+          "SUB.ct.abd.mesentery",
+          "SUB.ct.abd.retroperitoneum",
+          "SUB.ct.abd.vasculature",
+          "SUB.ct.abd_pel.bones"
+        ],
+        "impression": "IMP.ct.abd_pel.standard"
+      }
+    },
+    {
+      "cpt_code": "74174",
+      "procedure_name": "CT ANGIO ABD & PELVIS w/ & w/o contrast",
+      "contrast": "with_without",
+      "protocol": "cta",
+      "variants": [
+        {
+          "variant_id": "runoff",
+          "context": "runoff",
+          "template_name": "CTA CAP RUNOFF"
+        }
+      ],
+      "components": {
+        "header": "HDR.cta.abdomen_pelvis",
+        "technique": "TEC.cta.abd_pel",
+        "findings": [
+          "SUB.cta.aorta",
+          "SUB.cta.iliacs",
+          "SUB.cta.mesenteric",
+          "SUB.cta.renal_arteries",
+          "SUB.ct.abd.organs",
+          "SUB.ct.abd_pel.bones"
+        ],
+        "impression": "IMP.cta.abd_pel"
+      }
+    },
+    {
+      "cpt_code": "74175",
+      "procedure_name": "CT ANGIO ABD w/ contrast/noncontrast",
+      "contrast": "with_without",
+      "protocol": "cta",
+      "components": {
+        "header": "HDR.cta.abdomen",
+        "technique": "TEC.cta.abdomen",
+        "findings": [
+          "SUB.cta.aorta",
+          "SUB.cta.celiac",
+          "SUB.cta.sma",
+          "SUB.cta.renal_arteries",
+          "SUB.ct.abd.organs",
+          "SUB.ct.abd.bones"
+        ],
+        "impression": "IMP.cta.abdomen"
+      }
+    }
+  ],
+  
+  "special_protocols": [
+    {
+      "protocol_id": "LIRADS",
+      "name": "LI-RADS (Liver Imaging Reporting and Data System)",
+      "applicable_cpt": ["74160", "74170", "74177", "74178"],
+      "templates": [
+        "abd CT abd dual/triple HCC/LI-RADS structured female findings",
+        "abd CT abd dual/triple HCC/LI-RADS structured male findings",
+        "abd CT abd dual/triple HCC/LI-RADS structured sub liver findings"
+      ],
+      "required_components": [
+        "SUB.ct.abd.lirads_observations",
+        "SUB.ct.abd.lirads_categories"
+      ]
+    },
+    {
+      "protocol_id": "GI_BLEEDING",
+      "name": "GI Bleeding Protocol",
+      "applicable_cpt": ["74177", "74178"],
+      "templates": [
+        "abd CT abd/pel dual/triple findings GI bleeding FM female",
+        "abd CT abd/pel dual/triple findings GI bleeding FM male",
+        "abd CT abd/pel dual/triple without with GI bleeding emergency"
+      ]
+    },
+    {
+      "protocol_id": "PANCREAS",
+      "name": "Pancreas Protocol",
+      "applicable_cpt": ["74160", "74170", "74177", "74178"],
+      "templates": [
+        "abd CT abd/pel dual/triple findings pancreas FM female",
+        "abd CT abd/pel dual/triple findings pancreas FM male"
+      ]
+    },
+    {
+      "protocol_id": "RENAL_MASS",
+      "name": "Renal Mass Protocol",
+      "applicable_cpt": ["74178"],
+      "templates": [
+        "abd CT abd/pel dual/triple findings renal mass FM female",
+        "abd CT abd/pel dual/triple findings renal mass FM male"
+      ]
+    },
+    {
+      "protocol_id": "ADRENAL",
+      "name": "Adrenal Protocol",
+      "applicable_cpt": ["74160", "74170"],
+      "templates": [
+        "abd CT abd/pel dual/triple findings adrenal FM female",
+        "abd CT abd/pel dual/triple findings adrenal FM male"
+      ]
+    }
+  ],
+  
+  "shared_components": {
+    "findings_subcomponents": [
+      {
+        "component_id": "SUB.ct.abd.liver",
+        "name": "Liver",
+        "atomic_elements": ["ATM.liver.size", "ATM.liver.parenchyma", "ATM.liver.lesions", "ATM.liver.vasculature"]
+      },
+      {
+        "component_id": "SUB.ct.abd.gallbladder_biliary",
+        "name": "Gallbladder and Biliary System",
+        "atomic_elements": ["ATM.gb.wall", "ATM.gb.stones", "ATM.bile_ducts.caliber", "ATM.bile_ducts.stones"]
+      },
+      {
+        "component_id": "SUB.ct.abd.pancreas",
+        "name": "Pancreas",
+        "atomic_elements": ["ATM.pancreas.size", "ATM.pancreas.parenchyma", "ATM.pancreas.duct", "ATM.pancreas.lesions"]
+      },
+      {
+        "component_id": "SUB.ct.abd.spleen",
+        "name": "Spleen",
+        "atomic_elements": ["ATM.spleen.size", "ATM.spleen.lesions"]
+      },
+      {
+        "component_id": "SUB.ct.abd.adrenals",
+        "name": "Adrenal Glands",
+        "references": "Adrenal gland CT sub final",
+        "atomic_elements": ["ATM.adrenal.left", "ATM.adrenal.right", "ATM.adrenal.nodules"]
+      },
+      {
+        "component_id": "SUB.ct.abd.kidneys",
+        "name": "Kidneys",
+        "atomic_elements": ["ATM.kidney.size", "ATM.kidney.parenchyma", "ATM.kidney.cysts", "ATM.kidney.stones", "ATM.kidney.masses"]
+      },
+      {
+        "component_id": "SUB.ct.abd.kidneys_ureters",
+        "name": "Kidneys and Ureters",
+        "atomic_elements": ["ATM.kidney.size", "ATM.kidney.parenchyma", "ATM.kidney.cysts", "ATM.kidney.stones", "ATM.kidney.masses", "ATM.ureter.caliber", "ATM.ureter.stones"]
+      },
+      {
+        "component_id": "SUB.ct.abd.gi_tract",
+        "name": "GI Tract",
+        "references": "Bowel Sub final",
+        "atomic_elements": ["ATM.stomach.general", "ATM.small_bowel.general", "ATM.colon.general", "ATM.appendix.general"]
+      },
+      {
+        "component_id": "SUB.ct.pel.bladder",
+        "name": "Bladder",
+        "atomic_elements": ["ATM.bladder.wall", "ATM.bladder.contents"]
+      },
+      {
+        "component_id": "SUB.ct.pel.reproductive_female",
+        "name": "Female Reproductive Organs",
+        "atomic_elements": ["ATM.uterus.general", "ATM.ovaries.general", "ATM.adnexa.general"]
+      },
+      {
+        "component_id": "SUB.ct.pel.reproductive_male",
+        "name": "Male Reproductive Organs",
+        "atomic_elements": ["ATM.prostate.general", "ATM.seminal_vesicles.general"]
+      },
+      {
+        "component_id": "SUB.ct.abd.mesentery",
+        "name": "Mesentery and Peritoneum",
+        "atomic_elements": ["ATM.mesentery.fat", "ATM.mesentery.lymph_nodes", "ATM.peritoneum.ascites"]
+      },
+      {
+        "component_id": "SUB.ct.abd.retroperitoneum",
+        "name": "Retroperitoneum",
+        "atomic_elements": ["ATM.retro.lymph_nodes", "ATM.retro.masses"]
+      },
+      {
+        "component_id": "SUB.ct.abd.vasculature",
+        "name": "Abdominal Vasculature",
+        "atomic_elements": ["ATM.aorta.abdominal", "ATM.ivc.general", "ATM.portal_vein.general"]
+      },
+      {
+        "component_id": "SUB.ct.abd_pel.bones",
+        "name": "Bones",
+        "references": "Bone abd CT sub final",
+        "atomic_elements": ["ATM.spine.lumbar", "ATM.pelvis.bones", "ATM.hips.general"]
+      }
+    ]
+  },
+  
+  "master_templates": [
+    {
+      "template_id": "abd abdomen master header",
+      "description": "Standard header for abdomen CT reports"
+    },
+    {
+      "template_id": "abd CT master findings abd/pel female*",
+      "description": "Master findings template for female patients"
+    },
+    {
+      "template_id": "abd CT master findings abd/pel male*",
+      "description": "Master findings template for male patients"
+    }
+  ]
+}

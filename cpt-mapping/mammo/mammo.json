@@ -1,0 +1,230 @@
+{
+  "$schema": "../schema/cpt-mapping.schema.json",
+  "modality": "MAMMO",
+  "body_region": "breast",
+  "category": "Mammography",
+  "description": "All mammography CPT codes and their component mappings",
+  
+  "_note_on_variants": "variant_id values are INTERNAL identifiers only - they are NOT CPT modifiers. Real CMS modifiers (e.g., -26, -TC, -LT, -RT) would be specified in a separate 'modifiers' field if needed.",
+  
+  "cpt_codes": [
+    {
+      "cpt_code": "77067",
+      "procedure_name": "MAMMOGRAPHY DIGITAL SCREENING",
+      "contrast": "na",
+      "protocol": "screening",
+      "components": {
+        "header": "HDR.mammo.screening",
+        "technique": "TEC.mammo.screening.2d",
+        "findings": [
+          "SUB.mammo.breast_composition",
+          "SUB.mammo.masses",
+          "SUB.mammo.calcifications",
+          "SUB.mammo.architectural_distortion",
+          "SUB.mammo.asymmetries",
+          "SUB.mammo.lymph_nodes"
+        ],
+        "impression": "IMP.mammo.birads"
+      },
+      "special_elements": ["BI-RADS category", "Breast density category"]
+    },
+    {
+      "cpt_code": "77063",
+      "procedure_name": "MAMMOGRAPHY 3D DIGITAL SCREENING (Tomosynthesis)",
+      "contrast": "na",
+      "protocol": "screening_3d",
+      "variants": [
+        {
+          "variant_id": "screening",
+          "context": "screening",
+          "template_name": "MAMMOGRAPHY 3D DIGITAL SCREENING"
+        },
+        {
+          "variant_id": "diagnostic_bilateral",
+          "context": "diagnostic",
+          "laterality": "bilateral",
+          "template_name": "MAMMOGRAPHY 3D DIGITAL DIAGNOSTIC BILATERAL"
+        },
+        {
+          "variant_id": "diagnostic_unilateral",
+          "context": "diagnostic",
+          "laterality": "unilateral",
+          "template_name": "MAMMOGRAPHY 3D DIGITAL DIAGNOSTIC UNILATERAL"
+        }
+      ],
+      "components": {
+        "header": "HDR.mammo.3d",
+        "technique": "TEC.mammo.tomo",
+        "findings": [
+          "SUB.mammo.breast_composition",
+          "SUB.mammo.masses",
+          "SUB.mammo.calcifications",
+          "SUB.mammo.architectural_distortion",
+          "SUB.mammo.asymmetries",
+          "SUB.mammo.lymph_nodes"
+        ],
+        "impression": "IMP.mammo.birads"
+      }
+    },
+    {
+      "cpt_code": "77066",
+      "procedure_name": "MAMMOGRAPHY - DIAGNOSTIC BILATERAL",
+      "contrast": "na",
+      "protocol": "diagnostic",
+      "components": {
+        "header": "HDR.mammo.diagnostic",
+        "technique": "TEC.mammo.diagnostic.bilateral",
+        "findings": [
+          "SUB.mammo.breast_composition",
+          "SUB.mammo.masses",
+          "SUB.mammo.calcifications",
+          "SUB.mammo.architectural_distortion",
+          "SUB.mammo.asymmetries",
+          "SUB.mammo.lymph_nodes",
+          "SUB.mammo.skin_nipple"
+        ],
+        "impression": "IMP.mammo.birads"
+      }
+    },
+    {
+      "cpt_code": "77065",
+      "procedure_name": "MAMMOGRAPHY - DIAGNOSTIC UNILATERAL",
+      "contrast": "na",
+      "protocol": "diagnostic",
+      "components": {
+        "header": "HDR.mammo.diagnostic",
+        "technique": "TEC.mammo.diagnostic.unilateral",
+        "findings": [
+          "SUB.mammo.breast_composition",
+          "SUB.mammo.masses",
+          "SUB.mammo.calcifications",
+          "SUB.mammo.architectural_distortion",
+          "SUB.mammo.asymmetries",
+          "SUB.mammo.lymph_nodes",
+          "SUB.mammo.skin_nipple"
+        ],
+        "impression": "IMP.mammo.birads"
+      }
+    },
+    {
+      "cpt_code": "19081",
+      "procedure_name": "STEREOTACTIC BIOPSY",
+      "contrast": "na",
+      "protocol": "intervention",
+      "components": {
+        "header": "HDR.mammo.biopsy.stereo",
+        "technique": "TEC.mammo.biopsy.stereo",
+        "findings": [
+          "SUB.mammo.biopsy.target",
+          "SUB.mammo.biopsy.needle_placement",
+          "SUB.mammo.biopsy.specimens",
+          "SUB.mammo.biopsy.clip_placement",
+          "SUB.mammo.biopsy.complications"
+        ],
+        "impression": "IMP.mammo.biopsy"
+      }
+    },
+    {
+      "cpt_code": "19082",
+      "procedure_name": "STEREOTACTIC BIOPSY additional site",
+      "contrast": "na",
+      "protocol": "intervention",
+      "components": {
+        "header": "HDR.mammo.biopsy.stereo.additional",
+        "technique": "TEC.mammo.biopsy.stereo.additional",
+        "findings": [
+          "SUB.mammo.biopsy.target",
+          "SUB.mammo.biopsy.needle_placement",
+          "SUB.mammo.biopsy.specimens",
+          "SUB.mammo.biopsy.clip_placement"
+        ],
+        "impression": "IMP.mammo.biopsy.additional"
+      }
+    },
+    {
+      "cpt_code": "19283",
+      "procedure_name": "NEEDLE LOCALIZATION",
+      "contrast": "na",
+      "protocol": "intervention",
+      "components": {
+        "header": "HDR.mammo.localization",
+        "technique": "TEC.mammo.localization",
+        "findings": [
+          "SUB.mammo.localization.target",
+          "SUB.mammo.localization.wire_placement",
+          "SUB.mammo.localization.complications"
+        ],
+        "impression": "IMP.mammo.localization"
+      }
+    }
+  ],
+  
+  "special_protocols": [
+    {
+      "protocol_id": "BIRADS",
+      "name": "BI-RADS (Breast Imaging Reporting and Data System)",
+      "applicable_cpt": ["77067", "77063", "77066", "77065"],
+      "required_components": [
+        "SUB.mammo.birads_category",
+        "SUB.mammo.breast_density"
+      ],
+      "categories": {
+        "0": "Incomplete - Need Additional Imaging",
+        "1": "Negative",
+        "2": "Benign",
+        "3": "Probably Benign",
+        "4A": "Low Suspicion for Malignancy",
+        "4B": "Moderate Suspicion for Malignancy",
+        "4C": "High Suspicion for Malignancy",
+        "5": "Highly Suggestive of Malignancy",
+        "6": "Known Biopsy-Proven Malignancy"
+      },
+      "density_categories": {
+        "A": "Almost entirely fatty",
+        "B": "Scattered areas of fibroglandular density",
+        "C": "Heterogeneously dense",
+        "D": "Extremely dense"
+      }
+    }
+  ],
+  
+  "shared_components": {
+    "findings_subcomponents": [
+      {
+        "component_id": "SUB.mammo.breast_composition",
+        "name": "Breast Composition",
+        "atomic_elements": ["ATM.mammo.density_category"]
+      },
+      {
+        "component_id": "SUB.mammo.masses",
+        "name": "Masses",
+        "atomic_elements": ["ATM.mammo.mass_shape", "ATM.mammo.mass_margin", "ATM.mammo.mass_density", "ATM.mammo.mass_location", "ATM.mammo.mass_size"]
+      },
+      {
+        "component_id": "SUB.mammo.calcifications",
+        "name": "Calcifications",
+        "atomic_elements": ["ATM.mammo.calc_morphology", "ATM.mammo.calc_distribution", "ATM.mammo.calc_location"]
+      },
+      {
+        "component_id": "SUB.mammo.architectural_distortion",
+        "name": "Architectural Distortion",
+        "atomic_elements": ["ATM.mammo.distortion_present", "ATM.mammo.distortion_location"]
+      },
+      {
+        "component_id": "SUB.mammo.asymmetries",
+        "name": "Asymmetries",
+        "atomic_elements": ["ATM.mammo.asymmetry_type", "ATM.mammo.asymmetry_location"]
+      },
+      {
+        "component_id": "SUB.mammo.lymph_nodes",
+        "name": "Lymph Nodes",
+        "atomic_elements": ["ATM.mammo.axillary_nodes"]
+      },
+      {
+        "component_id": "SUB.mammo.birads_category",
+        "name": "BI-RADS Assessment",
+        "atomic_elements": ["ATM.mammo.birads_category", "ATM.mammo.management"]
+      }
+    ]
+  }
+}

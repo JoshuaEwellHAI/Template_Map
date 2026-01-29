@@ -1,0 +1,187 @@
+{
+  "$schema": "../schema/cpt-mapping.schema.json",
+  "modality": "FLUORO",
+  "body_region": "gi",
+  "category": "Fluoroscopy GI",
+  "description": "All GI fluoroscopy CPT codes and their component mappings",
+  
+  "_note_on_variants": "variant_id values are INTERNAL identifiers only - they are NOT CPT modifiers. Real CMS modifiers (e.g., -26, -TC, -LT, -RT) would be specified in a separate 'modifiers' field if needed.",
+  
+  "cpt_codes": [
+    {
+      "cpt_code": "74220",
+      "procedure_name": "FLUORO ESOPHAGUS EXAM",
+      "contrast": "with",
+      "components": {
+        "header": "HDR.fluoro.esophagram",
+        "technique": "TEC.fluoro.esophagram",
+        "findings": [
+          "SUB.fluoro.esophagus.motility",
+          "SUB.fluoro.esophagus.mucosa",
+          "SUB.fluoro.esophagus.narrowing",
+          "SUB.fluoro.gej"
+        ],
+        "impression": "IMP.fluoro.esophagram"
+      }
+    },
+    {
+      "cpt_code": "74241",
+      "procedure_name": "FLUORO UPPER GI SERIES",
+      "contrast": "with",
+      "components": {
+        "header": "HDR.fluoro.ugi",
+        "technique": "TEC.fluoro.ugi",
+        "findings": [
+          "SUB.fluoro.esophagus",
+          "SUB.fluoro.stomach",
+          "SUB.fluoro.duodenum"
+        ],
+        "impression": "IMP.fluoro.ugi"
+      }
+    },
+    {
+      "cpt_code": "74245",
+      "procedure_name": "FLUORO UPPER GI with SMALL BOWEL",
+      "contrast": "with",
+      "components": {
+        "header": "HDR.fluoro.ugi_sbft",
+        "technique": "TEC.fluoro.ugi_sbft",
+        "findings": [
+          "SUB.fluoro.esophagus",
+          "SUB.fluoro.stomach",
+          "SUB.fluoro.duodenum",
+          "SUB.fluoro.small_bowel"
+        ],
+        "impression": "IMP.fluoro.ugi_sbft"
+      }
+    },
+    {
+      "cpt_code": "74247",
+      "procedure_name": "FLUORO UPPER GI TRACT with AIR",
+      "contrast": "with",
+      "protocol": "double_contrast",
+      "components": {
+        "header": "HDR.fluoro.ugi.dc",
+        "technique": "TEC.fluoro.ugi.double_contrast",
+        "findings": [
+          "SUB.fluoro.esophagus",
+          "SUB.fluoro.stomach.mucosa",
+          "SUB.fluoro.duodenum.mucosa"
+        ],
+        "impression": "IMP.fluoro.ugi.dc"
+      }
+    },
+    {
+      "cpt_code": "74249",
+      "procedure_name": "FLUORO UGI & SB with AIR",
+      "contrast": "with",
+      "protocol": "double_contrast",
+      "components": {
+        "header": "HDR.fluoro.ugi_sbft.dc",
+        "technique": "TEC.fluoro.ugi_sbft.double_contrast",
+        "findings": [
+          "SUB.fluoro.esophagus",
+          "SUB.fluoro.stomach.mucosa",
+          "SUB.fluoro.duodenum.mucosa",
+          "SUB.fluoro.small_bowel"
+        ],
+        "impression": "IMP.fluoro.ugi_sbft.dc"
+      }
+    },
+    {
+      "cpt_code": "74250",
+      "procedure_name": "FLUORO SMALL BOWEL SERIES",
+      "contrast": "with",
+      "components": {
+        "header": "HDR.fluoro.sbft",
+        "technique": "TEC.fluoro.sbft",
+        "findings": [
+          "SUB.fluoro.small_bowel.transit",
+          "SUB.fluoro.small_bowel.caliber",
+          "SUB.fluoro.small_bowel.mucosa",
+          "SUB.fluoro.terminal_ileum"
+        ],
+        "impression": "IMP.fluoro.sbft"
+      }
+    },
+    {
+      "cpt_code": "74270",
+      "procedure_name": "FLUORO BARIUM ENEMA",
+      "contrast": "with",
+      "components": {
+        "header": "HDR.fluoro.be",
+        "technique": "TEC.fluoro.be.single_contrast",
+        "findings": [
+          "SUB.fluoro.colon.filling",
+          "SUB.fluoro.colon.caliber",
+          "SUB.fluoro.colon.mucosa",
+          "SUB.fluoro.rectum"
+        ],
+        "impression": "IMP.fluoro.be"
+      }
+    },
+    {
+      "cpt_code": "74280",
+      "procedure_name": "FLUORO BARIUM ENEMA with AIR CONTRAST",
+      "contrast": "with",
+      "protocol": "double_contrast",
+      "components": {
+        "header": "HDR.fluoro.be.dc",
+        "technique": "TEC.fluoro.be.double_contrast",
+        "findings": [
+          "SUB.fluoro.colon.filling",
+          "SUB.fluoro.colon.caliber",
+          "SUB.fluoro.colon.mucosa_detail",
+          "SUB.fluoro.colon.polyps",
+          "SUB.fluoro.rectum"
+        ],
+        "impression": "IMP.fluoro.be.dc"
+      }
+    },
+    {
+      "cpt_code": "74400",
+      "procedure_name": "FLUORO IVP / X-RAY IVP",
+      "contrast": "with",
+      "components": {
+        "header": "HDR.fluoro.ivp",
+        "technique": "TEC.fluoro.ivp",
+        "findings": [
+          "SUB.fluoro.kidneys",
+          "SUB.fluoro.ureters",
+          "SUB.fluoro.bladder"
+        ],
+        "impression": "IMP.fluoro.ivp"
+      }
+    }
+  ],
+  
+  "shared_components": {
+    "findings_subcomponents": [
+      {
+        "component_id": "SUB.fluoro.esophagus",
+        "name": "Esophagus",
+        "atomic_elements": ["ATM.esoph.motility", "ATM.esoph.caliber", "ATM.esoph.mucosa", "ATM.esoph.hiatal_hernia", "ATM.esoph.stricture", "ATM.esoph.diverticulum"]
+      },
+      {
+        "component_id": "SUB.fluoro.stomach",
+        "name": "Stomach",
+        "atomic_elements": ["ATM.stomach.contour", "ATM.stomach.mucosa", "ATM.stomach.ulcer", "ATM.stomach.mass", "ATM.stomach.outlet"]
+      },
+      {
+        "component_id": "SUB.fluoro.duodenum",
+        "name": "Duodenum",
+        "atomic_elements": ["ATM.duod.bulb", "ATM.duod.sweep", "ATM.duod.mucosa"]
+      },
+      {
+        "component_id": "SUB.fluoro.small_bowel",
+        "name": "Small Bowel",
+        "atomic_elements": ["ATM.sb.caliber", "ATM.sb.transit_time", "ATM.sb.mucosa", "ATM.sb.stricture"]
+      },
+      {
+        "component_id": "SUB.fluoro.colon",
+        "name": "Colon",
+        "atomic_elements": ["ATM.colon.caliber", "ATM.colon.haustral_pattern", "ATM.colon.mucosa", "ATM.colon.polyps", "ATM.colon.diverticula", "ATM.colon.stricture"]
+      }
+    ]
+  }
+}

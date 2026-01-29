@@ -1,0 +1,268 @@
+{
+  "$schema": "../../schema/template.schema.json",
+  "template_id": "71250-ct-chest-wo",
+  "cpt_code": "71250",
+  "procedure_name": "CT CHEST WITHOUT CONTRAST",
+  "modality": "CT",
+  "body_region": "chest",
+  "contrast": "without",
+  
+  "description": "Non-contrast CT of the chest",
+  
+  "variants": [
+    {
+      "variant_id": "routine",
+      "name": "Routine",
+      "context": "routine",
+      "is_default": true
+    },
+    {
+      "variant_id": "high-resolution",
+      "name": "High Resolution (HRCT)",
+      "context": "high_resolution",
+      "protocol": "hrct"
+    },
+    {
+      "variant_id": "nodule",
+      "name": "Nodule Follow-up",
+      "context": "nodule_followup"
+    },
+    {
+      "variant_id": "emergency",
+      "name": "Emergency",
+      "context": "emergency"
+    },
+    {
+      "variant_id": "structured",
+      "name": "Structured Reporting",
+      "style": "structured"
+    },
+    {
+      "variant_id": "free-text",
+      "name": "Free Text",
+      "style": "free_text"
+    }
+  ],
+  
+  "legacy_template_names": [
+    "chest CT chest without (CT2007)",
+    "chest CT chest without emergency",
+    "chest CT chest and HR without structured FM",
+    "chest CT chest without free text",
+    "chest CT chest without structured FM"
+  ],
+  
+  "structure": {
+    "header": {
+      "component_ref": "HDR.ct.chest",
+      "sections": [
+        {
+          "name": "EXAM",
+          "content": "CT chest without intravenous contrast",
+          "merge_field": "Procedures"
+        },
+        {
+          "name": "DATE",
+          "merge_field": "Exam Complete Time"
+        },
+        {
+          "name": "INDICATION",
+          "merge_field": "Indication"
+        },
+        {
+          "name": "COMPARISON",
+          "merge_field": "Comparison"
+        }
+      ]
+    },
+    
+    "technique": {
+      "component_ref": "TEC.ct.chest.without",
+      "default_text": "Non-contrast CT of the chest was performed with axial acquisitions. This facility uses radiation dose reduction techniques including at least one of the following: automated exposure control, dose modulation, and/or iterative reconstruction.",
+      "variants": {
+        "high-resolution": "High-resolution CT of the chest was performed with thin section axial acquisitions at full inspiration. This facility uses radiation dose reduction techniques.",
+        "nodule": "Non-contrast CT of the chest was performed for pulmonary nodule surveillance. This facility uses radiation dose reduction techniques."
+      }
+    },
+    
+    "findings": {
+      "component_ref": "FND.ct.chest",
+      "subcomponents": [
+        {
+          "order": 1,
+          "component_ref": "SUB.ct.chest.exam_quality",
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.quality.motion"},
+              {"ref": "ATM.quality.coverage"}
+            ]
+          }
+        },
+        {
+          "order": 2,
+          "component_ref": "SUB.ct.chest.lungs_airways_pleura",
+          "header": "LUNGS, AIRWAYS AND PLEURA:",
+          "required": true,
+          "source_template": "Lungs, Airways and Pleura CT sub final",
+          "content": {
+            "subsections": [
+              {
+                "name": "Airways",
+                "atomic_elements": [
+                  {"ref": "ATM.airways.trachea"},
+                  {"ref": "ATM.airways.bronchi"}
+                ]
+              },
+              {
+                "name": "Lungs",
+                "atomic_elements": [
+                  {"ref": "ATM.lungs.parenchyma"},
+                  {"ref": "ATM.lungs.nodules"},
+                  {"ref": "ATM.lungs.masses"},
+                  {"ref": "ATM.lungs.consolidation"},
+                  {"ref": "ATM.lungs.ground_glass"},
+                  {"ref": "ATM.lungs.emphysema"},
+                  {"ref": "ATM.lungs.fibrosis"}
+                ]
+              },
+              {
+                "name": "Pleura",
+                "atomic_elements": [
+                  {"ref": "ATM.pleura.effusion"},
+                  {"ref": "ATM.pleura.pneumothorax"},
+                  {"ref": "ATM.pleura.thickening"}
+                ]
+              }
+            ],
+            "normal_text": "Airways are patent. Lungs are clear without nodules, masses, or consolidation. No pleural effusion or pneumothorax."
+          }
+        },
+        {
+          "order": 3,
+          "component_ref": "SUB.ct.chest.mediastinum_hila",
+          "header": "MEDIASTINUM AND HILA:",
+          "required": true,
+          "source_template": "Mediastinum and Hila CT sub final",
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.mediastinum.lymph_nodes"},
+              {"ref": "ATM.mediastinum.masses"},
+              {"ref": "ATM.hila.lymphadenopathy"}
+            ],
+            "normal_text": "No mediastinal or hilar lymphadenopathy. No mediastinal mass."
+          }
+        },
+        {
+          "order": 4,
+          "component_ref": "SUB.ct.chest.heart_pericardium",
+          "header": "HEART AND PERICARDIUM:",
+          "required": true,
+          "source_template": "Heart CT sub final",
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.heart.size"},
+              {"ref": "ATM.heart.chambers"},
+              {"ref": "ATM.pericardium.effusion"},
+              {"ref": "ATM.coronaries.calcification"}
+            ],
+            "normal_text": "Heart is normal in size. No pericardial effusion."
+          }
+        },
+        {
+          "order": 5,
+          "component_ref": "SUB.ct.chest.aorta_great_vessels",
+          "header": "AORTA AND GREAT VESSELS:",
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.aorta.thoracic"},
+              {"ref": "ATM.aorta.calcification"},
+              {"ref": "ATM.great_vessels.general"}
+            ],
+            "normal_text": "Thoracic aorta is normal in caliber. Great vessels are unremarkable."
+          }
+        },
+        {
+          "order": 6,
+          "component_ref": "SUB.ct.chest.chest_wall",
+          "header": "CHEST WALL:",
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.chest_wall.soft_tissue"},
+              {"ref": "ATM.chest_wall.breast"},
+              {"ref": "ATM.chest_wall.axillae"}
+            ],
+            "normal_text": "Chest wall soft tissues are unremarkable. No axillary lymphadenopathy."
+          }
+        },
+        {
+          "order": 7,
+          "component_ref": "SUB.ct.chest.bones",
+          "header": "BONES:",
+          "required": true,
+          "source_template": "Bone Sub Final",
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.bones.ribs"},
+              {"ref": "ATM.bones.spine_thoracic"},
+              {"ref": "ATM.bones.sternum"},
+              {"ref": "ATM.bones.shoulders"}
+            ],
+            "normal_text": "No acute osseous abnormality. Degenerative changes of the thoracic spine."
+          }
+        },
+        {
+          "order": 8,
+          "component_ref": "SUB.ct.chest.upper_abdomen",
+          "header": "UPPER ABDOMEN:",
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.liver.visualized"},
+              {"ref": "ATM.adrenals.visualized"},
+              {"ref": "ATM.kidneys.visualized"}
+            ],
+            "normal_text": "Visualized upper abdomen is unremarkable."
+          }
+        }
+      ]
+    },
+    
+    "impression": {
+      "component_ref": "IMP.ct.chest.standard",
+      "options": [
+        {
+          "type": "normal",
+          "text": "No acute cardiopulmonary abnormality."
+        },
+        {
+          "type": "structured",
+          "numbered_findings": true
+        }
+      ]
+    }
+  },
+  
+  "protocol_specific": {
+    "hrct": {
+      "additional_findings": ["ILD pattern", "Honeycombing", "Traction bronchiectasis"],
+      "impression_includes": "ILD pattern classification if applicable"
+    },
+    "nodule": {
+      "required_elements": ["Nodule measurements", "Comparison to prior", "Fleischner recommendations"],
+      "reporting_system": "Fleischner Guidelines"
+    }
+  },
+  
+  "normal_template": {
+    "findings": "Airways are patent. Lungs are clear without nodules, masses, or consolidation. No pleural effusion or pneumothorax. No mediastinal or hilar lymphadenopathy. Heart is normal in size. No pericardial effusion. Thoracic aorta is normal in caliber. Chest wall soft tissues are unremarkable. No acute osseous abnormality. Visualized upper abdomen is unremarkable.",
+    "impression": "No acute cardiopulmonary abnormality."
+  },
+  
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2026-01-28"
+  }
+}

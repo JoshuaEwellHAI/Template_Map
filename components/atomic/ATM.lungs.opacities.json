@@ -1,0 +1,221 @@
+{
+  "$schema": "../schema/atomic-element.schema.json",
+  "element_id": "ATM.lungs.opacities",
+  "element_type": "atomic",
+  "name": "Pulmonary Opacities",
+  "description": "Picklist options for describing pulmonary opacities on imaging",
+  
+  "version": "1.0.0",
+  "last_updated": "2026-01-28",
+  
+  "modality": ["XR", "CT"],
+  "body_region": "chest",
+  
+  "parent_components": [
+    "SUB.chest.xr.lungs_pleura",
+    "SUB.ct.chest.lungs_airways_pleura"
+  ],
+  
+  "data_type": "picklist",
+  "allow_multiple": true,
+  "allow_free_text": true,
+  
+  "options": {
+    "normal": {
+      "label": "Clear",
+      "value": "clear",
+      "output_text": "Lungs are clear.",
+      "is_default": true,
+      "is_normal": true
+    },
+    
+    "patterns": [
+      {
+        "category": "Airspace Disease",
+        "options": [
+          {
+            "label": "Consolidation",
+            "value": "consolidation",
+            "requires_location": true,
+            "output_template": "{location} consolidation{extent}",
+            "associated_conditions": ["pneumonia", "aspiration", "hemorrhage", "edema"]
+          },
+          {
+            "label": "Ground-glass opacity",
+            "value": "ground_glass",
+            "requires_location": true,
+            "output_template": "{location} ground-glass opacity",
+            "modality_specific": ["CT"]
+          },
+          {
+            "label": "Airspace opacity",
+            "value": "airspace_opacity",
+            "requires_location": true,
+            "output_template": "{location} airspace opacity{extent}"
+          },
+          {
+            "label": "Patchy opacity",
+            "value": "patchy_opacity",
+            "requires_location": true,
+            "output_template": "Patchy opacity in the {location}"
+          },
+          {
+            "label": "Hazy opacity",
+            "value": "hazy_opacity",
+            "requires_location": true,
+            "output_template": "Hazy opacity in the {location}"
+          },
+          {
+            "label": "Confluent opacity",
+            "value": "confluent_opacity",
+            "requires_location": true,
+            "output_template": "Confluent opacity in the {location}"
+          }
+        ]
+      },
+      {
+        "category": "Interstitial Disease",
+        "options": [
+          {
+            "label": "Reticular pattern",
+            "value": "reticular",
+            "requires_location": true,
+            "output_template": "{distribution} reticular pattern"
+          },
+          {
+            "label": "Reticulonodular pattern",
+            "value": "reticulonodular",
+            "requires_location": true,
+            "output_template": "{distribution} reticulonodular pattern"
+          },
+          {
+            "label": "Linear opacities",
+            "value": "linear",
+            "requires_location": true,
+            "output_template": "Linear opacities in the {location}"
+          },
+          {
+            "label": "Interstitial thickening",
+            "value": "interstitial_thickening",
+            "requires_location": true,
+            "output_template": "Interstitial thickening in the {location}"
+          }
+        ]
+      },
+      {
+        "category": "Atelectasis",
+        "options": [
+          {
+            "label": "Subsegmental atelectasis",
+            "value": "subsegmental_atelectasis",
+            "requires_location": true,
+            "output_template": "Subsegmental atelectasis at the {location}",
+            "severity": "mild"
+          },
+          {
+            "label": "Platelike atelectasis",
+            "value": "platelike_atelectasis",
+            "requires_location": true,
+            "output_template": "Platelike atelectasis at the {location}",
+            "severity": "mild"
+          },
+          {
+            "label": "Segmental atelectasis",
+            "value": "segmental_atelectasis",
+            "requires_location": true,
+            "output_template": "Segmental atelectasis of the {location}",
+            "severity": "moderate"
+          },
+          {
+            "label": "Lobar atelectasis",
+            "value": "lobar_atelectasis",
+            "requires_location": true,
+            "output_template": "{location} lobar atelectasis",
+            "severity": "significant"
+          },
+          {
+            "label": "Complete lung collapse",
+            "value": "complete_collapse",
+            "requires_location": true,
+            "output_template": "Complete collapse of the {side} lung",
+            "severity": "critical"
+          }
+        ]
+      },
+      {
+        "category": "Chronic Changes",
+        "options": [
+          {
+            "label": "Scarring",
+            "value": "scarring",
+            "requires_location": true,
+            "output_template": "Scarring in the {location}"
+          },
+          {
+            "label": "Fibrotic changes",
+            "value": "fibrotic",
+            "requires_location": true,
+            "output_template": "Fibrotic changes in the {location}"
+          },
+          {
+            "label": "Calcified granuloma",
+            "value": "calcified_granuloma",
+            "requires_location": true,
+            "output_template": "Calcified granuloma in the {location}"
+          },
+          {
+            "label": "Post-surgical changes",
+            "value": "post_surgical",
+            "requires_location": true,
+            "output_template": "Post-surgical changes in the {location}"
+          }
+        ]
+      }
+    ]
+  },
+  
+  "location_options": {
+    "lung_zones": [
+      {"value": "right_upper", "label": "Right upper lobe/zone"},
+      {"value": "right_middle", "label": "Right middle lobe/zone"},
+      {"value": "right_lower", "label": "Right lower lobe/zone"},
+      {"value": "left_upper", "label": "Left upper lobe/zone"},
+      {"value": "left_lower", "label": "Left lower lobe/zone"},
+      {"value": "lingula", "label": "Lingula"},
+      {"value": "bilateral_upper", "label": "Bilateral upper lobes/zones"},
+      {"value": "bilateral_lower", "label": "Bilateral lower lobes/zones"},
+      {"value": "bilateral_diffuse", "label": "Bilateral diffuse"},
+      {"value": "perihilar", "label": "Perihilar"},
+      {"value": "basilar", "label": "Basilar"}
+    ],
+    "laterality": [
+      {"value": "right", "label": "Right"},
+      {"value": "left", "label": "Left"},
+      {"value": "bilateral", "label": "Bilateral"}
+    ]
+  },
+  
+  "extent_modifiers": [
+    {"value": "focal", "label": "Focal"},
+    {"value": "multifocal", "label": "Multifocal"},
+    {"value": "diffuse", "label": "Diffuse"},
+    {"value": "patchy", "label": "Patchy"},
+    {"value": "confluent", "label": "Confluent"}
+  ],
+  
+  "change_descriptors": [
+    {"value": "new", "label": "New"},
+    {"value": "improved", "label": "Improved"},
+    {"value": "worsened", "label": "Worsened"},
+    {"value": "stable", "label": "Stable"},
+    {"value": "resolved", "label": "Resolved"},
+    {"value": "interval_development", "label": "Interval development"}
+  ],
+  
+  "clinical_associations": {
+    "consolidation": ["pneumonia", "aspiration", "hemorrhage", "organizing_pneumonia", "malignancy"],
+    "ground_glass": ["infection", "edema", "hemorrhage", "inflammation", "drug_toxicity"],
+    "reticular": ["pulmonary_fibrosis", "interstitial_lung_disease", "lymphangitic_spread"],
+    "atelectasis": ["mucus_plugging", "mass_effect", "post_operative", "hypoventilation"]
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "$schema": "../../../schema/component-schema.json",
+  "component_id": "HDR.ct.technique-contrast",
+  "component_type": "header",
+  "name": "CT Contrast Technique",
+  "description": "IV contrast administration details for CT examinations",
+  
+  "applies_to": ["CT"],
+  
+  "fields": [
+    {
+      "field_id": "contrast_administered",
+      "label": "Contrast Administered",
+      "type": "boolean",
+      "required": true,
+      "options": [
+        {"value": true, "label": "With IV contrast"},
+        {"value": false, "label": "Without IV contrast"}
+      ]
+    },
+    {
+      "field_id": "contrast_volume",
+      "label": "Volume",
+      "type": "merge_field",
+      "merge_field_name": "IV Contrast Volume",
+      "required_if": "contrast_administered == true",
+      "unit": "mL"
+    },
+    {
+      "field_id": "contrast_type",
+      "label": "Contrast Agent",
+      "type": "merge_field",
+      "merge_field_name": "Contrast Type",
+      "required_if": "contrast_administered == true",
+      "options": [
+        {"value": "Omnipaque 350", "label": "Omnipaque 350 (iohexol)"},
+        {"value": "Omnipaque 300", "label": "Omnipaque 300 (iohexol)"},
+        {"value": "Isovue 370", "label": "Isovue 370 (iopamidol)"},
+        {"value": "Isovue 300", "label": "Isovue 300 (iopamidol)"},
+        {"value": "Visipaque 320", "label": "Visipaque 320 (iodixanol)"}
+      ]
+    },
+    {
+      "field_id": "injection_rate",
+      "label": "Injection Rate",
+      "type": "number",
+      "required": false,
+      "unit": "mL/s"
+    },
+    {
+      "field_id": "oral_contrast",
+      "label": "Oral Contrast",
+      "type": "picklist",
+      "required": false,
+      "options": [
+        {"value": "none", "label": "No oral contrast"},
+        {"value": "positive", "label": "Positive oral contrast administered"},
+        {"value": "negative", "label": "Negative (water) oral contrast"},
+        {"value": "rectal", "label": "Rectal contrast administered"}
+      ]
+    },
+    {
+      "field_id": "phase",
+      "label": "Phase",
+      "type": "picklist",
+      "required_if": "contrast_administered == true",
+      "allow_multiple": true,
+      "options": [
+        {"value": "arterial", "label": "Arterial phase"},
+        {"value": "portal_venous", "label": "Portal venous phase"},
+        {"value": "delayed", "label": "Delayed phase"},
+        {"value": "nephrographic", "label": "Nephrographic phase"},
+        {"value": "excretory", "label": "Excretory/urographic phase"}
+      ]
+    }
+  ],
+  
+  "output_templates": {
+    "with_contrast": "{contrast_volume} mL of {contrast_type} were administered intravenously.",
+    "without_contrast": "No intravenous contrast was administered.",
+    "multiphase": "Multiphase imaging was performed including {phase_list}."
+  },
+  
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2026-01-28"
+  }
+}

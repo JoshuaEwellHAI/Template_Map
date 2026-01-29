@@ -1,0 +1,154 @@
+{
+  "$schema": "../../schema/template.schema.json",
+  "template_id": "71045-xr-chest-1view",
+  "cpt_code": "71045",
+  "procedure_name": "X-RAY CHEST 1 VIEW",
+  "modality": "XR",
+  "body_region": "chest",
+  "contrast": "na",
+  
+  "description": "Single view chest x-ray (typically portable AP)",
+  
+  "variants": [
+    {
+      "variant_id": "portable",
+      "name": "Portable AP",
+      "context": "inpatient",
+      "is_default": true
+    },
+    {
+      "variant_id": "icu",
+      "name": "ICU Portable",
+      "context": "icu"
+    },
+    {
+      "variant_id": "emergency",
+      "name": "Emergency",
+      "context": "emergency"
+    },
+    {
+      "variant_id": "outpatient",
+      "name": "Outpatient PA",
+      "context": "outpatient"
+    }
+  ],
+  
+  "legacy_template_names": [
+    "chest XR chest 1 view op (XR2024/5)",
+    "chest XR chest 1 view ip (XR2024/5)",
+    "chest XR chest 1 view er (XR2024/5)",
+    "chest XR chest 1 view ICU structured",
+    "chest XR chest 1 view ICU free text"
+  ],
+  
+  "structure": {
+    "header": {
+      "component_ref": "HDR.xr.chest.standard",
+      "sections": [
+        {
+          "name": "EXAM",
+          "content": "Portable AP chest radiograph",
+          "merge_field": "Procedures"
+        },
+        {
+          "name": "DATE",
+          "merge_field": "Exam Complete Time"
+        },
+        {
+          "name": "INDICATION",
+          "merge_field": "Indication"
+        },
+        {
+          "name": "COMPARISON",
+          "merge_field": "Comparison"
+        }
+      ]
+    },
+    
+    "technique": {
+      "component_ref": "TEC.xr.chest.1view",
+      "variants": {
+        "portable": "Portable AP view of the chest was obtained.",
+        "icu": "Portable AP view of the chest was obtained at bedside.",
+        "outpatient": "Single PA view of the chest was obtained."
+      }
+    },
+    
+    "findings": {
+      "component_ref": "FND.xr.chest.standard",
+      "subcomponents": [
+        {
+          "order": 1,
+          "component_ref": "SUB.xr.chest.exam_quality",
+          "required": true,
+          "icu_specific": {
+            "includes_rotation": true,
+            "includes_penetration": true
+          }
+        },
+        {
+          "order": 2,
+          "component_ref": "SUB.xr.chest.support_devices",
+          "header": "SUPPORT DEVICES:",
+          "required": true,
+          "condition": "always_for_icu",
+          "icu_specific": {
+            "detailed_positioning": true,
+            "comparison_to_prior": true
+          }
+        },
+        {
+          "order": 3,
+          "component_ref": "SUB.xr.chest.lungs_pleura",
+          "header": "LUNGS AND PLEURA:",
+          "required": true
+        },
+        {
+          "order": 4,
+          "component_ref": "SUB.xr.chest.heart_mediastinum",
+          "header": "HEART AND MEDIASTINUM:",
+          "required": true
+        },
+        {
+          "order": 5,
+          "component_ref": "SUB.xr.chest.bones_soft_tissue",
+          "header": "BONES AND SOFT TISSUES:",
+          "required": true
+        }
+      ]
+    },
+    
+    "impression": {
+      "component_ref": "IMP.xr.chest.standard"
+    }
+  },
+  
+  "icu_support_device_templates": [
+    {
+      "ref": "SUB.xr.icu.lines_ett",
+      "description": "ETT only"
+    },
+    {
+      "ref": "SUB.xr.icu.lines_ett_ngt",
+      "description": "ETT and NGT"
+    },
+    {
+      "ref": "SUB.xr.icu.lines_ett_ngt_cvl",
+      "description": "ETT, NGT, and CVL"
+    },
+    {
+      "ref": "SUB.xr.icu.lines_all",
+      "description": "All common lines/tubes"
+    }
+  ],
+  
+  "normal_template": {
+    "findings": "Lungs are clear. No pleural effusion or pneumothorax. Heart size is within normal limits, though evaluation limited on portable exam. No acute osseous abnormality.",
+    "impression": "No acute cardiopulmonary abnormality."
+  },
+  
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2026-01-28"
+  }
+}

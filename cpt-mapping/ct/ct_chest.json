@@ -1,0 +1,335 @@
+{
+  "$schema": "../schema/cpt-mapping.schema.json",
+  "modality": "CT",
+  "body_region": "chest",
+  "category": "CT Chest",
+  "description": "All CT chest CPT codes and their component mappings",
+  
+  "_note_on_variants": "variant_id values are INTERNAL identifiers only - they are NOT CPT modifiers. Real CMS modifiers (e.g., -26, -TC, -LT, -RT) would be specified in a separate 'modifiers' field if needed.",
+  
+  "cpt_codes": [
+    {
+      "cpt_code": "71250",
+      "procedure_name": "CT CHEST w/o contrast",
+      "contrast": "without",
+      "variants": [
+        {
+          "variant_id": "routine",
+          "context": "routine",
+          "template_name": "chest CT chest without (CT2007)"
+        },
+        {
+          "variant_id": "emergency",
+          "context": "emergency",
+          "template_name": "chest CT chest without emergency"
+        },
+        {
+          "variant_id": "high_resolution",
+          "context": "high_resolution",
+          "template_name": "chest CT chest and HR without structured FM"
+        },
+        {
+          "variant_id": "nodule_followup",
+          "context": "nodule_followup",
+          "template_name": "chest CT chest (Nodule w/o contrast)"
+        },
+        {
+          "variant_id": "free_text",
+          "style": "free_text",
+          "template_name": "chest CT chest without free text"
+        },
+        {
+          "variant_id": "structured",
+          "style": "structured",
+          "template_name": "chest CT chest without structured FM"
+        }
+      ],
+      "components": {
+        "header": "HDR.ct.standard",
+        "technique": "TEC.ct.chest.without",
+        "findings": [
+          "SUB.ct.chest.exam_quality",
+          "SUB.ct.chest.lungs_airways_pleura",
+          "SUB.ct.chest.mediastinum_hila",
+          "SUB.ct.chest.heart_pericardium",
+          "SUB.ct.chest.aorta_great_vessels",
+          "SUB.ct.chest.chest_wall",
+          "SUB.ct.chest.bones",
+          "SUB.ct.chest.upper_abdomen"
+        ],
+        "impression": "IMP.ct.chest.standard"
+      }
+    },
+    {
+      "cpt_code": "71260",
+      "procedure_name": "CT CHEST w/ contrast",
+      "contrast": "with",
+      "variants": [
+        {
+          "variant_id": "routine",
+          "context": "routine",
+          "template_name": "chest CT chest with (CT2006)"
+        },
+        {
+          "variant_id": "emergency",
+          "context": "emergency",
+          "template_name": "chest CT chest with emergency"
+        },
+        {
+          "variant_id": "trauma",
+          "context": "trauma",
+          "template_name": "chest CT chest with trauma"
+        },
+        {
+          "variant_id": "free_text",
+          "style": "free_text",
+          "template_name": "chest CT chest with free text"
+        },
+        {
+          "variant_id": "structured",
+          "style": "structured",
+          "template_name": "chest CT chest with structured FM"
+        }
+      ],
+      "components": {
+        "header": "HDR.ct.standard",
+        "technique": "TEC.ct.chest.with",
+        "findings": [
+          "SUB.ct.chest.exam_quality",
+          "SUB.ct.chest.lungs_airways_pleura",
+          "SUB.ct.chest.mediastinum_hila",
+          "SUB.ct.chest.heart_pericardium",
+          "SUB.ct.chest.aorta_great_vessels",
+          "SUB.ct.chest.chest_wall",
+          "SUB.ct.chest.bones",
+          "SUB.ct.chest.upper_abdomen"
+        ],
+        "impression": "IMP.ct.chest.standard"
+      }
+    },
+    {
+      "cpt_code": "71270",
+      "procedure_name": "CT CHEST w/ and w/o contrast",
+      "contrast": "with_without",
+      "variants": [
+        {
+          "variant_id": "routine",
+          "context": "routine",
+          "template_name": "chest CT chest without with (CT2008)"
+        },
+        {
+          "variant_id": "emergency",
+          "context": "emergency",
+          "template_name": "chest CT chest without with emergency"
+        },
+        {
+          "variant_id": "free_text",
+          "style": "free_text",
+          "template_name": "chest CT chest without with free text"
+        },
+        {
+          "variant_id": "structured",
+          "style": "structured",
+          "template_name": "chest CT chest without with structured FM"
+        }
+      ],
+      "components": {
+        "header": "HDR.ct.standard",
+        "technique": "TEC.ct.chest.with_without",
+        "findings": [
+          "SUB.ct.chest.exam_quality",
+          "SUB.ct.chest.lungs_airways_pleura",
+          "SUB.ct.chest.mediastinum_hila",
+          "SUB.ct.chest.heart_pericardium",
+          "SUB.ct.chest.aorta_great_vessels",
+          "SUB.ct.chest.chest_wall",
+          "SUB.ct.chest.bones",
+          "SUB.ct.chest.upper_abdomen"
+        ],
+        "impression": "IMP.ct.chest.standard"
+      }
+    },
+    {
+      "cpt_code": "71271",
+      "procedure_name": "CT CHEST (Lung Screening) w/o contrast",
+      "contrast": "without",
+      "protocol": "lung_screening",
+      "variants": [
+        {
+          "variant_id": "low_dose_screening",
+          "context": "lung_cancer_screening",
+          "template_name": "chest CT chest lung screening (CT2035)"
+        },
+        {
+          "variant_id": "lung_rads_free_text",
+          "context": "lung_cancer_screening",
+          "style": "free_text",
+          "template_name": "chest CT chest lung screening free text Lung-RADS"
+        },
+        {
+          "variant_id": "lung_rads_structured",
+          "context": "lung_cancer_screening",
+          "style": "structured",
+          "template_name": "chest CT chest lung screening structured FM Lung-RADS"
+        }
+      ],
+      "components": {
+        "header": "HDR.ct.lung_screening",
+        "technique": "TEC.ct.chest.low_dose",
+        "findings": [
+          "SUB.ct.chest.lung_rads",
+          "SUB.ct.chest.nodules_detailed",
+          "SUB.ct.chest.lungs_airways_pleura",
+          "SUB.ct.chest.mediastinum_hila",
+          "SUB.ct.chest.incidentals"
+        ],
+        "impression": "IMP.ct.lung_rads"
+      },
+      "special_elements": ["Lung-RADS category", "Nodule management recommendations"]
+    },
+    {
+      "cpt_code": "71275",
+      "procedure_name": "CT ANGIOGRAPHY CHEST w/ and/or w/o contrast",
+      "contrast": "with",
+      "protocol": "cta",
+      "variants": [
+        {
+          "variant_id": "pe_protocol",
+          "context": "pe_protocol",
+          "template_name": "CT PE CAP"
+        },
+        {
+          "variant_id": "dissection_protocol",
+          "context": "dissection_protocol",
+          "template_name": "chest CTA chest dissection with free text"
+        },
+        {
+          "variant_id": "routine",
+          "context": "routine",
+          "template_name": "chest CTA chest with structured FM"
+        }
+      ],
+      "components": {
+        "header": "HDR.ct.standard",
+        "technique": "TEC.cta.chest",
+        "findings": [
+          "SUB.ct.chest.exam_quality",
+          "SUB.cta.chest.pulmonary_arteries",
+          "SUB.cta.chest.aorta_great_vessels",
+          "SUB.ct.chest.lungs_airways_pleura",
+          "SUB.ct.chest.mediastinum_hila",
+          "SUB.ct.chest.heart_pericardium",
+          "SUB.ct.chest.bones",
+          "SUB.ct.chest.upper_abdomen"
+        ],
+        "impression": "IMP.cta.chest"
+      }
+    },
+    {
+      "cpt_code": "75571",
+      "procedure_name": "CT CALCIUM SCORING w/o contrast",
+      "contrast": "without",
+      "protocol": "cardiac",
+      "variants": [
+        {
+          "variant_id": "normal",
+          "context": "routine",
+          "template_name": "chest CT cardiac coronary calcium normal"
+        },
+        {
+          "variant_id": "abnormal",
+          "context": "routine",
+          "template_name": "chest CT cardiac coronary calcium abnormal"
+        },
+        {
+          "variant_id": "abnormal_no_mesa",
+          "context": "routine",
+          "template_name": "chest CT cardiac coronary calcium abnormal no MESA"
+        }
+      ],
+      "components": {
+        "header": "HDR.ct.cardiac",
+        "technique": "TEC.ct.cardiac.calcium_score",
+        "findings": [
+          "SUB.ct.cardiac.calcium_scores",
+          "SUB.ct.cardiac.vessel_distribution",
+          "SUB.ct.chest.incidentals"
+        ],
+        "impression": "IMP.ct.cardiac.calcium"
+      }
+    },
+    {
+      "cpt_code": "75574",
+      "procedure_name": "CT CORONARY",
+      "contrast": "with",
+      "protocol": "cardiac_cta",
+      "components": {
+        "header": "HDR.ct.cardiac",
+        "technique": "TEC.cta.coronary",
+        "findings": [
+          "SUB.cta.coronary.lad",
+          "SUB.cta.coronary.lcx",
+          "SUB.cta.coronary.rca",
+          "SUB.cta.coronary.lm",
+          "SUB.ct.cardiac.morphology",
+          "SUB.ct.chest.incidentals"
+        ],
+        "impression": "IMP.cta.coronary"
+      }
+    }
+  ],
+  
+  "shared_components": {
+    "findings_subcomponents": [
+      {
+        "component_id": "SUB.ct.chest.exam_quality",
+        "name": "Exam Quality",
+        "atomic_elements": ["ATM.quality.motion", "ATM.quality.timing", "ATM.quality.coverage"]
+      },
+      {
+        "component_id": "SUB.ct.chest.lungs_airways_pleura",
+        "name": "Lungs, Airways and Pleura",
+        "references": "Lungs, Airways and Pleura CT sub final",
+        "atomic_elements": ["ATM.lungs.parenchyma", "ATM.lungs.nodules", "ATM.airways.bronchi", "ATM.pleura.effusion", "ATM.pleura.pneumothorax"]
+      },
+      {
+        "component_id": "SUB.ct.chest.mediastinum_hila",
+        "name": "Mediastinum and Hila",
+        "references": "Mediastinum and Hila CT sub final",
+        "atomic_elements": ["ATM.mediastinum.lymph_nodes", "ATM.mediastinum.masses", "ATM.hila.lymphadenopathy"]
+      },
+      {
+        "component_id": "SUB.ct.chest.heart_pericardium",
+        "name": "Heart and Pericardium",
+        "references": "Heart CT sub final",
+        "atomic_elements": ["ATM.heart.size", "ATM.heart.chambers", "ATM.pericardium.effusion", "ATM.coronaries.calcification"]
+      },
+      {
+        "component_id": "SUB.ct.chest.aorta_great_vessels",
+        "name": "Aorta and Great Vessels",
+        "atomic_elements": ["ATM.aorta.diameter", "ATM.aorta.calcification", "ATM.aorta.dissection", "ATM.great_vessels.svc", "ATM.great_vessels.arch_vessels"]
+      },
+      {
+        "component_id": "SUB.ct.chest.bones",
+        "name": "Bones",
+        "references": "Bone Sub Final",
+        "atomic_elements": ["ATM.bones.ribs", "ATM.bones.spine", "ATM.bones.sternum", "ATM.bones.shoulders"]
+      },
+      {
+        "component_id": "SUB.ct.chest.chest_wall",
+        "name": "Chest Wall",
+        "atomic_elements": ["ATM.chest_wall.soft_tissue", "ATM.chest_wall.breast", "ATM.chest_wall.axillae"]
+      },
+      {
+        "component_id": "SUB.ct.chest.upper_abdomen",
+        "name": "Upper Abdomen",
+        "atomic_elements": ["ATM.liver.visualized", "ATM.adrenals.visualized", "ATM.kidneys.visualized"]
+      },
+      {
+        "component_id": "SUB.cta.chest.pulmonary_arteries",
+        "name": "Pulmonary Arteries",
+        "atomic_elements": ["ATM.pa.main", "ATM.pa.right", "ATM.pa.left", "ATM.pa.lobar", "ATM.pa.segmental", "ATM.pa.subsegmental"]
+      }
+    ]
+  }
+}

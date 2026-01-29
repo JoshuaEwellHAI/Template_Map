@@ -1,0 +1,167 @@
+{
+  "$schema": "../../../schema/component-schema.json",
+  "component_id": "CMP.ct.head.hemorrhage-extra-axial",
+  "component_type": "finding",
+  "name": "Extra-axial Hemorrhage",
+  "description": "Assessment for subdural, epidural, and subarachnoid hemorrhage on CT head",
+  
+  "applies_to": ["CT"],
+  "body_region": "head",
+  "section": "FINDINGS",
+  "subsection": "Extra-axial Collections",
+  
+  "used_by_cpt": ["70450", "70460", "70470"],
+  
+  "fields": [
+    {
+      "field_id": "overall_assessment",
+      "label": "Extra-axial Hemorrhage",
+      "type": "picklist",
+      "required": true,
+      "options": [
+        {"value": "none", "label": "No extra-axial hemorrhage", "is_normal": true, "is_default": true},
+        {"value": "present", "label": "Extra-axial hemorrhage present"}
+      ]
+    },
+    {
+      "field_id": "subdural",
+      "label": "Subdural Hemorrhage",
+      "type": "boolean",
+      "show_if": "overall_assessment == 'present'"
+    },
+    {
+      "field_id": "subdural_location",
+      "label": "SDH Location",
+      "type": "picklist",
+      "show_if": "subdural == true",
+      "allow_multiple": true,
+      "options": [
+        {"value": "right_convexity", "label": "Right convexity"},
+        {"value": "left_convexity", "label": "Left convexity"},
+        {"value": "bilateral_convexity", "label": "Bilateral convexity"},
+        {"value": "right_tentorial", "label": "Right tentorial"},
+        {"value": "left_tentorial", "label": "Left tentorial"},
+        {"value": "falcine", "label": "Falcine/interhemispheric"},
+        {"value": "posterior_fossa", "label": "Posterior fossa"}
+      ]
+    },
+    {
+      "field_id": "subdural_thickness",
+      "label": "SDH Maximum Thickness",
+      "type": "measurement",
+      "show_if": "subdural == true",
+      "unit": "mm"
+    },
+    {
+      "field_id": "subdural_density",
+      "label": "SDH Density",
+      "type": "picklist",
+      "show_if": "subdural == true",
+      "options": [
+        {"value": "hyperdense", "label": "Hyperdense (acute)"},
+        {"value": "isodense", "label": "Isodense (subacute)"},
+        {"value": "hypodense", "label": "Hypodense (chronic)"},
+        {"value": "mixed", "label": "Mixed density (acute on chronic)"}
+      ]
+    },
+    {
+      "field_id": "epidural",
+      "label": "Epidural Hemorrhage",
+      "type": "boolean",
+      "show_if": "overall_assessment == 'present'"
+    },
+    {
+      "field_id": "epidural_location",
+      "label": "EDH Location",
+      "type": "picklist",
+      "show_if": "epidural == true",
+      "options": [
+        {"value": "right_temporal", "label": "Right temporal"},
+        {"value": "left_temporal", "label": "Left temporal"},
+        {"value": "right_parietal", "label": "Right parietal"},
+        {"value": "left_parietal", "label": "Left parietal"},
+        {"value": "frontal", "label": "Frontal"},
+        {"value": "posterior_fossa", "label": "Posterior fossa"}
+      ]
+    },
+    {
+      "field_id": "subarachnoid",
+      "label": "Subarachnoid Hemorrhage",
+      "type": "boolean",
+      "show_if": "overall_assessment == 'present'"
+    },
+    {
+      "field_id": "sah_location",
+      "label": "SAH Location",
+      "type": "picklist",
+      "show_if": "subarachnoid == true",
+      "allow_multiple": true,
+      "options": [
+        {"value": "sulci", "label": "Cerebral sulci"},
+        {"value": "sylvian", "label": "Sylvian fissure"},
+        {"value": "basal_cisterns", "label": "Basal cisterns"},
+        {"value": "interhemispheric", "label": "Interhemispheric fissure"},
+        {"value": "posterior_fossa", "label": "Posterior fossa"},
+        {"value": "diffuse", "label": "Diffuse"}
+      ]
+    },
+    {
+      "field_id": "mass_effect",
+      "label": "Mass Effect",
+      "type": "boolean",
+      "show_if": "overall_assessment == 'present'"
+    },
+    {
+      "field_id": "midline_shift",
+      "label": "Midline Shift",
+      "type": "measurement",
+      "show_if": "mass_effect == true",
+      "unit": "mm"
+    },
+    {
+      "field_id": "herniation",
+      "label": "Herniation",
+      "type": "picklist",
+      "show_if": "mass_effect == true",
+      "options": [
+        {"value": "none", "label": "No herniation"},
+        {"value": "subfalcine", "label": "Subfalcine herniation"},
+        {"value": "uncal", "label": "Uncal herniation"},
+        {"value": "tonsillar", "label": "Tonsillar herniation"},
+        {"value": "upward", "label": "Upward transtentorial herniation"}
+      ]
+    }
+  ],
+  
+  "critical_findings": [
+    {
+      "condition": "epidural == true",
+      "finding": "Epidural hematoma",
+      "action": "IMMEDIATE COMMUNICATION - Neurosurgical emergency",
+      "priority": "critical"
+    },
+    {
+      "condition": "herniation != 'none'",
+      "finding": "Brain herniation",
+      "action": "IMMEDIATE COMMUNICATION",
+      "priority": "critical"
+    },
+    {
+      "condition": "midline_shift > 5",
+      "finding": "Significant midline shift (>5mm)",
+      "action": "URGENT COMMUNICATION",
+      "priority": "urgent"
+    },
+    {
+      "condition": "subarachnoid == true && sah_location contains 'basal_cisterns'",
+      "finding": "SAH in basal cisterns - concerning for aneurysm",
+      "action": "Recommend CTA",
+      "priority": "urgent"
+    }
+  ],
+  
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2026-01-28"
+  }
+}

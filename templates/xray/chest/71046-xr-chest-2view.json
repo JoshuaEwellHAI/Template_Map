@@ -1,0 +1,232 @@
+{
+  "$schema": "../../schema/template.schema.json",
+  "template_id": "71046-xr-chest-2view",
+  "cpt_code": "71046",
+  "procedure_name": "X-RAY CHEST 2 VIEWS",
+  "modality": "XR",
+  "body_region": "chest",
+  "contrast": "na",
+  
+  "description": "Standard 2-view chest x-ray (PA and lateral)",
+  
+  "variants": [
+    {
+      "variant_id": "standard",
+      "name": "Standard Adult",
+      "context": "routine",
+      "is_default": true
+    },
+    {
+      "variant_id": "young-adult",
+      "name": "Young Adult (18-40)",
+      "context": "routine",
+      "age_range": "18-40"
+    },
+    {
+      "variant_id": "over-40",
+      "name": "Adult Over 40",
+      "context": "routine",
+      "age_range": ">40"
+    },
+    {
+      "variant_id": "emergency",
+      "name": "Emergency",
+      "context": "emergency"
+    }
+  ],
+  
+  "legacy_template_names": [
+    "chest XR chest 2 view >40 yo (XR2017/8)",
+    "chest XR chest 2 view 18-40 yo (XR2017/2018)"
+  ],
+  
+  "structure": {
+    "header": {
+      "component_ref": "HDR.xr.chest.standard",
+      "sections": [
+        {
+          "name": "EXAM",
+          "content": "PA and lateral chest radiograph",
+          "merge_field": "Procedures"
+        },
+        {
+          "name": "DATE",
+          "merge_field": "Exam Complete Time"
+        },
+        {
+          "name": "INDICATION",
+          "merge_field": "Indication"
+        },
+        {
+          "name": "COMPARISON",
+          "merge_field": "Comparison",
+          "options": ["None", "Prior from {date}"]
+        }
+      ]
+    },
+    
+    "technique": {
+      "component_ref": "TEC.xr.chest.2view",
+      "default_text": "PA and lateral views of the chest were obtained."
+    },
+    
+    "findings": {
+      "component_ref": "FND.xr.chest.standard",
+      "subcomponents": [
+        {
+          "order": 1,
+          "component_ref": "SUB.xr.chest.exam_quality",
+          "header": null,
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {
+                "ref": "ATM.exam_quality.positioning",
+                "default": "adequate"
+              },
+              {
+                "ref": "ATM.exam_quality.inspiration",
+                "default": "adequate"
+              }
+            ]
+          }
+        },
+        {
+          "order": 2,
+          "component_ref": "SUB.xr.chest.support_devices",
+          "header": "SUPPORT DEVICES:",
+          "required": false,
+          "condition": "if_present",
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.devices.ett"},
+              {"ref": "ATM.devices.ngt"},
+              {"ref": "ATM.devices.cvl"},
+              {"ref": "ATM.devices.chest_tube"},
+              {"ref": "ATM.devices.pacer"}
+            ]
+          }
+        },
+        {
+          "order": 3,
+          "component_ref": "SUB.xr.chest.lungs_pleura",
+          "header": "LUNGS AND PLEURA:",
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {
+                "ref": "ATM.lungs.opacities",
+                "normal_text": "Lungs are clear."
+              },
+              {
+                "ref": "ATM.pleura.effusion",
+                "normal_text": "No pleural effusion."
+              },
+              {
+                "ref": "ATM.pleura.pneumothorax",
+                "normal_text": "No pneumothorax."
+              }
+            ],
+            "combined_normal": "Lungs are clear. No pleural effusion or pneumothorax."
+          }
+        },
+        {
+          "order": 4,
+          "component_ref": "SUB.xr.chest.heart_mediastinum",
+          "header": "HEART AND MEDIASTINUM:",
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {
+                "ref": "ATM.heart.size",
+                "normal_text": "Heart size is normal."
+              },
+              {
+                "ref": "ATM.mediastinum.width",
+                "normal_text": "Mediastinal contours are unremarkable."
+              }
+            ],
+            "combined_normal": "Heart size is normal. Mediastinal contours are unremarkable."
+          }
+        },
+        {
+          "order": 5,
+          "component_ref": "SUB.xr.chest.bones_soft_tissue",
+          "header": "BONES AND SOFT TISSUES:",
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {
+                "ref": "ATM.bones.ribs",
+                "normal_text": "No acute osseous abnormality."
+              },
+              {
+                "ref": "ATM.soft_tissue.general",
+                "normal_text": "Soft tissues are unremarkable."
+              }
+            ],
+            "combined_normal": "No acute osseous abnormality. Soft tissues are unremarkable."
+          }
+        },
+        {
+          "order": 6,
+          "component_ref": "SUB.xr.chest.upper_abdomen",
+          "header": "UPPER ABDOMEN:",
+          "required": false,
+          "condition": "if_visualized",
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.upper_abd.general"}
+            ],
+            "normal_text": "Visualized upper abdomen is unremarkable."
+          }
+        }
+      ]
+    },
+    
+    "impression": {
+      "component_ref": "IMP.xr.chest.standard",
+      "options": [
+        {
+          "type": "normal",
+          "text": "No acute cardiopulmonary abnormality."
+        },
+        {
+          "type": "normal_alternative",
+          "text": "Normal chest radiograph."
+        },
+        {
+          "type": "structured",
+          "numbered_findings": true
+        }
+      ]
+    }
+  },
+  
+  "normal_template": {
+    "findings": "Lungs are clear. No pleural effusion or pneumothorax. Heart size is normal. Mediastinal contours are unremarkable. No acute osseous abnormality.",
+    "impression": "No acute cardiopulmonary abnormality."
+  },
+  
+  "critical_findings": [
+    {
+      "finding": "Tension pneumothorax",
+      "action": "Immediate communication required"
+    },
+    {
+      "finding": "Large pleural effusion with mediastinal shift",
+      "action": "Urgent communication"
+    },
+    {
+      "finding": "Free air under diaphragm",
+      "action": "Immediate communication required"
+    }
+  ],
+  
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2026-01-28",
+    "last_modified": "2026-01-28",
+    "author": "Template Mapping System"
+  }
+}

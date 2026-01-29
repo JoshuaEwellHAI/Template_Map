@@ -1,0 +1,308 @@
+{
+  "$schema": "../../schema/template.schema.json",
+  "template_id": "74177-ct-abdomen-pelvis-w",
+  "cpt_code": "74177",
+  "procedure_name": "CT ABDOMEN AND PELVIS WITH CONTRAST",
+  "modality": "CT",
+  "body_region": "abdomen-pelvis",
+  "contrast": "with",
+  
+  "description": "Contrast-enhanced CT of the abdomen and pelvis",
+  
+  "variants": [
+    {
+      "variant_id": "female",
+      "name": "Female",
+      "gender": "female",
+      "is_default": false
+    },
+    {
+      "variant_id": "male",
+      "name": "Male",
+      "gender": "male",
+      "is_default": false
+    },
+    {
+      "variant_id": "emergency",
+      "name": "Emergency",
+      "context": "emergency"
+    },
+    {
+      "variant_id": "oncology",
+      "name": "Oncology Staging",
+      "context": "oncology"
+    }
+  ],
+  
+  "legacy_template_names": [
+    "abd CT abd/pel with female (CT3043)",
+    "abd CT abd/pel with male (CT3043)",
+    "abd CT abd/pel with emergency"
+  ],
+  
+  "structure": {
+    "header": {
+      "component_ref": "HDR.ct.abdomen_pelvis",
+      "sections": [
+        {
+          "name": "EXAM",
+          "content": "CT abdomen and pelvis with intravenous contrast"
+        },
+        {
+          "name": "DATE",
+          "merge_field": "Exam Complete Time"
+        },
+        {
+          "name": "INDICATION",
+          "merge_field": "Indication"
+        },
+        {
+          "name": "COMPARISON",
+          "merge_field": "Comparison"
+        }
+      ]
+    },
+    
+    "technique": {
+      "component_ref": "TEC.ct.abd_pel.with",
+      "default_text": "CT of the abdomen and pelvis was performed following administration of intravenous contrast. Oral contrast was/was not administered. This facility uses radiation dose reduction techniques.",
+      "contrast_fields": [
+        {
+          "name": "IV Contrast Volume",
+          "merge_field": "IV Contrast Volume"
+        },
+        {
+          "name": "Contrast Type",
+          "merge_field": "Contrast Type"
+        }
+      ]
+    },
+    
+    "findings": {
+      "component_ref": "FND.ct.abdomen_pelvis",
+      "subcomponents": [
+        {
+          "order": 1,
+          "component_ref": "SUB.ct.abd.liver",
+          "header": "LIVER:",
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.liver.size"},
+              {"ref": "ATM.liver.parenchyma"},
+              {"ref": "ATM.liver.lesions"},
+              {"ref": "ATM.liver.vasculature"}
+            ],
+            "normal_text": "Liver is normal in size and attenuation. No focal hepatic lesion."
+          }
+        },
+        {
+          "order": 2,
+          "component_ref": "SUB.ct.abd.gallbladder_biliary",
+          "header": "GALLBLADDER AND BILIARY:",
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.gb.wall"},
+              {"ref": "ATM.gb.stones"},
+              {"ref": "ATM.bile_ducts.caliber"}
+            ],
+            "normal_text": "Gallbladder is unremarkable. No biliary ductal dilation."
+          }
+        },
+        {
+          "order": 3,
+          "component_ref": "SUB.ct.abd.pancreas",
+          "header": "PANCREAS:",
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.pancreas.size"},
+              {"ref": "ATM.pancreas.parenchyma"},
+              {"ref": "ATM.pancreas.duct"}
+            ],
+            "normal_text": "Pancreas is unremarkable."
+          }
+        },
+        {
+          "order": 4,
+          "component_ref": "SUB.ct.abd.spleen",
+          "header": "SPLEEN:",
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.spleen.size"},
+              {"ref": "ATM.spleen.lesions"}
+            ],
+            "normal_text": "Spleen is normal in size."
+          }
+        },
+        {
+          "order": 5,
+          "component_ref": "SUB.ct.abd.adrenals",
+          "header": "ADRENAL GLANDS:",
+          "required": true,
+          "source_template": "Adrenal gland CT sub final",
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.adrenal.left"},
+              {"ref": "ATM.adrenal.right"}
+            ],
+            "normal_text": "Adrenal glands are unremarkable."
+          }
+        },
+        {
+          "order": 6,
+          "component_ref": "SUB.ct.abd.kidneys_ureters",
+          "header": "KIDNEYS AND URETERS:",
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.kidney.size"},
+              {"ref": "ATM.kidney.parenchyma"},
+              {"ref": "ATM.kidney.cysts"},
+              {"ref": "ATM.kidney.stones"},
+              {"ref": "ATM.kidney.hydronephrosis"},
+              {"ref": "ATM.ureter.caliber"}
+            ],
+            "normal_text": "Kidneys are normal in size and enhancement. No hydronephrosis or nephrolithiasis. Ureters are normal in caliber."
+          }
+        },
+        {
+          "order": 7,
+          "component_ref": "SUB.ct.abd.gi_tract",
+          "header": "GI TRACT:",
+          "required": true,
+          "source_template": "Bowel Sub final",
+          "content": {
+            "subsections": [
+              {
+                "name": "Stomach",
+                "atomic_elements": [{"ref": "ATM.stomach.general"}]
+              },
+              {
+                "name": "Small Bowel",
+                "atomic_elements": [{"ref": "ATM.small_bowel.general"}]
+              },
+              {
+                "name": "Colon",
+                "atomic_elements": [{"ref": "ATM.colon.general"}]
+              },
+              {
+                "name": "Appendix",
+                "atomic_elements": [{"ref": "ATM.appendix.general"}],
+                "source_template": "Appendix CT sub final"
+              }
+            ],
+            "normal_text": "Stomach, small bowel, and colon are unremarkable. Appendix is normal."
+          }
+        },
+        {
+          "order": 8,
+          "component_ref": "SUB.ct.pel.bladder",
+          "header": "BLADDER:",
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.bladder.wall"},
+              {"ref": "ATM.bladder.contents"}
+            ],
+            "normal_text": "Bladder is unremarkable."
+          }
+        },
+        {
+          "order": 9,
+          "component_ref": "SUB.ct.pel.reproductive",
+          "header": "REPRODUCTIVE ORGANS:",
+          "required": true,
+          "gender_specific": {
+            "female": {
+              "component_ref": "SUB.ct.pel.reproductive_female",
+              "atomic_elements": [
+                {"ref": "ATM.uterus.general"},
+                {"ref": "ATM.ovaries.general"},
+                {"ref": "ATM.adnexa.general"}
+              ],
+              "normal_text": "Uterus and adnexa are unremarkable."
+            },
+            "male": {
+              "component_ref": "SUB.ct.pel.reproductive_male",
+              "atomic_elements": [
+                {"ref": "ATM.prostate.general"},
+                {"ref": "ATM.seminal_vesicles.general"}
+              ],
+              "normal_text": "Prostate and seminal vesicles are unremarkable."
+            }
+          }
+        },
+        {
+          "order": 10,
+          "component_ref": "SUB.ct.abd.mesentery_peritoneum",
+          "header": "MESENTERY AND PERITONEUM:",
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.mesentery.fat"},
+              {"ref": "ATM.mesentery.lymph_nodes"},
+              {"ref": "ATM.peritoneum.ascites"}
+            ],
+            "normal_text": "No mesenteric or retroperitoneal lymphadenopathy. No ascites."
+          }
+        },
+        {
+          "order": 11,
+          "component_ref": "SUB.ct.abd.vasculature",
+          "header": "VASCULATURE:",
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.aorta.abdominal"},
+              {"ref": "ATM.ivc.general"}
+            ],
+            "normal_text": "Abdominal aorta is normal in caliber. IVC is patent."
+          }
+        },
+        {
+          "order": 12,
+          "component_ref": "SUB.ct.abd_pel.bones",
+          "header": "BONES:",
+          "required": true,
+          "source_template": "Bone abd CT sub final",
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.spine.lumbar"},
+              {"ref": "ATM.pelvis.bones"},
+              {"ref": "ATM.hips.general"}
+            ],
+            "normal_text": "No acute osseous abnormality. Degenerative changes of the lumbar spine."
+          }
+        }
+      ]
+    },
+    
+    "impression": {
+      "component_ref": "IMP.ct.abd_pel.standard",
+      "options": [
+        {
+          "type": "normal",
+          "text": "No acute abdominal or pelvic abnormality."
+        },
+        {
+          "type": "structured",
+          "numbered_findings": true
+        }
+      ]
+    }
+  },
+  
+  "normal_template": {
+    "findings_female": "Liver is normal in size and attenuation. No focal hepatic lesion. Gallbladder is unremarkable. No biliary ductal dilation. Pancreas and spleen are unremarkable. Adrenal glands are unremarkable. Kidneys are normal in size and enhancement. No hydronephrosis or nephrolithiasis. Stomach, small bowel, and colon are unremarkable. Appendix is normal. Bladder is unremarkable. Uterus and adnexa are unremarkable. No mesenteric or retroperitoneal lymphadenopathy. No ascites. Abdominal aorta is normal in caliber. No acute osseous abnormality.",
+    "findings_male": "Liver is normal in size and attenuation. No focal hepatic lesion. Gallbladder is unremarkable. No biliary ductal dilation. Pancreas and spleen are unremarkable. Adrenal glands are unremarkable. Kidneys are normal in size and enhancement. No hydronephrosis or nephrolithiasis. Stomach, small bowel, and colon are unremarkable. Appendix is normal. Bladder is unremarkable. Prostate is unremarkable. No mesenteric or retroperitoneal lymphadenopathy. No ascites. Abdominal aorta is normal in caliber. No acute osseous abnormality.",
+    "impression": "No acute abdominal or pelvic abnormality."
+  },
+  
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2026-01-28"
+  }
+}

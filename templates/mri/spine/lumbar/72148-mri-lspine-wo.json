@@ -1,0 +1,198 @@
+{
+  "$schema": "../../../schema/template.schema.json",
+  "template_id": "72148-mri-lspine-wo",
+  "cpt_code": "72148",
+  "procedure_name": "MRI LUMBAR SPINE WITHOUT CONTRAST",
+  "modality": "MRI",
+  "body_region": "lumbar-spine",
+  "contrast": "without",
+  
+  "description": "Non-contrast MRI of the lumbar spine",
+  
+  "variants": [
+    {
+      "variant_id": "routine",
+      "name": "Routine",
+      "context": "routine",
+      "is_default": true
+    },
+    {
+      "variant_id": "post-op",
+      "name": "Post-operative",
+      "context": "post_operative"
+    }
+  ],
+  
+  "structure": {
+    "header": {
+      "component_ref": "HDR.mri.spine.lumbar",
+      "sections": [
+        {
+          "name": "EXAM",
+          "content": "MRI lumbar spine without intravenous contrast"
+        },
+        {
+          "name": "DATE",
+          "merge_field": "Exam Complete Time"
+        },
+        {
+          "name": "INDICATION",
+          "merge_field": "Indication"
+        },
+        {
+          "name": "COMPARISON",
+          "merge_field": "Comparison"
+        }
+      ]
+    },
+    
+    "technique": {
+      "component_ref": "TEC.mri.spine.lumbar.without",
+      "default_text": "Multiplanar, multisequence MRI of the lumbar spine was performed without intravenous contrast.",
+      "sequences": ["Sagittal T1", "Sagittal T2", "Axial T2", "Sagittal STIR"]
+    },
+    
+    "findings": {
+      "component_ref": "FND.mri.spine.lumbar",
+      "subcomponents": [
+        {
+          "order": 1,
+          "component_ref": "SUB.mri.spine.alignment",
+          "header": "ALIGNMENT:",
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.spine.alignment"},
+              {"ref": "ATM.spine.listhesis"}
+            ],
+            "normal_text": "Normal lumbar lordosis is maintained. No listhesis."
+          }
+        },
+        {
+          "order": 2,
+          "component_ref": "SUB.mri.spine.conus_cauda",
+          "header": "CONUS AND CAUDA EQUINA:",
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.spine.conus_level"},
+              {"ref": "ATM.spine.conus_signal"},
+              {"ref": "ATM.spine.cauda"}
+            ],
+            "normal_text": "Conus medullaris terminates at an appropriate level (L1-L2). Conus and cauda equina are normal in signal and morphology."
+          }
+        },
+        {
+          "order": 3,
+          "component_ref": "SUB.mri.spine.vertebral_bodies",
+          "header": "VERTEBRAL BODIES:",
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.spine.marrow_signal"},
+              {"ref": "ATM.spine.vertebral_height"},
+              {"ref": "ATM.spine.compression_fracture"},
+              {"ref": "ATM.spine.hemangioma"}
+            ],
+            "normal_text": "Vertebral body heights and marrow signal are preserved. No compression fracture."
+          }
+        },
+        {
+          "order": 4,
+          "component_ref": "SUB.mri.spine.discs_lumbar",
+          "header": "INTERVERTEBRAL DISCS:",
+          "required": true,
+          "content": {
+            "levels": ["L1-L2", "L2-L3", "L3-L4", "L4-L5", "L5-S1"],
+            "per_level_elements": [
+              {"ref": "ATM.spine.disc_height"},
+              {"ref": "ATM.spine.disc_signal"},
+              {"ref": "ATM.spine.disc_bulge"},
+              {"ref": "ATM.spine.disc_protrusion"},
+              {"ref": "ATM.spine.disc_extrusion"},
+              {"ref": "ATM.spine.annular_tear"},
+              {"ref": "ATM.spine.central_canal"},
+              {"ref": "ATM.spine.neural_foramina_l"},
+              {"ref": "ATM.spine.neural_foramina_r"}
+            ],
+            "normal_text_per_level": "No disc herniation or significant degenerative change. Central canal and neural foramina are patent.",
+            "structured_format": {
+              "L1-L2": "Normal disc height and signal. No herniation. Central canal and neural foramina are patent.",
+              "L2-L3": "Normal disc height and signal. No herniation. Central canal and neural foramina are patent.",
+              "L3-L4": "Normal disc height and signal. No herniation. Central canal and neural foramina are patent.",
+              "L4-L5": "Normal disc height and signal. No herniation. Central canal and neural foramina are patent.",
+              "L5-S1": "Normal disc height and signal. No herniation. Central canal and neural foramina are patent."
+            }
+          }
+        },
+        {
+          "order": 5,
+          "component_ref": "SUB.mri.spine.facets",
+          "header": "FACET JOINTS:",
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.spine.facet_hypertrophy"},
+              {"ref": "ATM.spine.facet_effusion"},
+              {"ref": "ATM.spine.ligamentum_flavum"}
+            ],
+            "normal_text": "Facet joints are unremarkable. No ligamentum flavum hypertrophy."
+          }
+        },
+        {
+          "order": 6,
+          "component_ref": "SUB.mri.spine.paraspinal",
+          "header": "PARASPINAL SOFT TISSUES:",
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.spine.paraspinal_muscles"},
+              {"ref": "ATM.spine.paraspinal_mass"}
+            ],
+            "normal_text": "Paraspinal soft tissues are unremarkable."
+          }
+        }
+      ]
+    },
+    
+    "impression": {
+      "component_ref": "IMP.mri.spine.lumbar",
+      "options": [
+        {
+          "type": "normal",
+          "text": "Normal MRI of the lumbar spine."
+        },
+        {
+          "type": "structured",
+          "numbered_findings": true,
+          "by_level": true
+        }
+      ]
+    }
+  },
+  
+  "disc_grading_system": {
+    "herniation_types": [
+      {"type": "bulge", "description": "Broad-based (>50% circumference) extension beyond disc margin"},
+      {"type": "protrusion", "description": "Focal (<50% circumference) extension, base wider than apex"},
+      {"type": "extrusion", "description": "Focal extension, apex wider than base"},
+      {"type": "sequestration", "description": "Free fragment, no continuity with parent disc"}
+    ],
+    "stenosis_grading": [
+      {"grade": "none", "description": "Normal"},
+      {"grade": "mild", "description": "Minimal narrowing, CSF visible around thecal sac"},
+      {"grade": "moderate", "description": "Moderate narrowing, some CSF visible"},
+      {"grade": "severe", "description": "Severe narrowing, no CSF visible"}
+    ]
+  },
+  
+  "normal_template": {
+    "findings": "Normal lumbar lordosis is maintained. No listhesis. Conus medullaris terminates at an appropriate level. Conus and cauda equina are normal. Vertebral body heights and marrow signal are preserved. No compression fracture. At all levels from L1-L2 through L5-S1, there is no disc herniation. Central canal and neural foramina are patent at all levels. Facet joints are unremarkable. Paraspinal soft tissues are unremarkable.",
+    "impression": "Normal MRI of the lumbar spine."
+  },
+  
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2026-01-28"
+  }
+}

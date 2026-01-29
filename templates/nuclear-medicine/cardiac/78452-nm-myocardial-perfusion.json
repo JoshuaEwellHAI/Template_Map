@@ -1,0 +1,199 @@
+{
+  "$schema": "../../schema/template.schema.json",
+  "template_id": "78452-nm-myocardial-perfusion",
+  "cpt_code": "78452",
+  "procedure_name": "MYOCARDIAL PERFUSION IMAGING",
+  "modality": "NM",
+  "body_region": "cardiac",
+  "contrast": "na",
+  
+  "description": "Myocardial perfusion imaging (stress and rest)",
+  
+  "variants": [
+    {
+      "variant_id": "exercise",
+      "name": "Exercise Stress",
+      "context": "exercise",
+      "add_on_cpt": "93015"
+    },
+    {
+      "variant_id": "pharmacologic",
+      "name": "Pharmacologic Stress",
+      "context": "pharmacologic",
+      "add_on_cpt": "93015"
+    }
+  ],
+  
+  "legacy_template_names": [
+    "MYOCARDIAL PERFUSION Imaging/Exercise",
+    "MYOCARDIAL PERFUSION Imaging/Pharmacologic"
+  ],
+  
+  "structure": {
+    "header": {
+      "component_ref": "HDR.nm.cardiac",
+      "sections": [
+        {
+          "name": "EXAM",
+          "content": "Myocardial perfusion imaging with SPECT"
+        },
+        {
+          "name": "DATE",
+          "merge_field": "Exam Complete Time"
+        },
+        {
+          "name": "INDICATION",
+          "merge_field": "Indication"
+        },
+        {
+          "name": "COMPARISON",
+          "merge_field": "Comparison"
+        }
+      ]
+    },
+    
+    "technique": {
+      "component_ref": "TEC.nm.myocardial_perfusion",
+      "variants": {
+        "exercise": "The patient underwent a symptom-limited exercise treadmill stress test using the Bruce protocol. At peak exercise, ___ mCi of Tc-99m sestamibi was administered intravenously. SPECT imaging was performed. Rest images were obtained following administration of ___ mCi of Tc-99m sestamibi.",
+        "pharmacologic": "Pharmacologic stress was performed using ___. At peak stress, ___ mCi of Tc-99m sestamibi was administered intravenously. SPECT imaging was performed. Rest images were obtained following administration of ___ mCi of Tc-99m sestamibi."
+      },
+      "stress_data": {
+        "exercise": [
+          {"field": "Peak HR", "unit": "bpm"},
+          {"field": "Peak BP", "unit": "mmHg"},
+          {"field": "METS achieved"},
+          {"field": "% Max predicted HR"},
+          {"field": "Exercise duration", "unit": "min"},
+          {"field": "Reason for stopping"}
+        ],
+        "pharmacologic": [
+          {"field": "Agent used"},
+          {"field": "Dose administered"},
+          {"field": "Peak HR", "unit": "bpm"},
+          {"field": "Peak BP", "unit": "mmHg"}
+        ]
+      }
+    },
+    
+    "findings": {
+      "component_ref": "FND.nm.cardiac",
+      "subcomponents": [
+        {
+          "order": 1,
+          "component_ref": "SUB.nm.cardiac.stress_response",
+          "header": "STRESS RESPONSE:",
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.cardiac.symptoms"},
+              {"ref": "ATM.cardiac.ecg_changes"},
+              {"ref": "ATM.cardiac.hemodynamic_response"}
+            ]
+          }
+        },
+        {
+          "order": 2,
+          "component_ref": "SUB.nm.cardiac.perfusion",
+          "header": "PERFUSION:",
+          "required": true,
+          "content": {
+            "territories": [
+              {
+                "name": "LAD Territory",
+                "segments": ["Anterior", "Anteroseptal", "Apex"],
+                "atomic_elements": [
+                  {"ref": "ATM.cardiac.perfusion_stress"},
+                  {"ref": "ATM.cardiac.perfusion_rest"},
+                  {"ref": "ATM.cardiac.reversibility"}
+                ]
+              },
+              {
+                "name": "LCX Territory",
+                "segments": ["Lateral", "Inferolateral"],
+                "atomic_elements": [
+                  {"ref": "ATM.cardiac.perfusion_stress"},
+                  {"ref": "ATM.cardiac.perfusion_rest"},
+                  {"ref": "ATM.cardiac.reversibility"}
+                ]
+              },
+              {
+                "name": "RCA Territory",
+                "segments": ["Inferior", "Inferoseptal"],
+                "atomic_elements": [
+                  {"ref": "ATM.cardiac.perfusion_stress"},
+                  {"ref": "ATM.cardiac.perfusion_rest"},
+                  {"ref": "ATM.cardiac.reversibility"}
+                ]
+              }
+            ],
+            "normal_text": "Homogeneous radiotracer uptake throughout the myocardium on both stress and rest images. No evidence of ischemia or infarction."
+          }
+        },
+        {
+          "order": 3,
+          "component_ref": "SUB.nm.cardiac.lv_function",
+          "header": "LEFT VENTRICULAR FUNCTION:",
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.cardiac.lvef"},
+              {"ref": "ATM.cardiac.lv_volumes"},
+              {"ref": "ATM.cardiac.wall_motion"}
+            ],
+            "normal_text": "Left ventricular ejection fraction is normal at ___%. Normal wall motion. No transient ischemic dilation."
+          }
+        },
+        {
+          "order": 4,
+          "component_ref": "SUB.nm.cardiac.tid",
+          "header": "TRANSIENT ISCHEMIC DILATION:",
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.cardiac.tid_ratio"}
+            ],
+            "normal_text": "TID ratio is normal."
+          }
+        },
+        {
+          "order": 5,
+          "component_ref": "SUB.nm.cardiac.other",
+          "header": "OTHER:",
+          "required": false,
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.cardiac.lung_uptake"},
+              {"ref": "ATM.cardiac.rv_visualization"}
+            ]
+          }
+        }
+      ]
+    },
+    
+    "impression": {
+      "component_ref": "IMP.nm.cardiac",
+      "options": [
+        {
+          "type": "normal",
+          "text": "1. Normal myocardial perfusion imaging with no evidence of ischemia or infarction.\n2. Normal left ventricular systolic function with LVEF of ___."
+        },
+        {
+          "type": "structured",
+          "numbered_findings": true,
+          "includes": ["Perfusion summary", "LVEF", "Risk stratification if applicable"]
+        }
+      ]
+    }
+  },
+  
+  "normal_template": {
+    "findings": "The patient achieved adequate stress with appropriate hemodynamic response. No significant ECG changes or symptoms. Homogeneous radiotracer uptake throughout the myocardium on both stress and rest images. No evidence of ischemia or infarction. Left ventricular ejection fraction is normal. Normal wall motion. TID ratio is normal.",
+    "impression": "1. Normal myocardial perfusion imaging with no evidence of ischemia or infarction.\n2. Normal left ventricular systolic function."
+  },
+  
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2026-01-28"
+  }
+}

@@ -1,0 +1,149 @@
+{
+  "$schema": "../../../schema/component-schema.json",
+  "component_id": "CMP.xray.chest.pleura",
+  "component_type": "finding",
+  "name": "Pleura",
+  "description": "Pleural findings on chest radiograph including effusion and pneumothorax",
+  
+  "applies_to": ["XR"],
+  "body_region": "chest",
+  "section": "FINDINGS",
+  "subsection": "Pleura",
+  
+  "used_by_cpt": ["71045", "71046", "71047", "71048"],
+  
+  "fields": [
+    {
+      "field_id": "pleural_effusion",
+      "label": "Pleural Effusion",
+      "type": "picklist",
+      "required": true,
+      "options": [
+        {"value": "none", "label": "No pleural effusion", "is_normal": true, "is_default": true},
+        {"value": "right", "label": "Right pleural effusion"},
+        {"value": "left", "label": "Left pleural effusion"},
+        {"value": "bilateral", "label": "Bilateral pleural effusions"}
+      ]
+    },
+    {
+      "field_id": "effusion_size",
+      "label": "Effusion Size",
+      "type": "picklist",
+      "show_if": "pleural_effusion != 'none'",
+      "allow_multiple": false,
+      "options": [
+        {"value": "trace", "label": "Trace/minimal"},
+        {"value": "small", "label": "Small"},
+        {"value": "moderate", "label": "Moderate"},
+        {"value": "large", "label": "Large"}
+      ]
+    },
+    {
+      "field_id": "effusion_change",
+      "label": "Change from Prior",
+      "type": "picklist",
+      "show_if": "pleural_effusion != 'none'",
+      "options": [
+        {"value": "new", "label": "New"},
+        {"value": "increased", "label": "Increased"},
+        {"value": "decreased", "label": "Decreased"},
+        {"value": "stable", "label": "Stable"},
+        {"value": "no_prior", "label": "No prior for comparison"}
+      ]
+    },
+    {
+      "field_id": "effusion_characteristics",
+      "label": "Characteristics",
+      "type": "picklist",
+      "show_if": "pleural_effusion != 'none'",
+      "required": false,
+      "options": [
+        {"value": "free_flowing", "label": "Free-flowing"},
+        {"value": "layering", "label": "Layering"},
+        {"value": "loculated", "label": "Appears loculated"}
+      ]
+    },
+    {
+      "field_id": "pneumothorax",
+      "label": "Pneumothorax",
+      "type": "picklist",
+      "required": true,
+      "options": [
+        {"value": "none", "label": "No pneumothorax", "is_normal": true, "is_default": true},
+        {"value": "right", "label": "Right pneumothorax"},
+        {"value": "left", "label": "Left pneumothorax"},
+        {"value": "bilateral", "label": "Bilateral pneumothoraces"}
+      ]
+    },
+    {
+      "field_id": "pneumothorax_size",
+      "label": "Pneumothorax Size",
+      "type": "picklist",
+      "show_if": "pneumothorax != 'none'",
+      "options": [
+        {"value": "small", "label": "Small (<2 cm at apex)"},
+        {"value": "moderate", "label": "Moderate (2-4 cm)"},
+        {"value": "large", "label": "Large (>4 cm)"},
+        {"value": "tension", "label": "Tension pneumothorax"}
+      ]
+    },
+    {
+      "field_id": "pneumothorax_change",
+      "label": "Change from Prior",
+      "type": "picklist",
+      "show_if": "pneumothorax != 'none'",
+      "options": [
+        {"value": "new", "label": "New"},
+        {"value": "increased", "label": "Increased"},
+        {"value": "decreased", "label": "Decreased"},
+        {"value": "stable", "label": "Stable"},
+        {"value": "resolved", "label": "Resolved"}
+      ]
+    },
+    {
+      "field_id": "pleural_thickening",
+      "label": "Pleural Thickening",
+      "type": "picklist",
+      "required": false,
+      "options": [
+        {"value": "none", "label": "No pleural thickening", "is_default": true},
+        {"value": "focal", "label": "Focal pleural thickening"},
+        {"value": "diffuse", "label": "Diffuse pleural thickening"},
+        {"value": "calcified", "label": "Calcified pleural plaques"}
+      ]
+    }
+  ],
+  
+  "output_templates": {
+    "normal": "No pleural effusion or pneumothorax.",
+    "effusion_only": "{effusion_change} {effusion_size} {pleural_effusion}.",
+    "pneumothorax_only": "{pneumothorax_change} {pneumothorax_size} {pneumothorax}.",
+    "both": "{effusion_statement} {pneumothorax_statement}"
+  },
+  
+  "critical_findings": [
+    {
+      "condition": "pneumothorax_size == 'tension'",
+      "finding": "Tension pneumothorax",
+      "action": "IMMEDIATE COMMUNICATION REQUIRED",
+      "priority": "critical"
+    },
+    {
+      "condition": "pneumothorax != 'none' && pneumothorax_change == 'new'",
+      "finding": "New pneumothorax",
+      "action": "Urgent communication to ordering provider",
+      "priority": "urgent"
+    },
+    {
+      "condition": "effusion_size == 'large' && effusion_change == 'new'",
+      "finding": "New large pleural effusion",
+      "action": "Communication to ordering provider",
+      "priority": "urgent"
+    }
+  ],
+  
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2026-01-28"
+  }
+}

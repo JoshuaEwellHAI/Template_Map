@@ -1,0 +1,333 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://harrison.ai/schemas/template.schema.json",
+  "title": "Radiology Template Schema",
+  "description": "Schema for individual CPT code template files",
+  "type": "object",
+  "required": ["template_id", "cpt_code", "procedure_name", "modality", "body_region", "structure"],
+  
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "template_id": {
+      "type": "string",
+      "pattern": "^[0-9]{5}-[a-z]+-[a-z0-9-]+$",
+      "description": "Unique template identifier (e.g., 71046-xr-chest-2view)"
+    },
+    "cpt_code": {
+      "type": "string",
+      "pattern": "^[0-9]{5}$",
+      "description": "5-digit CPT code"
+    },
+    "procedure_name": {
+      "type": "string",
+      "description": "Official procedure name"
+    },
+    "modality": {
+      "type": "string",
+      "enum": ["XR", "CT", "MRI", "US", "NM", "PET", "FLUORO", "MAMMO"],
+      "description": "Imaging modality"
+    },
+    "body_region": {
+      "type": "string",
+      "description": "Primary body region"
+    },
+    "contrast": {
+      "type": "string",
+      "enum": ["without", "with", "with_without", "na"],
+      "description": "Contrast administration"
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable description of the exam"
+    },
+    "variants": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/variant" },
+      "description": "Template variants (gender, context, style)"
+    },
+    "legacy_template_names": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Original template names from source system"
+    },
+    "structure": {
+      "$ref": "#/definitions/template_structure",
+      "description": "Template structure with component references"
+    },
+    "protocol_specific": {
+      "type": "object",
+      "description": "Protocol-specific configurations"
+    },
+    "normal_template": {
+      "$ref": "#/definitions/normal_template",
+      "description": "Pre-composed normal report text"
+    },
+    "critical_findings": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/critical_finding" },
+      "description": "Critical findings requiring communication"
+    },
+    "metadata": {
+      "$ref": "#/definitions/metadata"
+    }
+  },
+  
+  "definitions": {
+    "variant": {
+      "type": "object",
+      "required": ["variant_id", "name"],
+      "properties": {
+        "variant_id": {
+          "type": "string",
+          "description": "Unique variant identifier"
+        },
+        "name": {
+          "type": "string",
+          "description": "Display name"
+        },
+        "gender": {
+          "type": "string",
+          "enum": ["male", "female"]
+        },
+        "context": {
+          "type": "string",
+          "enum": ["routine", "inpatient", "outpatient", "emergency", "icu", "trauma", "oncology", "high_resolution", "nodule_followup", "stroke", "epilepsy", "dementia", "with_doppler"]
+        },
+        "age_range": {
+          "type": "string"
+        },
+        "protocol": {
+          "type": "string"
+        },
+        "style": {
+          "type": "string",
+          "enum": ["structured", "free_text"]
+        },
+        "add_on_cpt": {
+          "type": "string",
+          "description": "Additional CPT code required"
+        },
+        "is_default": {
+          "type": "boolean"
+        }
+      }
+    },
+    
+    "template_structure": {
+      "type": "object",
+      "required": ["header", "technique", "findings", "impression"],
+      "properties": {
+        "header": {
+          "$ref": "#/definitions/header_section"
+        },
+        "technique": {
+          "$ref": "#/definitions/technique_section"
+        },
+        "findings": {
+          "$ref": "#/definitions/findings_section"
+        },
+        "impression": {
+          "$ref": "#/definitions/impression_section"
+        }
+      }
+    },
+    
+    "header_section": {
+      "type": "object",
+      "required": ["component_ref"],
+      "properties": {
+        "component_ref": {
+          "type": "string",
+          "pattern": "^HDR\\.",
+          "description": "Reference to header component"
+        },
+        "sections": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "content": { "type": "string" },
+              "merge_field": { "type": "string" },
+              "options": { 
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    
+    "technique_section": {
+      "type": "object",
+      "required": ["component_ref"],
+      "properties": {
+        "component_ref": {
+          "type": "string",
+          "pattern": "^TEC\\."
+        },
+        "default_text": {
+          "type": "string"
+        },
+        "variants": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "sequences": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "contrast_fields": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "merge_field": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    
+    "findings_section": {
+      "type": "object",
+      "required": ["component_ref", "subcomponents"],
+      "properties": {
+        "component_ref": {
+          "type": "string",
+          "pattern": "^FND\\."
+        },
+        "subcomponents": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/subcomponent" }
+        }
+      }
+    },
+    
+    "subcomponent": {
+      "type": "object",
+      "required": ["order", "component_ref"],
+      "properties": {
+        "order": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "component_ref": {
+          "type": "string",
+          "pattern": "^SUB\\."
+        },
+        "header": {
+          "type": ["string", "null"]
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "condition": {
+          "type": "string",
+          "enum": ["always", "if_present", "if_visualized", "always_for_icu"]
+        },
+        "source_template": {
+          "type": "string",
+          "description": "Legacy template name this maps from"
+        },
+        "content": {
+          "type": "object",
+          "properties": {
+            "atomic_elements": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "ref": { "type": "string", "pattern": "^ATM\\." },
+                  "default": { "type": "string" },
+                  "normal_text": { "type": "string" }
+                }
+              }
+            },
+            "subsections": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "atomic_elements": { "type": "array" },
+                  "source_template": { "type": "string" }
+                }
+              }
+            },
+            "normal_text": { "type": "string" },
+            "combined_normal": { "type": "string" }
+          }
+        },
+        "gender_specific": {
+          "type": "object",
+          "properties": {
+            "female": { "type": "object" },
+            "male": { "type": "object" }
+          }
+        },
+        "icu_specific": {
+          "type": "object"
+        }
+      }
+    },
+    
+    "impression_section": {
+      "type": "object",
+      "required": ["component_ref"],
+      "properties": {
+        "component_ref": {
+          "type": "string",
+          "pattern": "^IMP\\."
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": { 
+                "type": "string",
+                "enum": ["normal", "normal_alternative", "structured"]
+              },
+              "text": { "type": "string" },
+              "numbered_findings": { "type": "boolean" }
+            }
+          }
+        }
+      }
+    },
+    
+    "normal_template": {
+      "type": "object",
+      "properties": {
+        "findings": { "type": "string" },
+        "findings_female": { "type": "string" },
+        "findings_male": { "type": "string" },
+        "impression": { "type": "string" }
+      }
+    },
+    
+    "critical_finding": {
+      "type": "object",
+      "required": ["finding", "action"],
+      "properties": {
+        "finding": { "type": "string" },
+        "action": { "type": "string" }
+      }
+    },
+    
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "version": { "type": "string" },
+        "created": { "type": "string", "format": "date" },
+        "last_modified": { "type": "string", "format": "date" },
+        "author": { "type": "string" }
+      }
+    }
+  }
+}

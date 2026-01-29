@@ -1,0 +1,228 @@
+{
+  "$schema": "../../schema/template.schema.json",
+  "template_id": "70551-mri-brain-wo",
+  "cpt_code": "70551",
+  "procedure_name": "MRI BRAIN WITHOUT CONTRAST",
+  "modality": "MRI",
+  "body_region": "brain",
+  "contrast": "without",
+  
+  "description": "Non-contrast MRI of the brain",
+  
+  "variants": [
+    {
+      "variant_id": "routine",
+      "name": "Routine",
+      "context": "routine",
+      "is_default": true
+    },
+    {
+      "variant_id": "stroke",
+      "name": "Stroke Protocol",
+      "context": "stroke",
+      "protocol": "stroke"
+    },
+    {
+      "variant_id": "epilepsy",
+      "name": "Epilepsy Protocol",
+      "context": "epilepsy",
+      "protocol": "epilepsy"
+    },
+    {
+      "variant_id": "dementia",
+      "name": "Dementia/Memory Loss",
+      "context": "dementia"
+    }
+  ],
+  
+  "legacy_template_names": [
+    "*neuro MRI brain with neuro structured normal"
+  ],
+  
+  "structure": {
+    "header": {
+      "component_ref": "HDR.mri.brain",
+      "sections": [
+        {
+          "name": "EXAM",
+          "content": "MRI brain without intravenous contrast"
+        },
+        {
+          "name": "DATE",
+          "merge_field": "Exam Complete Time"
+        },
+        {
+          "name": "INDICATION",
+          "merge_field": "Indication"
+        },
+        {
+          "name": "COMPARISON",
+          "merge_field": "Comparison"
+        }
+      ]
+    },
+    
+    "technique": {
+      "component_ref": "TEC.mri.brain.without",
+      "default_text": "Multiplanar, multisequence MRI of the brain was performed without intravenous contrast.",
+      "sequences": ["T1", "T2", "FLAIR", "DWI", "GRE/SWI"]
+    },
+    
+    "findings": {
+      "component_ref": "FND.mri.brain",
+      "subcomponents": [
+        {
+          "order": 1,
+          "component_ref": "SUB.mri.brain.parenchyma",
+          "header": "BRAIN PARENCHYMA:",
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.brain.white_matter"},
+              {"ref": "ATM.brain.gray_matter"},
+              {"ref": "ATM.brain.signal_abnormality"},
+              {"ref": "ATM.brain.mass_effect"}
+            ],
+            "normal_text": "No acute infarct on diffusion-weighted imaging. No intracranial mass or mass effect. No abnormal parenchymal signal intensity."
+          }
+        },
+        {
+          "order": 2,
+          "component_ref": "SUB.mri.brain.white_matter",
+          "header": "WHITE MATTER:",
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.brain.white_matter_lesions"},
+              {"ref": "ATM.brain.periventricular_changes"}
+            ],
+            "normal_text": "No significant white matter disease."
+          }
+        },
+        {
+          "order": 3,
+          "component_ref": "SUB.mri.brain.ventricles",
+          "header": "VENTRICLES AND CSF SPACES:",
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.brain.ventricle_size"},
+              {"ref": "ATM.brain.hydrocephalus"},
+              {"ref": "ATM.brain.sulci"}
+            ],
+            "normal_text": "Ventricles and sulci are normal in size and configuration for patient's age. No hydrocephalus."
+          }
+        },
+        {
+          "order": 4,
+          "component_ref": "SUB.mri.brain.extra_axial",
+          "header": "EXTRA-AXIAL SPACES:",
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.brain.subdural"},
+              {"ref": "ATM.brain.epidural"},
+              {"ref": "ATM.brain.subarachnoid"}
+            ],
+            "normal_text": "No extra-axial collection."
+          }
+        },
+        {
+          "order": 5,
+          "component_ref": "SUB.mri.brain.posterior_fossa",
+          "header": "POSTERIOR FOSSA:",
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.brain.cerebellum"},
+              {"ref": "ATM.brain.brainstem"},
+              {"ref": "ATM.brain.fourth_ventricle"}
+            ],
+            "normal_text": "Brainstem and cerebellum are unremarkable."
+          }
+        },
+        {
+          "order": 6,
+          "component_ref": "SUB.mri.brain.midline_structures",
+          "header": "MIDLINE STRUCTURES:",
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.brain.pituitary"},
+              {"ref": "ATM.brain.pineal"},
+              {"ref": "ATM.brain.corpus_callosum"}
+            ],
+            "normal_text": "Pituitary gland and pineal gland are unremarkable. Corpus callosum is normal."
+          }
+        },
+        {
+          "order": 7,
+          "component_ref": "SUB.mri.brain.orbits_iac",
+          "header": "ORBITS AND IACs:",
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.orbits.general"},
+              {"ref": "ATM.iac.general"}
+            ],
+            "normal_text": "Orbits and internal auditory canals are grossly unremarkable."
+          }
+        },
+        {
+          "order": 8,
+          "component_ref": "SUB.mri.brain.calvarium",
+          "header": "CALVARIUM AND SCALP:",
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.skull.calvarium"},
+              {"ref": "ATM.skull.scalp"}
+            ],
+            "normal_text": "Calvarium is intact. Scalp soft tissues are unremarkable."
+          }
+        },
+        {
+          "order": 9,
+          "component_ref": "SUB.mri.brain.paranasal_sinuses",
+          "header": "PARANASAL SINUSES AND MASTOIDS:",
+          "required": true,
+          "content": {
+            "atomic_elements": [
+              {"ref": "ATM.sinuses.general"},
+              {"ref": "ATM.mastoids.general"}
+            ],
+            "normal_text": "Paranasal sinuses and mastoid air cells are clear."
+          }
+        }
+      ]
+    },
+    
+    "impression": {
+      "component_ref": "IMP.mri.brain.standard",
+      "options": [
+        {
+          "type": "normal",
+          "text": "Normal MRI of the brain without contrast."
+        },
+        {
+          "type": "normal_alternative",
+          "text": "No acute intracranial abnormality."
+        },
+        {
+          "type": "structured",
+          "numbered_findings": true
+        }
+      ]
+    }
+  },
+  
+  "normal_template": {
+    "findings": "No acute infarct on diffusion-weighted imaging. No intracranial mass or mass effect. No abnormal parenchymal signal intensity. No significant white matter disease. Ventricles and sulci are normal in size and configuration. No hydrocephalus. No extra-axial collection. Brainstem and cerebellum are unremarkable. Pituitary gland and pineal gland are unremarkable. Orbits and internal auditory canals are grossly unremarkable. Calvarium is intact. Paranasal sinuses and mastoid air cells are clear.",
+    "impression": "Normal MRI of the brain without contrast."
+  },
+  
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2026-01-28"
+  }
+}

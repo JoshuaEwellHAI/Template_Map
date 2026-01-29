@@ -1,0 +1,215 @@
+{
+  "$schema": "../schema/cpt-mapping.schema.json",
+  "modality": "XR",
+  "body_region": "chest",
+  "category": "Chest X-Ray",
+  "description": "All chest x-ray CPT codes and their component mappings",
+  
+  "_note_on_variants": "variant_id values are INTERNAL identifiers only - they are NOT CPT modifiers. Real CMS modifiers (e.g., -26, -TC, -LT, -RT) would be specified in a separate 'modifiers' field if needed.",
+  
+  "cpt_codes": [
+    {
+      "cpt_code": "71045",
+      "procedure_name": "X-RAY CHEST 1 VIEW",
+      "contrast": "na",
+      "variants": [
+        {
+          "variant_id": "outpatient",
+          "context": "outpatient",
+          "template_name": "chest XR chest 1 view op (XR2024/5)"
+        },
+        {
+          "variant_id": "inpatient",
+          "context": "inpatient",
+          "template_name": "chest XR chest 1 view ip (XR2024/5)"
+        },
+        {
+          "variant_id": "emergency",
+          "context": "emergency",
+          "template_name": "chest XR chest 1 view er (XR2024/5)"
+        },
+        {
+          "variant_id": "icu_free_text",
+          "context": "icu",
+          "style": "free_text",
+          "template_name": "chest XR chest 1 view ICU free text"
+        },
+        {
+          "variant_id": "icu_structured",
+          "context": "icu",
+          "style": "structured",
+          "template_name": "chest XR chest 1 view ICU structured"
+        }
+      ],
+      "components": {
+        "header": "HDR.chest.xr.standard",
+        "technique": "TEC.chest.xr.1view",
+        "findings": [
+          "SUB.chest.xr.exam_quality",
+          "SUB.chest.xr.support_devices",
+          "SUB.chest.xr.lungs_pleura",
+          "SUB.chest.xr.heart_mediastinum",
+          "SUB.chest.xr.bones_soft_tissue",
+          "SUB.chest.xr.upper_abdomen"
+        ],
+        "impression": "IMP.chest.xr.standard"
+      }
+    },
+    {
+      "cpt_code": "71046",
+      "procedure_name": "X-RAY CHEST 2 VIEWS",
+      "contrast": "na",
+      "variants": [
+        {
+          "variant_id": "adult_over_40",
+          "context": "outpatient",
+          "age_group": ">40",
+          "template_name": "chest XR chest 2 view >40 yo (XR2017/8)"
+        },
+        {
+          "variant_id": "adult_18_to_40",
+          "context": "outpatient",
+          "age_group": "18-40",
+          "template_name": "chest XR chest 2 view 18-40 yo (XR2017/2018)"
+        }
+      ],
+      "components": {
+        "header": "HDR.chest.xr.standard",
+        "technique": "TEC.chest.xr.2view",
+        "findings": [
+          "SUB.chest.xr.exam_quality",
+          "SUB.chest.xr.support_devices",
+          "SUB.chest.xr.lungs_pleura",
+          "SUB.chest.xr.heart_mediastinum",
+          "SUB.chest.xr.bones_soft_tissue",
+          "SUB.chest.xr.upper_abdomen"
+        ],
+        "impression": "IMP.chest.xr.standard"
+      }
+    },
+    {
+      "cpt_code": "71047",
+      "procedure_name": "X-RAY CHEST with APICAL LORDOTIC",
+      "contrast": "na",
+      "variants": [
+        {
+          "variant_id": "standard",
+          "context": "outpatient",
+          "template_name": "chest XR chest apic-lord (XR2005/6)"
+        }
+      ],
+      "components": {
+        "header": "HDR.chest.xr.standard",
+        "technique": "TEC.chest.xr.apical_lordotic",
+        "findings": [
+          "SUB.chest.xr.exam_quality",
+          "SUB.chest.xr.lungs_pleura",
+          "SUB.chest.xr.heart_mediastinum",
+          "SUB.chest.xr.bones_soft_tissue"
+        ],
+        "impression": "IMP.chest.xr.standard"
+      }
+    },
+    {
+      "cpt_code": "71048",
+      "procedure_name": "X-RAY CHEST with OBLIQUE PROJECTIONS",
+      "contrast": "na",
+      "variants": [
+        {
+          "variant_id": "standard",
+          "context": "outpatient",
+          "template_name": "chest XR chest 4 views (XR2066)"
+        }
+      ],
+      "components": {
+        "header": "HDR.chest.xr.standard",
+        "technique": "TEC.chest.xr.4view",
+        "findings": [
+          "SUB.chest.xr.exam_quality",
+          "SUB.chest.xr.support_devices",
+          "SUB.chest.xr.lungs_pleura",
+          "SUB.chest.xr.heart_mediastinum",
+          "SUB.chest.xr.bones_soft_tissue",
+          "SUB.chest.xr.upper_abdomen"
+        ],
+        "impression": "IMP.chest.xr.standard"
+      }
+    }
+  ],
+  
+  "shared_components": {
+    "findings_subcomponents": [
+      {
+        "component_id": "SUB.chest.xr.exam_quality",
+        "name": "Exam Quality",
+        "description": "Quality assessment for chest x-ray",
+        "atomic_elements": ["ATM.exam_quality.positioning", "ATM.exam_quality.inspiration", "ATM.exam_quality.artifacts"]
+      },
+      {
+        "component_id": "SUB.chest.xr.support_devices",
+        "name": "Support Devices",
+        "description": "Lines, tubes, and support devices",
+        "atomic_elements": ["ATM.devices.ett", "ATM.devices.ngt", "ATM.devices.cvl", "ATM.devices.chest_tube", "ATM.devices.pacer"]
+      },
+      {
+        "component_id": "SUB.chest.xr.lungs_pleura",
+        "name": "Lungs and Pleura",
+        "description": "Pulmonary parenchyma and pleural spaces",
+        "atomic_elements": ["ATM.lungs.opacities", "ATM.lungs.volumes", "ATM.lungs.nodules", "ATM.pleura.effusion", "ATM.pleura.pneumothorax", "ATM.pleura.thickening"]
+      },
+      {
+        "component_id": "SUB.chest.xr.heart_mediastinum",
+        "name": "Heart and Mediastinum",
+        "description": "Cardiac silhouette and mediastinal contours",
+        "atomic_elements": ["ATM.heart.size", "ATM.heart.contour", "ATM.mediastinum.width", "ATM.mediastinum.contour"]
+      },
+      {
+        "component_id": "SUB.chest.xr.bones_soft_tissue",
+        "name": "Bones and Soft Tissues",
+        "description": "Osseous structures and soft tissue assessment",
+        "atomic_elements": ["ATM.bones.ribs", "ATM.bones.clavicles", "ATM.bones.spine", "ATM.bones.shoulders", "ATM.soft_tissue.general"]
+      },
+      {
+        "component_id": "SUB.chest.xr.upper_abdomen",
+        "name": "Upper Abdomen",
+        "description": "Visualized upper abdominal structures",
+        "atomic_elements": ["ATM.upper_abd.liver", "ATM.upper_abd.stomach", "ATM.upper_abd.free_air"]
+      }
+    ],
+    "icu_support_device_variants": [
+      "chest XR chest 1 view ICU sub lines/tubes ALL",
+      "chest XR chest 1 view ICU sub lines/tubes CVL",
+      "chest XR chest 1 view ICU sub lines/tubes ET",
+      "chest XR chest 1 view ICU sub lines/tubes ET/GI",
+      "chest XR chest 1 view ICU sub lines/tubes GI"
+    ]
+  },
+  
+  "master_templates": [
+    {
+      "template_id": "chest XR chest master root",
+      "description": "Root template for standard chest x-ray",
+      "usage": "Base template for most chest x-ray variants"
+    },
+    {
+      "template_id": "chest XR chest master header",
+      "description": "Standard header for chest x-ray reports"
+    },
+    {
+      "template_id": "chest XR chest master normal",
+      "description": "Normal findings template"
+    },
+    {
+      "template_id": "chest XR chest master emergency",
+      "description": "Emergency department chest x-ray template"
+    },
+    {
+      "template_id": "chest XR chest master ICU/strucdtured",
+      "description": "ICU structured template with device tracking"
+    },
+    {
+      "template_id": "chest XR chest master structured",
+      "description": "Structured reporting with picklists"
+    }
+  ]
+}
